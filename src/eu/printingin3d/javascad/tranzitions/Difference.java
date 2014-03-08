@@ -1,0 +1,120 @@
+package eu.printingin3d.javascad.tranzitions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import eu.printingin3d.javascad.coords.Boundaries3d;
+import eu.printingin3d.javascad.coords.Boundary;
+import eu.printingin3d.javascad.enums.Language;
+import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
+import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.Cube;
+import eu.printingin3d.javascad.utils.AssertValue;
+import eu.printingin3d.javascad.utils.ListUtils;
+
+/**
+ * Difference operation. It subtracts from the first model all the others.
+ *
+ * @author ivivan <ivivan@printingin3d.eu>
+ */
+public class Difference extends Abstract3dModel {
+	private final Abstract3dModel model1;
+	private final List<Abstract3dModel> model2;
+	
+	/**
+	 * <p>Creates the object with the models given. The first parameter will be the model
+	 * and the second list of models will be subtracted by it.</p>
+	 * <p>If the first parameter is null it throws an IllegalValueException.
+	 * If the second parameter is null or empty the operation do nothing,
+	 * just gives back the first model.</p> 
+	 * @param model1 the model subtracted from
+	 * @param model2 the model to be subtracted
+	 * @throws IllegalValueException if the first model is null
+	 */
+	public Difference(Abstract3dModel model1, List<Abstract3dModel> model2) throws IllegalValueException {
+		AssertValue.isNotNull(model1, "The first parameter of the difference operation should not be null!");
+		
+		this.model1 = model1;
+		this.model2 = model2==null ? Collections.<Abstract3dModel>emptyList() : ListUtils.removeNulls(model2);
+	}
+	
+	/**
+	 * <p>Creates the object with the list of models given. The first parameter is used as a model
+	 * and all subsequent models will be subtracted from it.</p>
+	 * <p>If the first parameter is null it throws an IllegalValueException.
+	 * If any subsequent parameter is null that parameter is ignored. If only one parameter is
+	 * given this operation does nothing, just gives back the first model.</p> 
+	 * @param model1 the model subtracted from
+	 * @param model2 the model to be subtracted
+	 * @throws IllegalValueException if the first model is null
+	 */
+	public Difference(Abstract3dModel model1, Abstract3dModel... model2) throws IllegalValueException {
+		this(model1, Arrays.asList(model2));
+	}
+
+	@Override
+	protected String innerToScad() {
+		if (model2.isEmpty()) {
+			return model1.toScad();
+		}
+		
+		String attributes;
+		StringBuilder result = new StringBuilder();
+		switch (Language.getCurrent()) {
+		case OpenSCAD:
+			result.append("difference()");
+			attributes = "";
+			break;
+		case POVRay:
+			result.append("difference");
+			attributes = Abstract3dModel.ATTRIBUTES_PLACEHOLDER;
+			break;
+		default:
+			throw new LanguageNotSupportedException();
+		}
+		result.append('{').append(model1.toScad());
+		for (Abstract3dModel model : model2) {
+			result.append(model.toScad());
+		}
+		return result.append(attributes).append('}').toString();
+	}
+
+	@Override
+	protected Boundaries3d getModelBoundaries() {
+		Boundaries3d boundaries = model1.getBoundaries();
+		Boundary x = boundaries.getX();
+		Boundary y = boundaries.getY();
+		Boundary z = boundaries.getZ();
+		
+		for (Abstract3dModel model : model2) {
+			if (model instanceof Cube && !model.isRotated()) {
+				Boundaries3d b = model.getBoundaries();
+				if (x.isInsideOf(b.getX())) {
+					if (y.isInsideOf(b.getY())) {
+						z = z.remove(b.getZ());
+					}
+					else if (z.isInsideOf(b.getZ())) {
+						y = y.remove(b.getY());
+					}
+				}
+				else if (y.isInsideOf(b.getY()) && 
+						z.isInsideOf(b.getZ())) {
+					x = x.remove(b.getX());
+				}
+			}
+		}
+		return new Boundaries3d(x, y, z);
+	}
+
+	@Override
+	protected Abstract3dModel innerCloneModel() {
+		List<Abstract3dModel> cloneModels = new ArrayList<>();
+		for (Abstract3dModel model : model2) {
+			cloneModels.add(model.cloneModel());
+		}
+		return new Difference(model1.cloneModel(), cloneModels);
+	}
+}

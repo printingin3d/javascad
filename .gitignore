@@ -1,0 +1,9 @@
+/bin
+/bin-test
+/coverage-report
+/docs
+/jar
+/junit
+/checkstyle-result.xml
+/.classpath
+/.project
