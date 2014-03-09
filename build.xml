@@ -32,6 +32,7 @@
               <exclude name="**/*.java"/>
           </fileset>
       </copy>
+	  <tstamp/>
   </target>
   <target name="clean">
     <delete dir="bin"/>
@@ -156,15 +157,8 @@
            basedir="docs"
       />
   </target>
-  <target name="find_revision" description="Sets property 'revision.number' to the head svn revision">
-    <delete file="version.properties"/>
-    
-    <!-- find out revision number of HEAD, need svn.exe installed on local machine -->
-    <exec executable="c:/Program Files/TortoiseSVN/bin/SubWCRev.exe">
-        <arg line=". version.properties.template version.properties"/>
-    </exec>
-    
-    <property file="version.properties"/>
+  <target name="find_revision" depends="init" description="Sets property 'revision.number' to the head svn revision">
+    <property name="revision.number" value="${DSTAMP}"/>
     
     <fail unless="revision.number" />
     
