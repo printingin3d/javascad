@@ -3,9 +3,7 @@ package eu.printingin3d.javascad.coords;
 import java.util.Arrays;
 import java.util.List;
 
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.utils.AssertValue;
 
 /**
@@ -18,19 +16,6 @@ public class Triangle3d {
 	private final Coords3d point1;
 	private final Coords3d point2;
 	private final Coords3d point3;
-	
-	/**
-	 * Renders a list of triangles as a POVRay triangle list.
-	 * @param list the list of triangles to render
-	 * @return the POVRay string for the triangles
-	 */
-	public static String trianglesToString(List<Triangle3d> list) {
-		StringBuilder sb = new StringBuilder();
-		for (Triangle3d tri : list) {
-			sb.append(tri.renderPovRay());
-		}
-		return sb.toString();
-	}
 	
 	/**
 	 * Created the triangle by defining the three corner.
@@ -76,16 +61,5 @@ public class Triangle3d {
 		AssertValue.isNotNegative(p3, "point3 ("+point3+") cannot be found in the coordinate list!");
 		
 		return "[" + p1 + ',' + p2 + ',' + p3 + ']';
-	}
-	
-	/**
-	 * Renders the triangle as is used by POVRay: the three coordinates after each other.
-	 * @return the POVRay version of the triangle
-	 */
-	public String renderPovRay() {
-		if (Language.POVRay.isActive()) {
-			return "triangle {"+point1+","+point2+","+point3+"}";
-		}
-		throw new LanguageNotSupportedException();
 	}
 }

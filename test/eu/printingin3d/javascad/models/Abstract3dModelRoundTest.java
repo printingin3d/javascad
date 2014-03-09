@@ -4,12 +4,10 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertDoubleEquals;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.BoundaryTest;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.enums.Plane;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.testutils.RandomUtils;
@@ -18,11 +16,6 @@ import eu.printingin3d.javascad.testutils.TestModel;
 public class Abstract3dModelRoundTest {
 	private static final Boundaries3d TEST_BOUNDARIES = RandomUtils.getRandomBoundaries();
 
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
-	
 	@Test
 	public void roundShoundReturnWithTheActualObject() {
 		Abstract3dModel testSubject = new TestModel("(base)");

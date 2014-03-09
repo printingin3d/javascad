@@ -21,7 +21,12 @@ public class RandomUtils {
 	}
 	
 	public static Coords3d getRandomCoords() {
-		return new Coords3d(getRandomDouble(-1000.0, 1000.0),getRandomDouble(-1000.0, 1000.0),getRandomDouble(-1000.0, 1000.0));
+		while (true) {
+			Coords3d coords3d = new Coords3d(getRandomDouble(-1000.0, 1000.0),getRandomDouble(-1000.0, 1000.0),getRandomDouble(-1000.0, 1000.0));
+			if (!coords3d.isZero()) {
+				return coords3d;
+			}
+		}
 	}
 
 	public static Triangle3d getRandomTriangle() {

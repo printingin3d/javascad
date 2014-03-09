@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.List;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
-import eu.printingin3d.javascad.enums.Language;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.utils.ListUtils;
 
@@ -53,24 +51,11 @@ public class Union extends Abstract3dModel {
 			result.append(models.get(0).toScad());
 			break;
 		default:
-			switch (Language.getCurrent()) {
-			case OpenSCAD:
-				result.append("union() {\n");
-				for (Abstract3dModel model : models) {
-					result.append(model.toScad());
-				}
-				result.append("}\n");
-				break;
-			case POVRay:
-				result.append("union {\n");
-				for (Abstract3dModel model : models) {
-					result.append(model.toScad());
-				}
-				result.append(Abstract3dModel.ATTRIBUTES_PLACEHOLDER).append("}\n");
-				break;
-			default:
-				throw new LanguageNotSupportedException();
+			result.append("union() {\n");
+			for (Abstract3dModel model : models) {
+				result.append(model.toScad());
 			}
+			result.append("}\n");
 			break;
 		}
 		return result.toString();

@@ -9,11 +9,9 @@ import java.util.Map;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.enums.Plane;
 import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.tranzitions.Rotate;
 import eu.printingin3d.javascad.tranzitions.Translate;
 import eu.printingin3d.javascad.utils.AssertValue;
@@ -166,8 +164,9 @@ public abstract class Abstract3dModel implements IModel {
 		}
 		return sb.toString();
 	}
-
-	private String getOpenSCAD() {
+	
+	@Override
+	public final String toScad() {
 		StringBuilder sb = new StringBuilder(getPrefix());
 		StringBuilder ending = new StringBuilder();
 		if (!roundingPlane.isEmpty()) {
@@ -186,48 +185,6 @@ public abstract class Abstract3dModel implements IModel {
 		}
 		
 		return sb.toString()+ending.toString();
-	}
-	
-	private String getPOVRay() {
-		StringBuilder attributes = new StringBuilder("pigment {color rgb <1, 0, 0>}");
-		
-		if (!rotate.isZero()) {
-			attributes.append(Rotate.getRotate(rotate));
-		}
-		
-		if (isMulti()) {
-			String innerPov = innerToScad();
-			
-			StringBuilder sb = new StringBuilder("union {");
-			
-			for (Coords3d coord : moves) {
-				sb.append(innerPov.replace(ATTRIBUTES_PLACEHOLDER, 
-						attributes.toString()+Translate.getTranslate(coord)));
-			}
-			
-			sb.append('}');
-			
-			return sb.toString();
-		}
-		else {
-			for (Coords3d coord : moves) {
-				attributes.append(Translate.getTranslate(coord));
-			}
-			
-			return innerToScad().replace(ATTRIBUTES_PLACEHOLDER, attributes.toString());
-		}
-	}
-	
-	@Override
-	public final String toScad() {
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
-			return getOpenSCAD();
-		case POVRay:
-			return getPOVRay();
-		default:
-			throw new LanguageNotSupportedException();
-		}
 	}
 	
 	protected abstract Boundaries3d getModelBoundaries();

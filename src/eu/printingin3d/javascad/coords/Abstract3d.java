@@ -1,6 +1,5 @@
 package eu.printingin3d.javascad.coords;
 
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
 /**
@@ -64,10 +63,10 @@ public class Abstract3d {
 	
 	@Override
 	public String toString() {
-		return new StringBuilder().append(Language.getCurrent().getVectorStartChar()).
+		return new StringBuilder().append('[').
 				append(DoubleUtils.formatDouble(x)).append(',').
 				append(DoubleUtils.formatDouble(y)).append(',').
-				append(DoubleUtils.formatDouble(z)).append(Language.getCurrent().getVectorEndChar()).
+				append(DoubleUtils.formatDouble(z)).append(']').
 				toString();
 	}
 

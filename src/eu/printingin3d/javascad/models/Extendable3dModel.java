@@ -7,7 +7,8 @@ public abstract class Extendable3dModel extends Abstract3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return baseModel.innerCloneModel();
+		throw new UnsupportedOperationException("Cloning is not permitted for extendable 3D model unless "
+				+ "it is specifically handled in the derived class!");
 	}
 
 	@Override
@@ -17,7 +18,7 @@ public abstract class Extendable3dModel extends Abstract3dModel {
 
 	@Override
 	protected Boundaries3d getModelBoundaries() {
-		return baseModel.getModelBoundaries();
+		return baseModel.getBoundaries();
 	}
 
 }

@@ -2,9 +2,7 @@ package eu.printingin3d.javascad.tranzitions;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.utils.AssertValue;
 
@@ -38,14 +36,7 @@ public class Scale extends Abstract3dModel {
 		if (scale.isIdent()) {
 			return model.toScad();
 		}
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
-			return "scale("+scale+")"+model.toScad();	
-		case POVRay:
-			return "object {"+model.toScad()+" scale "+scale+Abstract3dModel.ATTRIBUTES_PLACEHOLDER+"}";
-		default:
-			throw new LanguageNotSupportedException();		
-		}
+		return "scale("+scale+")"+model.toScad();	
 	}
 
 	@Override

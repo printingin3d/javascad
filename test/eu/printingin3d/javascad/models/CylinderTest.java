@@ -4,33 +4,18 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import static eu.printingin3d.javascad.testutils.RandomUtils.getRandomDouble;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 
 public class CylinderTest {
 	private static final double EPSILON = 0.001;
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test
 	public void testCylinder() {
 		Cylinder cylinder = new Cylinder(10.0, 20.0);
 		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", cylinder.toScad());
-	}
-	
-	@Test
-	public void testCylinderPovRay() {
-		Language.POVRay.setCurrent();
-		
-		Cylinder cylinder = new Cylinder(20.0, 5.0);
-		assertEqualsWithoutWhiteSpaces("cylinder {<0,0,-10> <0,0,10> 5 #attributes}", cylinder.innerToScad());
 	}
 
 	@Test(expected = IllegalValueException.class)
@@ -68,14 +53,6 @@ public class CylinderTest {
 	public void testCone() {
 		Cylinder cylinder = new Cylinder(10.0, 20.0, 5.0);
 		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r1=20, r2=5, center=true);", cylinder.toScad());
-	}
-	
-	@Test
-	public void testConePovRay() {
-		Language.POVRay.setCurrent();
-		
-		Cylinder cylinder = new Cylinder(10.0, 20.0, 5.0);
-		assertEqualsWithoutWhiteSpaces("cone {<0,0,-5> 20 <0,0,5> 5 #attributes}", cylinder.innerToScad());
 	}
 
 	@Test

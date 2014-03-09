@@ -3,12 +3,10 @@ package eu.printingin3d.javascad.tranzitions;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.testutils.TestModel;
 
@@ -19,11 +17,6 @@ public class MirrorTest {
 	private static final double EPSILON = 0.001;
 	private static final TestModel TEST_MODEL = new TestModel("(model)", 
 			new Boundaries3d(new Boundary(MIN, MAX), new Boundary(MIN, MAX), new Boundary(MIN, MAX)));
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test(expected=IllegalValueException.class)
 	public void mirrorXshouldThrowIllegalValueExceptionIfModelIsNull() {
@@ -44,36 +37,15 @@ public class MirrorTest {
 	public void testMirrorX() {
 		assertEqualsWithoutWhiteSpaces("mirror([1,0,0]) (model)", Mirror.mirrorX(TEST_MODEL).toScad());
 	}
-	
-	@Test
-	public void testMirrorXPovRay() {
-		Language.POVRay.setCurrent();
-		
-		assertEqualsWithoutWhiteSpaces("object { (model) scale <-1,1,1> #attributes }", Mirror.mirrorX(TEST_MODEL).innerToScad());
-	}
 
 	@Test
 	public void testMirrorY() {
 		assertEqualsWithoutWhiteSpaces("mirror([0,1,0]) (model)", Mirror.mirrorY(TEST_MODEL).toScad());
 	}
-	
-	@Test
-	public void testMirrorYPovRay() {
-		Language.POVRay.setCurrent();
-		
-		assertEqualsWithoutWhiteSpaces("object { (model) scale <1,-1,1> #attributes }", Mirror.mirrorY(TEST_MODEL).innerToScad());
-	}
 
 	@Test
 	public void testMirrorZ() {
 		assertEqualsWithoutWhiteSpaces("mirror([0,0,1]) (model)", Mirror.mirrorZ(TEST_MODEL).toScad());
-	}
-	
-	@Test
-	public void testMirrorZPovRay() {
-		Language.POVRay.setCurrent();
-		
-		assertEqualsWithoutWhiteSpaces("object { (model) scale <1,1,-1> #attributes }", Mirror.mirrorZ(TEST_MODEL).innerToScad());
 	}
 
 	@Test

@@ -7,21 +7,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.TestModel;
 
 public class UnionTest {
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test
 	public void testUnion1() {
@@ -36,32 +29,7 @@ public class UnionTest {
 	}
 	
 	@Test
-	public void testUnion1PovRay() {
-		Language.POVRay.setCurrent();
-		
-		Union union = new Union(new TestModel("(model1)"), new TestModel("(model2)"));
-		assertEqualsWithoutWhiteSpaces("union {(model1) (model2) #attributes }", union.innerToScad());
-	}
-	
-	@Test
-	public void testUnion2PovRay() {
-		Language.POVRay.setCurrent();
-		
-		Union union = new Union(Arrays.<Abstract3dModel>asList(new TestModel("(model1)"), new TestModel("(model2)")));
-		assertEqualsWithoutWhiteSpaces("union {(model1) (model2) #attributes }", union.innerToScad());
-	}
-	
-	@Test
 	public void testUnionWithNullList() {
-		List<Abstract3dModel> models = null;
-		Union union = new Union(models);
-		assertEqualsWithoutWhiteSpaces("", union.toScad());
-	}
-	
-	@Test
-	public void testUnionWithNullListPovRay() {
-		Language.POVRay.setCurrent();
-		
 		List<Abstract3dModel> models = null;
 		Union union = new Union(models);
 		assertEqualsWithoutWhiteSpaces("", union.toScad());
@@ -74,17 +42,6 @@ public class UnionTest {
 				null, 
 				new TestModel("(model2)")));
 		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2)}", union.toScad());
-	}
-	
-	@Test
-	public void unionShouldHandleNullElementsInTheListPovRay() {
-		Language.POVRay.setCurrent();
-		
-		Union union = new Union(Arrays.<Abstract3dModel>asList(
-				new TestModel("(model1)"), 
-				null, 
-				new TestModel("(model2)")));
-		assertEqualsWithoutWhiteSpaces("union {(model1) (model2) #attributes}", union.innerToScad());
 	}
 	
 	@Test

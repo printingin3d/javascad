@@ -3,10 +3,7 @@ package eu.printingin3d.javascad.models;
 import static eu.printingin3d.javascad.utils.AssertValue.isNotNegative;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
-import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
 /**
@@ -58,29 +55,12 @@ public class Cylinder extends Abstract3dModel {
 	@Override
 	protected String innerToScad() {
 		if (DoubleUtils.equalsEps(bottomRadius, topRadius)) {
-			switch (Language.getCurrent()) {
-			case OpenSCAD:
-				return "cylinder(h="+DoubleUtils.formatDouble(length)+
-						", r="+DoubleUtils.formatDouble(bottomRadius)+", center=true);\n";
-			case POVRay:
-				return "cylinder {"+Coords3d.zOnly(-length/2.0)+Coords3d.zOnly(length/2.0)+
-						DoubleUtils.formatDouble(topRadius)+Abstract3dModel.ATTRIBUTES_PLACEHOLDER+"}";
-			default:
-				throw new LanguageNotSupportedException();
-			}
-		}
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
 			return "cylinder(h="+DoubleUtils.formatDouble(length)+
+						", r="+DoubleUtils.formatDouble(bottomRadius)+", center=true);\n";
+		}
+		return "cylinder(h="+DoubleUtils.formatDouble(length)+
 					", r1="+DoubleUtils.formatDouble(bottomRadius)+
 					", r2="+DoubleUtils.formatDouble(topRadius)+", center=true);\n";
-		case POVRay:
-			return "cone {"+Coords3d.zOnly(-length/2.0)+DoubleUtils.formatDouble(bottomRadius)+
-					Coords3d.zOnly(length/2.0)+DoubleUtils.formatDouble(topRadius)+
-					Abstract3dModel.ATTRIBUTES_PLACEHOLDER+"}";
-		default:
-			throw new LanguageNotSupportedException();
-		}
 	}
 
 	@Override

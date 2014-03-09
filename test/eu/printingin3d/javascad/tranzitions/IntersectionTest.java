@@ -5,34 +5,19 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 
 import java.util.Arrays;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.TestModel;
 
 public class IntersectionTest {
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test
 	public void testToScad() {
 		Intersection intersection = new Intersection(new TestModel("(model1)"), new TestModel("(model2)"));
 		assertEqualsWithoutWhiteSpaces("intersection() {(model1) (model2)}", intersection.toScad());
-	}
-	
-	@Test
-	public void testToPovRay() {
-		Language.POVRay.setCurrent();
-		
-		Intersection intersection = new Intersection(new TestModel("(model1)"), new TestModel("(model2)"));
-		assertEqualsWithoutWhiteSpaces("intersection {(model1) (model2) #attributes}", intersection.innerToScad());
 	}
 	
 	@Test

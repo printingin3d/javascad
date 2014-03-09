@@ -8,14 +8,15 @@ import java.util.Set;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.utils.AssertValue;
 
 /**
- * <p>Represents a set of triangles. It is good to know that some operations -
- * such as difference or intersection - are not always works perfectly with this object.</p>
+ * <p>
+ * Represents a set of triangles. It is good to know that some operations - such
+ * as difference or intersection - are not always works perfectly with this
+ * object.
+ * </p>
  * 
  * @author Rob van der Veer
  */
@@ -25,12 +26,16 @@ public class Polyhedron extends Abstract3dModel {
 
 	/**
 	 * Constructs the object with the given triangles.
-	 * @param triangles the triangles used to create this object
-	 * @throws IllegalValueException thrown if the given list is empty
+	 * 
+	 * @param triangles
+	 *            the triangles used to create this object
+	 * @throws IllegalValueException
+	 *             thrown if the given list is empty
 	 */
 	public Polyhedron(List<Triangle3d> triangles) throws IllegalValueException {
-		AssertValue.isNotEmpty(triangles, "The triangle list should not be empty!");
-		
+		AssertValue.isNotEmpty(triangles,
+				"The triangle list should not be empty!");
+
 		this.triangles = triangles;
 	}
 
@@ -42,7 +47,7 @@ public class Polyhedron extends Abstract3dModel {
 		double maxX = Double.MIN_VALUE;
 		double maxY = Double.MIN_VALUE;
 		double maxZ = Double.MIN_VALUE;
-		
+
 		for (final Coords3d p : getPoints()) {
 			minX = Math.min(p.getX(), minX);
 			minY = Math.min(p.getY(), minY);
@@ -63,7 +68,7 @@ public class Polyhedron extends Abstract3dModel {
 		}
 		return new ArrayList<>(result);
 	}
-	
+
 	@Override
 	protected Abstract3dModel innerCloneModel() {
 		return new Polyhedron(new ArrayList<>(triangles));
@@ -71,24 +76,15 @@ public class Polyhedron extends Abstract3dModel {
 
 	@Override
 	protected String innerToScad() {
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
-			List<Coords3d> points = getPoints();
-			
-			StringBuffer b = new StringBuffer("");
-			b.append("polyhedron(");
-			addPoints(b, points);
-			b.append(",");
-			addTriangles(b, points);
-			b.append("\n);");
-			return b.toString();
-		case POVRay:
-			return "mesh {"+Triangle3d.trianglesToString(triangles)+
-					Abstract3dModel.ATTRIBUTES_PLACEHOLDER+"}";
-		default:
-			throw new LanguageNotSupportedException();
-		}
-		
+		List<Coords3d> points = getPoints();
+
+		StringBuffer b = new StringBuffer("");
+		b.append("polyhedron(");
+		addPoints(b, points);
+		b.append(",");
+		addTriangles(b, points);
+		b.append("\n);");
+		return b.toString();
 	}
 
 	private void addPoints(StringBuffer b, List<Coords3d> points) {

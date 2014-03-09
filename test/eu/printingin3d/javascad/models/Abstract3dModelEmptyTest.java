@@ -11,7 +11,6 @@ import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.testutils.TestModel;
 
@@ -23,8 +22,6 @@ public class Abstract3dModelEmptyTest {
 	
 	@Before
 	public void init() {
-		Language.OpenSCAD.setCurrent();
-		
 		testSubject = new TestModel("",
 			new Boundaries3d(
 					new Boundary(MIN_BOUND, MAX_BOUND), 

@@ -3,22 +3,16 @@ package eu.printingin3d.javascad.models;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 import eu.printingin3d.javascad.testutils.TestModel;
 
 public class BoundedModelTest {
-	@BeforeClass
-	public static void init() {
-		Language.OpenSCAD.setCurrent();
-	}	
-
+	
 	@Test
 	public void testInnerToScad() {
 		TestModel baseModel = new TestModel("(model)");

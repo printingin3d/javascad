@@ -5,10 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
 import org.junit.Test;
-
-import eu.printingin3d.javascad.enums.Language;
 
 public class Abstract3dTest {
 	
@@ -16,11 +13,6 @@ public class Abstract3dTest {
 		public TestAbstract3d(double x, double y, double z) {
 			super(x, y, z);
 		}
-	}
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
 	}
 	
 	@Test
@@ -59,14 +51,6 @@ public class Abstract3dTest {
 	public void testToString() {
 		TestAbstract3d testSubject = new TestAbstract3d(10.0, 20.0, 30.0);
 		assertEqualsWithoutWhiteSpaces("[10,20,30]", testSubject.toString());
-	}
-	
-	@Test
-	public void testToStringPovRay() {
-		Language.POVRay.setCurrent();
-
-		TestAbstract3d testSubject = new TestAbstract3d(10.0, 20.0, 30.0);
-		assertEqualsWithoutWhiteSpaces("<10,20,30>", testSubject.toString());
 	}
 
 	@Test

@@ -3,35 +3,20 @@ package eu.printingin3d.javascad.tranzitions;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.testutils.TestModel;
 
 public class ScaleTest {
 	private static final double EPSILON = 0.001;
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test
 	public void testToScad() {
 		assertEqualsWithoutWhiteSpaces("scale([1,1.5,3.1416]) (model)", new Scale(TestModel.DEFAULT, new Coords3d(1, 1.5, Math.PI)).toScad());
-	}
-	
-	@Test
-	public void testToPovRay() {
-		Language.POVRay.setCurrent();
-		
-		Scale scale = new Scale(TestModel.DEFAULT, new Coords3d(1, 1.5, Math.PI));
-		assertEqualsWithoutWhiteSpaces("object { (model) scale <1, 1.5, 3.1416> #attributes }", scale.innerToScad());
 	}
 	
 	@Test

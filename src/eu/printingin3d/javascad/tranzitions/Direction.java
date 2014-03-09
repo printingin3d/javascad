@@ -10,31 +10,25 @@ public enum Direction {
 	/**
 	 * X direction.
 	 */
-	X("1,0,0", "-1,1,1"), 
+	X("1,0,0"), 
 	
 	/**
 	 * Y direction.
 	 */
-	Y("0,1,0", "1,-1,1"),
+	Y("0,1,0"),
 	
 	/**
 	 * z direction.
 	 */
-	Z("0,0,1", "1,1,-1");
+	Z("0,0,1");
 	
-	private final String openScadMirrorParams;
-	private final String povRayMirrorParams;
+	private final String mirrorParams;
 
-	private Direction(String openScadMirrorParams, String povRayMirrorParams) {
-		this.openScadMirrorParams = openScadMirrorParams;
-		this.povRayMirrorParams = povRayMirrorParams;
+	private Direction(String mirrorParams) {
+		this.mirrorParams = mirrorParams;
 	}
 
 	protected String getOpenScadMirrorParams() {
-		return openScadMirrorParams;
-	}
-
-	protected String getPovRayMirrorParams() {
-		return povRayMirrorParams;
+		return mirrorParams;
 	}
 }

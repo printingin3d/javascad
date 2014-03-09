@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
-import eu.printingin3d.javascad.enums.Language;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 
 /**
@@ -54,25 +52,13 @@ public class Intersection extends Abstract3dModel {
 			result.append(models.get(0).toScad());
 			break;
 		default:
-			String attributes;
-			switch (Language.getCurrent()) {
-			case OpenSCAD:
-				result.append("intersection()");
-				attributes = "";
-				break;
-			case POVRay:
-				result.append("intersection");
-				attributes = ATTRIBUTES_PLACEHOLDER;
-				break;
-			default:
-				throw new LanguageNotSupportedException();
-			}
+			result.append("intersection()");
 			
 			result.append("{\n");
 			for (Abstract3dModel model : models) {
 				result.append(model.toScad());
 			}
-			result.append(attributes).append("}\n");
+			result.append("}\n");
 			break;
 		}
 		return result.toString();

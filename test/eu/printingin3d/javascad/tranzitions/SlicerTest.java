@@ -3,14 +3,12 @@ package eu.printingin3d.javascad.tranzitions;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.BoundaryTest;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.TestModel;
@@ -19,11 +17,6 @@ public class SlicerTest {
 	private static final double EPSILON = 0.001;
 	private static final Abstract3dModel TEST_MODEL = new TestModel("(model)",
 			new Boundaries3d(new Boundary(0.0, 24.0), new Boundary(-12.0, 36.0), new Boundary(6.0, 18.0)));
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test(expected = IllegalValueException.class)
 	public void constructorShouldThrowExceptionIfIndexIsNegative() {

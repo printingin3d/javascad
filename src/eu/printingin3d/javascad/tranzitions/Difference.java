@@ -7,9 +7,7 @@ import java.util.List;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
 import eu.printingin3d.javascad.utils.AssertValue;
@@ -63,18 +61,8 @@ public class Difference extends Abstract3dModel {
 		
 		String attributes;
 		StringBuilder result = new StringBuilder();
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
-			result.append("difference()");
-			attributes = "";
-			break;
-		case POVRay:
-			result.append("difference");
-			attributes = Abstract3dModel.ATTRIBUTES_PLACEHOLDER;
-			break;
-		default:
-			throw new LanguageNotSupportedException();
-		}
+		result.append("difference()");
+		attributes = "";
 		result.append('{').append(model1.toScad());
 		for (Abstract3dModel model : model2) {
 			result.append(model.toScad());

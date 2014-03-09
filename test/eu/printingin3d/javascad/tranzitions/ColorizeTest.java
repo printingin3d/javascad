@@ -2,18 +2,12 @@ package eu.printingin3d.javascad.tranzitions;
 
 import java.awt.Color;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.testutils.AssertEx;
 import eu.printingin3d.javascad.testutils.TestModel;
 
 public class ColorizeTest {
-	@BeforeClass
-	public static void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test
 	public void testWithoutAlpha() {

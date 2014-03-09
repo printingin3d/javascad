@@ -1,14 +1,6 @@
 package eu.printingin3d.javascad.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import eu.printingin3d.javascad.coords.Coords2d;
-import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.coords.Triangle3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
@@ -52,79 +44,18 @@ public class Prism extends Cylinder {
 				"The number of sides should be positive, but "+numberOfSides);
 		this.numberOfSides = numberOfSides;
 	}
-
-	private List<Coords2d> getCirclePoints(double radius) {
-		List<Coords2d> result = new ArrayList<>();
-		for (int i=0;i<numberOfSides;i++) {
-			double alpha = 2*Math.PI*i/numberOfSides;
-			result.add(new Coords2d(radius*Math.sin(alpha), -radius*Math.cos(alpha)));
-		}
-		result.add(result.get(0));
-		return result;
-	}
-	
-	private static String listToString(List<? extends Object> list) {
-		StringBuilder sb = new StringBuilder();
-		for (Object obj : list) {
-			sb.append(obj);
-		}
-		return sb.toString();
-	}
-	
-	private List<Triangle3d> getTrianglesOfBottomAndTop() {
-		double z = length/2.0;
-		List<Triangle3d> result = new ArrayList<>();
-		Coords3d prevTop = null;
-		Coords3d prevBottom = null;
-		List<Coords2d> topCirclePoints = getCirclePoints(topRadius);
-		List<Coords2d> bottomCirclePoints = getCirclePoints(bottomRadius);
-		for (int i=0;i<topCirclePoints.size();i++) {
-			Coords3d top = topCirclePoints.get(i).withZ(z);
-			Coords3d bottom = bottomCirclePoints.get(i).withZ(-z);
-			if (i>0) {
-				result.add(new Triangle3d(Coords3d.zOnly(z), top, prevTop));
-				result.add(new Triangle3d(Coords3d.zOnly(-z), bottom, prevBottom));
-				
-				result.add(new Triangle3d(prevBottom, prevTop, top));
-				result.add(new Triangle3d(prevBottom, bottom, top));
-			}
-			
-			prevTop = top;
-			prevBottom = bottom;
-		}
-		return result;
-	}
 	
 	@Override
 	protected String innerToScad() {
 		if (DoubleUtils.equalsEps(bottomRadius, topRadius)) {
-			switch (Language.getCurrent()) {
-			case OpenSCAD:
-				return "cylinder(h="+DoubleUtils.formatDouble(length)+
-						", r="+DoubleUtils.formatDouble(bottomRadius)+
-						", $fn="+numberOfSides+", center=true);\n";
-			case POVRay:
-				return "prism { linear_spline "+
-					DoubleUtils.formatDouble(-length/2)+","+DoubleUtils.formatDouble(length/2)+","+
-					DoubleUtils.formatDouble(numberOfSides+1)+"," +
-					listToString(getCirclePoints(bottomRadius))+Abstract3dModel.ATTRIBUTES_PLACEHOLDER+"}";
-			default:
-				throw new LanguageNotSupportedException();
-			}
-		}
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
 			return "cylinder(h="+DoubleUtils.formatDouble(length)+
-					", r1="+DoubleUtils.formatDouble(bottomRadius)+
-					", r2="+DoubleUtils.formatDouble(topRadius)+
+					", r="+DoubleUtils.formatDouble(bottomRadius)+
 					", $fn="+numberOfSides+", center=true);\n";
-		case POVRay:
-			return "mesh {"+
-					Triangle3d.trianglesToString(getTrianglesOfBottomAndTop())+
-					Abstract3dModel.ATTRIBUTES_PLACEHOLDER+"}";
-		default:
-			throw new LanguageNotSupportedException();
 		}
+		return "cylinder(h="+DoubleUtils.formatDouble(length)+
+				", r1="+DoubleUtils.formatDouble(bottomRadius)+
+				", r2="+DoubleUtils.formatDouble(topRadius)+
+				", $fn="+numberOfSides+", center=true);\n";
 	}
 
 	@Override

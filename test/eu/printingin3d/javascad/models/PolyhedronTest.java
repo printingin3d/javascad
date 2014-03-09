@@ -13,9 +13,7 @@ import org.junit.Test;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.testutils.AssertEx;
 
 public class PolyhedronTest {
 	
@@ -73,8 +71,6 @@ public class PolyhedronTest {
 	
 	@Test
 	public void testScad() {
-		Language.OpenSCAD.setCurrent();
-		
 		Coords3d c0 = new Coords3d(10,10,0);
 		Coords3d c1 = new Coords3d(10,-10,0);
 		Coords3d c2 = new Coords3d(-10,-10,0);
@@ -102,37 +98,6 @@ public class PolyhedronTest {
 		Collections.sort(posList);
 		
 		assertTrue(scad.contains(replacePositions("[[%0,%1,%4], [%1,%2,%4], [%2,%3,%4], [%3,%0,%4], [%1,%0,%3], [%2,%1,%3]]", posList)));
-	}
-	
-	@Test
-	public void testPovRay() {
-		Language.POVRay.setCurrent();
-
-		Coords3d c0 = new Coords3d(10,10,0);
-		Coords3d c1 = new Coords3d(10,-10,0);
-		Coords3d c2 = new Coords3d(-10,-10,0);
-		Coords3d c3 = new Coords3d(-10,10,0);
-		Coords3d c4 = new Coords3d(0,0,10);
-
-		List<Triangle3d> triangles=new ArrayList<Triangle3d>();
-		triangles.add(new Triangle3d(c0,c1,c4));
-		triangles.add(new Triangle3d(c1,c2,c4));
-		triangles.add(new Triangle3d(c2,c3,c4));
-		triangles.add(new Triangle3d(c3,c0,c4));
-		triangles.add(new Triangle3d(c1,c0,c3));
-		triangles.add(new Triangle3d(c2,c1,c3));
-		Polyhedron p=new Polyhedron(triangles);
-
-		String pov = p.innerToScad();
-		
-		AssertEx.assertEqualsWithoutWhiteSpaces("mesh { " +
-				"triangle {< 10, 10,0>, < 10,-10,0>, <0,0,10>} " +
-				"triangle {< 10,-10,0>, <-10,-10,0>, <0,0,10>} " +
-				"triangle {<-10,-10,0>, <-10, 10,0>, <0,0,10>} " +
-				"triangle {<-10, 10,0>, < 10, 10,0>, <0,0,10>} " +
-				"triangle {< 10,-10,0>, < 10, 10,0>, <-10, 10,0>} " +
-				"triangle {<-10,-10,0>, < 10,-10,0>, <-10, 10,0>} " +
-				"#attributes}", pov);
 	}
 	
 	private static String replacePositions(String origPos, List<PositionAndIndex> posList) {

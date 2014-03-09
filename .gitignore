@@ -7,3 +7,6 @@
 /checkstyle-result.xml
 /.classpath
 /.project
+/eclipse-bin
+/pmd_error.xml
+/pmd_warning.xml

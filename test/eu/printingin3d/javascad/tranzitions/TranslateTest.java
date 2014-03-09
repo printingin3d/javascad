@@ -3,34 +3,20 @@ package eu.printingin3d.javascad.tranzitions;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.testutils.TestModel;
 
 public class TranslateTest {
 	private static final double EPSILON = 0.001;
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test
 	public void testGetTranslate() {
 		assertEqualsWithoutWhiteSpaces("translate([10,20,30])", Translate.getTranslate(new Coords3d(10, 20, 30)));
-	}
-	
-	@Test
-	public void testGetTranslatePovRay() {
-		Language.POVRay.setCurrent();
-		
-		assertEqualsWithoutWhiteSpaces("translate <10,20,30>", Translate.getTranslate(new Coords3d(10, 20, 30)));
 	}
 	
 	@Test
@@ -39,24 +25,9 @@ public class TranslateTest {
 	}
 	
 	@Test
-	public void getTranslateShouldReturnAnEmptyStringIfMoveIsZeroPovRay() {
-		Language.POVRay.setCurrent();
-		
-		assertEqualsWithoutWhiteSpaces("", Translate.getTranslate(Coords3d.ZERO));
-	}
-	
-	@Test
 	public void testToScad() {
 		Translate translate = new Translate(new TestModel("(model)"), new Coords3d(30, 20, 10));
 		assertEqualsWithoutWhiteSpaces("translate([30,20,10]) (model)", translate.toScad());
-	}
-	
-	@Test
-	public void testToPovRay() {
-		Language.POVRay.setCurrent();
-		
-		Translate translate = new Translate(new TestModel("(model)"), new Coords3d(30, 20, 10));
-		assertEqualsWithoutWhiteSpaces("object { (model) translate <30,20,10> #attributes }", translate.innerToScad());
 	}
 	
 	@Test

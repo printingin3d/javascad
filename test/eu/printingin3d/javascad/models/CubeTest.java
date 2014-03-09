@@ -3,21 +3,14 @@ package eu.printingin3d.javascad.models;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Dims3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 
 public class CubeTest {
 	private static final double EPSILON = 0.001;
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 	
 	@Test
 	public void testToScad1() {
@@ -29,14 +22,6 @@ public class CubeTest {
 	public void testToScad2() {
 		Cube cube = new Cube(new Dims3d(10.0, 20.0, 30.0));
 		assertEqualsWithoutWhiteSpaces("cube([10,20,30],center=true);", cube.toScad());
-	}
-	
-	@Test
-	public void testPovRay() {
-		Language.POVRay.setCurrent();
-		
-		Cube cube = new Cube(new Dims3d(10.0, 20.0, 30.0));
-		assertEqualsWithoutWhiteSpaces("box { <-5, -10, -15> <5, 10, 15> #attributes }", cube.innerToScad());
 	}
 	
 	@Test

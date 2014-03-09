@@ -1,6 +1,5 @@
 package eu.printingin3d.javascad.openscad;
 
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.models.IModel;
 
 /**
@@ -33,9 +32,6 @@ public class Consts implements IModel {
 
 	@Override
 	public String toScad() {
-		if (Language.OpenSCAD.isActive()) {
-			return "$fs="+fs+";$fa="+fa+";\n";
-		}
-		return "";
+		return "$fs="+fs+";$fa="+fa+";\n";
 	}
 }

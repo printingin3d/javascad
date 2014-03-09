@@ -4,22 +4,14 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 
 public class Triangle3dTest {
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test(expected = IllegalValueException.class)
 	public void point1ShouldNotBeNull1() {
@@ -74,32 +66,4 @@ public class Triangle3dTest {
 		
 		assertEqualsWithoutWhiteSpaces("[0, 2, 5]", new Triangle3d(c1, c2, c3).toTriangleString(points));
 	}	
-
-	@Test(expected = LanguageNotSupportedException.class)
-	public void openScadLanguageIsNotSupportedToRender() {
-		new Triangle3d(RandomUtils.getRandomCoords(), RandomUtils.getRandomCoords(), RandomUtils.getRandomCoords()).renderPovRay();
-	}
-	
-	@Test
-	public void shouldRenderAppropriatelyInPovRay() {
-		Language.POVRay.setCurrent();
-		String value = new Triangle3d(new Coords3d(10, 20, 30), new Coords3d(15, 25, 35), new Coords3d(1, 2, 3)).renderPovRay();
-		assertEqualsWithoutWhiteSpaces("triangle { <10,20,30>, <15,25,35>, <1,2,3> }", value);
-	}
-	
-	@Test
-	public void trianglesToStringShouldPutTrianglesAfterEachOther() {
-		Language.POVRay.setCurrent();
-		List<Triangle3d> values = Arrays.asList(
-				new Triangle3d(new Coords3d(10, 20, 30), new Coords3d(15, 25, 35), new Coords3d(1, 2, 3)),
-				new Triangle3d(new Coords3d(1, 2, 3), new Coords3d(15, 25, 35), new Coords3d(10, 20, 30)));
-		assertEqualsWithoutWhiteSpaces("triangle { <10,20,30>, <15,25,35>, <1,2,3> } triangle { <1,2,3>, <15,25,35>, <10,20,30> }", 
-				Triangle3d.trianglesToString(values));
-	}
-	
-	@Test
-	public void trianglesToStringShouldReturnEmptyStringForAnEmptyList() {
-		Language.POVRay.setCurrent();
-		assertEqualsWithoutWhiteSpaces("", Triangle3d.trianglesToString(Collections.<Triangle3d>emptyList()));
-	}
 }

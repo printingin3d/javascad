@@ -2,18 +2,11 @@ package eu.printingin3d.javascad.models;
 
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 
 public class PrismTest {
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test
 	public void testWhenOnlyOneRadiusIsGiven() {
@@ -33,13 +26,6 @@ public class PrismTest {
 		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=8.5, $fn=8, center=true);", prism.toScad());
 	}
 
-	@Test
-	public void testPovRayRender() {
-		Language.POVRay.setCurrent();
-		Prism prism = new Prism(10.0, 5.0, 8);
-		assertEqualsWithoutWhiteSpaces("prism { linear_spline -5, 5, 9, <0,-5> <3.5355,-3.5355> <5,0> <3.5355,3.5355> <0,5> <-3.5355,3.5355> <-5,0> <-3.5355,-3.5355> <0,-5> #attributes}", prism.innerToScad());
-	}
-	
 	@Test(expected = IllegalValueException.class)
 	public void negativeLengthShouldThrowException1() {
 		new Prism(-10.0, 5.0, 5);

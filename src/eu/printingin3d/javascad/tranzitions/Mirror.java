@@ -1,9 +1,7 @@
 package eu.printingin3d.javascad.tranzitions;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.utils.AssertValue;
 
@@ -56,14 +54,7 @@ public final class Mirror extends Abstract3dModel {
 
 	@Override
 	protected String innerToScad() {
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
-			return "mirror(["+direction.getOpenScadMirrorParams()+"])"+model.toScad();
-		case POVRay:
-			return "object {"+model.toScad()+" scale <"+direction.getPovRayMirrorParams()+"> #attributes }";
-		default:
-			throw new LanguageNotSupportedException();
-		}
+		return "mirror(["+direction.getOpenScadMirrorParams()+"])"+model.toScad();
 	}
 
 	@Override

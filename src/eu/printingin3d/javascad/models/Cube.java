@@ -5,9 +5,7 @@ import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
 import eu.printingin3d.javascad.enums.AlignType;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.enums.Side;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 
 /**
  * Represents a cuboid. 
@@ -52,16 +50,7 @@ public class Cube extends Abstract3dModel {
 
 	@Override
 	protected String innerToScad() {
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
-			return "cube("+size+",center=true);\n";
-		case POVRay:
-			Boundaries3d modelBoundaries = getModelBoundaries();
-			return "box {"+modelBoundaries.getMinCorner()+
-					modelBoundaries.getMaxCorner()+Abstract3dModel.ATTRIBUTES_PLACEHOLDER+"}";
-		default:
-			throw new LanguageNotSupportedException();
-		}
+		return "cube("+size+",center=true);\n";
 	}
 
 	@Override

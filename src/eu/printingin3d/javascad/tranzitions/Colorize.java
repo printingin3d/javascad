@@ -3,7 +3,6 @@ package eu.printingin3d.javascad.tranzitions;
 import java.awt.Color;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
@@ -32,7 +31,7 @@ public class Colorize extends Abstract3dModel {
 	protected String innerToScad() {
 		
 		StringBuilder sb = new StringBuilder();
-		sb.append(Language.getCurrent().getVectorStartChar()).
+		sb.append('[').
 				append(DoubleUtils.formatDouble(color.getRed()/255.0)).append(',').
 				append(DoubleUtils.formatDouble(color.getGreen()/255.0)).append(',').
 				append(DoubleUtils.formatDouble(color.getBlue()/255.0));
@@ -40,14 +39,9 @@ public class Colorize extends Abstract3dModel {
 		if (color.getAlpha()<255) {
 			sb.append(',').append(DoubleUtils.formatDouble(color.getAlpha()/255.0));
 		}
-		sb.append(Language.getCurrent().getVectorEndChar());
+		sb.append(']');
 		
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
-			return "color("+sb+")"+baseModel.toScad();
-		default:
-			return baseModel.toScad();
-		}
+		return "color("+sb+")"+baseModel.toScad();
 	}
 
 	@Override

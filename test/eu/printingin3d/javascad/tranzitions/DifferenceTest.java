@@ -7,25 +7,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
 import eu.printingin3d.javascad.testutils.TestModel;
 
 public class DifferenceTest {
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test(expected=IllegalValueException.class)
 	public void shouldThrowExceptionIfFirstModelIsNull() {
@@ -46,14 +39,6 @@ public class DifferenceTest {
 	public void testToScad() {
 		Difference difference = new Difference(new TestModel("(model1)"), new TestModel("(model2)"));
 		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2)}", difference.toScad());
-	}
-	
-	@Test
-	public void testToPovRay() {
-		Language.POVRay.setCurrent();
-		
-		Difference difference = new Difference(new TestModel("(model1)"), new TestModel("(model2)"));
-		assertEqualsWithoutWhiteSpaces("difference {(model1) (model2) #attributes }", difference.innerToScad());
 	}
 	
 	@Test

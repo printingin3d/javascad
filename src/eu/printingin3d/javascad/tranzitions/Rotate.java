@@ -2,9 +2,7 @@ package eu.printingin3d.javascad.tranzitions;
 
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.LanguageNotSupportedException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.utils.AssertValue;
 
@@ -38,27 +36,12 @@ public class Rotate extends Abstract3dModel {
 	 * @return the string which represents the rotation in OpenSCAD
 	 */
 	public static String getRotate(Angles3d angles) {
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
-			return "rotate("+angles+")";
-		case POVRay:
-			return "rotate"+angles;
-		default:
-			throw new LanguageNotSupportedException();			
-		}
+		return "rotate("+angles+")";
 	}
 	
 	@Override
 	protected String innerToScad() {
-		switch (Language.getCurrent()) {
-		case OpenSCAD:
-			return getRotate(angles)+model.toScad();
-		case POVRay:
-			return "object {"+model.toScad()+getRotate(angles)+Abstract3dModel.ATTRIBUTES_PLACEHOLDER+"}";
-		default:
-			throw new LanguageNotSupportedException();			
-		}
-		
+		return getRotate(angles)+model.toScad();
 	}
 
 	@Override

@@ -3,34 +3,19 @@ package eu.printingin3d.javascad.models;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
-import eu.printingin3d.javascad.enums.Language;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 
 public class SphereTest {
 	private static final double EPSILON = 0.001;
-	
-	@Before
-	public void init() {
-		Language.OpenSCAD.setCurrent();
-	}
 
 	@Test
 	public void testToScad() {
 		Sphere sphere = new Sphere(10.0);
 		assertEqualsWithoutWhiteSpaces("sphere(r=10);", sphere.toScad());
-	}
-	
-	@Test
-	public void testToPovRay() {
-		Language.POVRay.setCurrent();
-		
-		Sphere sphere = new Sphere(10.0);
-		assertEqualsWithoutWhiteSpaces("sphere{<0,0,0> 10 #attributes}", sphere.innerToScad());
 	}
 	
 	@Test
