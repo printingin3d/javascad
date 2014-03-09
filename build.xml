@@ -17,6 +17,11 @@
     <pathelement location="lib/cglib-2.2.2.jar"/>
     <pathelement location="lib/objenesis-1.2.jar"/>
     <pathelement location="lib/asm-3.3.1.jar"/>
+	<!-- PMD libs -->
+    <pathelement location="lib/jaxen-1.1.1.jar"/>
+    <pathelement location="lib/pmd-4.3.jar"/>
+	<!-- checkstyle libs -->
+    <pathelement location="lib/checkstyle-5.6-all.jar"/>
   </path>
   <target name="init">
       <mkdir dir="bin"/>
@@ -27,7 +32,6 @@
               <exclude name="**/*.java"/>
           </fileset>
       </copy>
-	  <tstamp/>
   </target>
   <target name="clean">
     <delete dir="bin"/>
@@ -53,7 +57,7 @@
     <jar destfile="jar/JavaScad.jar" basedir="bin" />
   </target>
   <target name="pmd-error">
-    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpath="c:/Program Files/pmd-bin-4.3/lib/pmd-4.3.jar"/>
+    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="JavaScad.classpath.test"/>
     <pmd shortFilenames="true" failOnRuleViolation="true" targetjdk="1.7">
       <ruleset>braces,basic,imports</ruleset>
       <formatter type="xml" toFile="pmd_error.xml" linkPrefix="http://pmd.sourceforge.net/xref/"/>
@@ -63,7 +67,7 @@
     </pmd>
   </target>
   <target name="pmd-warning">
-    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpath="c:/Program Files/pmd-bin-4.3/lib/pmd-4.3.jar"/>
+    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="JavaScad.classpath.test"/>
     <pmd shortFilenames="true" failOnRuleViolation="false" targetjdk="1.7">
       <ruleset>codesize,design</ruleset>
       <formatter type="xml" toFile="pmd_warning.xml" linkPrefix="http://pmd.sourceforge.net/xref/"/>
@@ -73,7 +77,7 @@
     </pmd>
   </target>
   <target depends="pmd-error" name="pmd">
-    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpath="c:/Program Files/pmd-bin-4.3/lib/pmd-4.3.jar"/>
+    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="JavaScad.classpath.test"/>
     <pmd shortFilenames="true" failOnRuleViolation="false" targetjdk="1.7">
       <ruleset>codesize,design</ruleset>
       <formatter type="html" toFile="pmd_output.html" linkPrefix="http://pmd.sourceforge.net/xref/"/>
@@ -152,8 +156,15 @@
            basedir="docs"
       />
   </target>
-  <target name="find_revision" depends="init" description="Sets property 'revision.number' to the head svn revision">
-    <property name="revision.number" value="${DSTAMP}"/>
+  <target name="find_revision" description="Sets property 'revision.number' to the head svn revision">
+    <delete file="version.properties"/>
+    
+    <!-- find out revision number of HEAD, need svn.exe installed on local machine -->
+    <exec executable="c:/Program Files/TortoiseSVN/bin/SubWCRev.exe">
+        <arg line=". version.properties.template version.properties"/>
+    </exec>
+    
+    <property file="version.properties"/>
     
     <fail unless="revision.number" />
     
@@ -170,8 +181,7 @@
 	<echo file="jar/version.text" append="false">${revision.number}</echo>
   </target>
   <target name="checkstyle">
-    <taskdef resource="checkstyletask.properties"
-             classpath="c:/Program Files/checkstyle-5.6/checkstyle-5.6-all.jar"/>
+    <taskdef resource="checkstyletask.properties" classpathref="JavaScad.classpath.test"/>
     <checkstyle config="checkstyle.xml" failonviolation="false">
       <fileset dir="src" includes="**/*.java"/>
       <formatter type="xml" toFile="checkstyle-result.xml"/>
