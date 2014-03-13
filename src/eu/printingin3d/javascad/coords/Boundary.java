@@ -171,7 +171,7 @@ public class Boundary {
 	 * @throws IllegalValueException if there is nothing left
 	 */
 	public Boundary remove(Boundary b) {
-		if (this.max<b.min || this.min>b.max) {
+		if (this.max<=b.min || this.min>=b.max) {
 			return this;
 		}
 		if (this.min<b.min && this.max>b.min) {

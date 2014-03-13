@@ -13,6 +13,9 @@ import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
+import eu.printingin3d.javascad.coords.Dims3d;
+import eu.printingin3d.javascad.enums.AlignType;
+import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
@@ -124,5 +127,15 @@ public class DifferenceTest {
 		assertDoubleEquals(25.0, boundaries.getY().getMax());
 		assertDoubleEquals( 0.0, boundaries.getZ().getMin());
 		assertDoubleEquals(50.0, boundaries.getZ().getMax());
+	}
+	
+	@Test
+	public void shouldWorkIfTheObjectAreTouching() {
+		Abstract3dModel base = new Cube(new Dims3d(6.0, 30.0, 6.0));
+		Abstract3dModel result = new Difference(base,
+						new Cube(100.0)
+							.align(new Side(AlignType.MAX, AlignType.CENTER, AlignType.NONE), base, true)
+							.align(Side.TOP, base, false));
+		result.getBoundaries();
 	}
 }
