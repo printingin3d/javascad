@@ -1,4 +1,4 @@
-package eu.printingin3d.javascad.coords;
+package eu.printingin3d.javascad.coords2d;
 
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 import static org.junit.Assert.assertEquals;
@@ -6,6 +6,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import eu.printingin3d.javascad.coords2d.Abstract2d;
 
 public class Abstract2dTest {
 	

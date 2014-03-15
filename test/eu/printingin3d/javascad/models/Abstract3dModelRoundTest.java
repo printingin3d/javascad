@@ -10,49 +10,50 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.BoundaryTest;
 import eu.printingin3d.javascad.enums.Plane;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.RandomUtils;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class Abstract3dModelRoundTest {
 	private static final Boundaries3d TEST_BOUNDARIES = RandomUtils.getRandomBoundaries();
 
 	@Test
 	public void roundShoundReturnWithTheActualObject() {
-		Abstract3dModel testSubject = new TestModel("(base)");
+		Abstract3dModel testSubject = new Test3dModel("(base)");
 		Assert.assertSame(testSubject, testSubject.round(Plane.XY, 1.0));
 	}
 
 	@Test
 	public void roundShouldRenderWithMinkowskiXY() {
-		Abstract3dModel testSubject = new TestModel("(base)");
+		Abstract3dModel testSubject = new Test3dModel("(base)");
 		testSubject.round(Plane.XY, 2.0);
 		assertEqualsWithoutWhiteSpaces("minkowski() {(base) cylinder(r=2, h=0.00001, center=true);}", testSubject.toScad());
 	}
 	
 	@Test
 	public void roundShouldRenderWithMinkowskiYZ() {
-		Abstract3dModel testSubject = new TestModel("(base)");
+		Abstract3dModel testSubject = new Test3dModel("(base)");
 		testSubject.round(Plane.YZ, 3.0);
 		assertEqualsWithoutWhiteSpaces("minkowski() {(base) rotate([0,90,0]) cylinder(r=3, h=0.00001, center=true);}", testSubject.toScad());
 	}
 	
 	@Test
 	public void roundShouldRenderWithMinkowskiXZ() {
-		Abstract3dModel testSubject = new TestModel("(base)");
+		Abstract3dModel testSubject = new Test3dModel("(base)");
 		testSubject.round(Plane.XZ, 1.5);
 		assertEqualsWithoutWhiteSpaces("minkowski() {(base) rotate([90,0,0]) cylinder(r=1.5, h=0.00001, center=true);}", testSubject.toScad());
 	}
 	
 	@Test
 	public void roundShouldRenderWithMinkowskiAll() {
-		Abstract3dModel testSubject = new TestModel("(base)");
+		Abstract3dModel testSubject = new Test3dModel("(base)");
 		testSubject.round(Plane.ALL, 3.3);
 		assertEqualsWithoutWhiteSpaces("minkowski() {(base) sphere(r=3.3);}", testSubject.toScad());
 	}
 	
 	@Test
 	public void roundShouldIncreaseTheSizeXY() {
-		Abstract3dModel testSubject = new TestModel("(base)", TEST_BOUNDARIES);
+		Abstract3dModel testSubject = new Test3dModel("(base)", TEST_BOUNDARIES);
 		testSubject.round(Plane.XY, 2.0);
 		Boundaries3d boundaries = testSubject.getBoundaries();
 		assertDoubleEquals(TEST_BOUNDARIES.getX().getMin()-2.0, boundaries.getX().getMin());
@@ -65,7 +66,7 @@ public class Abstract3dModelRoundTest {
 	
 	@Test
 	public void roundShouldIncreaseTheSizeYZ() {
-		Abstract3dModel testSubject = new TestModel("(base)", TEST_BOUNDARIES);
+		Abstract3dModel testSubject = new Test3dModel("(base)", TEST_BOUNDARIES);
 		testSubject.round(Plane.YZ, 3.3);
 		Boundaries3d boundaries = testSubject.getBoundaries();
 
@@ -79,7 +80,7 @@ public class Abstract3dModelRoundTest {
 	
 	@Test
 	public void roundShouldIncreaseTheSizeXZ() {
-		Abstract3dModel testSubject = new TestModel("(base)", TEST_BOUNDARIES);
+		Abstract3dModel testSubject = new Test3dModel("(base)", TEST_BOUNDARIES);
 		testSubject.round(Plane.XZ, 5.3);
 		Boundaries3d boundaries = testSubject.getBoundaries();
 		
@@ -94,7 +95,7 @@ public class Abstract3dModelRoundTest {
 	
 	@Test
 	public void roundShouldIncreaseTheSizeALL() {
-		Abstract3dModel testSubject = new TestModel("(base)", TEST_BOUNDARIES);
+		Abstract3dModel testSubject = new Test3dModel("(base)", TEST_BOUNDARIES);
 		testSubject.round(Plane.ALL, 1.9);
 		Boundaries3d boundaries = testSubject.getBoundaries();
 		
@@ -108,14 +109,14 @@ public class Abstract3dModelRoundTest {
 	
 	@Test
 	public void roundShouldIncreaseTheSizeAll() {
-		Abstract3dModel testSubject = new TestModel("(base)");
+		Abstract3dModel testSubject = new Test3dModel("(base)");
 		testSubject.round(Plane.ALL, 3.3);
 		assertEqualsWithoutWhiteSpaces("minkowski() {(base) sphere(r=3.3);}", testSubject.toScad());
 	}
 
 	@Test(expected = IllegalValueException.class)
 	public void negativeRadiusShouldThrowException() {
-		Abstract3dModel testSubject = new TestModel("(base)");
+		Abstract3dModel testSubject = new Test3dModel("(base)");
 		testSubject.round(Plane.ALL, -2.0);
 	}
 }

@@ -9,7 +9,7 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class TranslateTest {
 	private static final double EPSILON = 0.001;
@@ -26,13 +26,13 @@ public class TranslateTest {
 	
 	@Test
 	public void testToScad() {
-		Translate translate = new Translate(new TestModel("(model)"), new Coords3d(30, 20, 10));
+		Translate translate = new Translate(new Test3dModel("(model)"), new Coords3d(30, 20, 10));
 		assertEqualsWithoutWhiteSpaces("translate([30,20,10]) (model)", translate.toScad());
 	}
 	
 	@Test
 	public void toScadWithZeroMoveShouldDoNothing() {
-		Translate translate = new Translate(new TestModel("(model)"), Coords3d.ZERO);
+		Translate translate = new Translate(new Test3dModel("(model)"), Coords3d.ZERO);
 		assertEqualsWithoutWhiteSpaces("(model)", translate.toScad());
 	}
 	
@@ -42,7 +42,7 @@ public class TranslateTest {
 				new Boundary(50.2, 13.3), 
 				new Boundary(18.3, 78.3), 
 				new Boundary(10.0, 43.2));
-		Translate translate = new Translate(new TestModel("(model)", boundaries), Coords3d.ZERO);
+		Translate translate = new Translate(new Test3dModel("(model)", boundaries), Coords3d.ZERO);
 		Boundaries3d newBoundaries = translate.getBoundaries();
 		
 		Assert.assertEquals(13.3, newBoundaries.getX().getMin(), EPSILON);
@@ -59,7 +59,7 @@ public class TranslateTest {
 				new Boundary(50.2, 13.3), 
 				new Boundary(18.3, 78.3), 
 				new Boundary(10.0, 43.2));
-		Translate translate = new Translate(new TestModel("(model)", boundaries), new Coords3d(30, 20, 10));
+		Translate translate = new Translate(new Test3dModel("(model)", boundaries), new Coords3d(30, 20, 10));
 		Boundaries3d newBoundaries = translate.getBoundaries();
 		
 		Assert.assertEquals(43.3, newBoundaries.getX().getMin(), EPSILON);
@@ -77,6 +77,6 @@ public class TranslateTest {
 	
 	@Test(expected=IllegalValueException.class)
 	public void shouldThrowIllegalValueExceptionIfMoveIsNull() {
-		new Translate(new TestModel("(model)"), null);
+		new Translate(new Test3dModel("(model)"), null);
 	}
 }

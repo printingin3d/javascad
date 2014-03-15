@@ -4,6 +4,7 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertDoubleEquals;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.coords.Dims3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 
 public class Dims3dTest {

@@ -4,7 +4,7 @@ import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.AssertValue;
 
 /**
- * Denotes the size of an object, thus negative values are forbidden.
+ * Denotes the size of a 3D object, thus negative values are forbidden.
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
@@ -24,6 +24,10 @@ public class Dims3d extends Abstract3d {
 		AssertValue.isNotNegative(z, "All dimensions should be positive, but z is "+z);
 	}
 
+	/**
+	 * Increases the dimension by 1 in every direction. 
+	 * @return a new dimension object which is bigger than this by 1.
+	 */
 	public Dims3d increase() {
 		return new Dims3d(x+1.0, y+1.0, z+1.0);
 	}

@@ -10,19 +10,19 @@ import org.junit.Test;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.models.Abstract3dModel;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class IntersectionTest {
 
 	@Test
 	public void testToScad() {
-		Intersection intersection = new Intersection(new TestModel("(model1)"), new TestModel("(model2)"));
+		Intersection intersection = new Intersection(new Test3dModel("(model1)"), new Test3dModel("(model2)"));
 		assertEqualsWithoutWhiteSpaces("intersection() {(model1) (model2)}", intersection.toScad());
 	}
 	
 	@Test
 	public void testToScadWithOnlyOneModel() {
-		Intersection intersection = new Intersection(new TestModel("(model1)"));
+		Intersection intersection = new Intersection(new Test3dModel("(model1)"));
 		assertEqualsWithoutWhiteSpaces("(model1)", intersection.toScad());
 	}
 	
@@ -35,11 +35,11 @@ public class IntersectionTest {
 	
 	@Test
 	public void boundariesShouldBeTheLowestAndHighestValueOfTheList() {
-		TestModel model1 = new TestModel("(model1)", new Boundaries3d(
+		Test3dModel model1 = new Test3dModel("(model1)", new Boundaries3d(
 				new Boundary(10.2, 50.8), 
 				new Boundary(10.2, 50.8), 
 				new Boundary(10.2, 50.8)));
-		TestModel model2 = new TestModel("(model2)", new Boundaries3d(
+		Test3dModel model2 = new Test3dModel("(model2)", new Boundaries3d(
 				new Boundary(20.9, 51.1), 
 				new Boundary(20.9, 51.1), 
 				new Boundary(20.9, 51.1)));

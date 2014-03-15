@@ -13,8 +13,9 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.BoundaryTest;
 import eu.printingin3d.javascad.coords.Coords3d;
+import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.RandomUtils;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class Abstract3dModelBoundariesTest {
 	private Boundaries3d testSubjectsBoundaries;
@@ -23,7 +24,7 @@ public class Abstract3dModelBoundariesTest {
 	@Before
 	public void init() {
 		testSubjectsBoundaries = RandomUtils.getRandomBoundaries();
-		testSubject = new TestModel("(subject)", testSubjectsBoundaries);
+		testSubject = new Test3dModel("(subject)", testSubjectsBoundaries);
 	}
 	
 	@Test

@@ -8,6 +8,9 @@ import static org.junit.Assert.assertNotSame;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.coords.Angles3d;
+import eu.printingin3d.javascad.coords.Coords3d;
+
 public class Coords3dTest {
 	
 	public static void assertCoords3dEquals(Coords3d expected, Coords3d actual) {

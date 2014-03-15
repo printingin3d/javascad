@@ -20,7 +20,7 @@ import eu.printingin3d.javascad.utils.RoundProperties;
 
 /**
  * <p>Implements IModel interface and adds convenient methods to make it easier to move or rotate
- * the models. Every primitive object and transition extends this class.</p>
+ * the 3D models. Every primitive 3D object and 3D transition extend this class.</p>
  * <p>It can even represent more than one model on certain cases - see {@link #moves(Collection)}.</p>
  *
  * @author ivivan <ivivan@printingin3d.eu>

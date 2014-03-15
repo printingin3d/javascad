@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.coords.Abstract3d;
+
 public class Abstract3dTest {
 	
 	private static class TestAbstract3d extends Abstract3d {

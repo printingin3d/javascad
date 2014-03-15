@@ -9,6 +9,10 @@ import java.util.Collections;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.coords.Angles3d;
+import eu.printingin3d.javascad.coords.Boundaries3d;
+import eu.printingin3d.javascad.coords.Boundary;
+import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 
 public class Boundaries3dTest {

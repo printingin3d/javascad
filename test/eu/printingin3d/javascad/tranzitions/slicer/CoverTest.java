@@ -6,11 +6,11 @@ import org.junit.Test;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.models.Abstract3dModel;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 import eu.printingin3d.javascad.tranzitions.Direction;
 
 public class CoverTest {
-	private static final Abstract3dModel TEST_MODEL = new TestModel("(model)",
+	private static final Abstract3dModel TEST_MODEL = new Test3dModel("(model)",
 			new Boundaries3d(new Boundary(0.0, 24.0), new Boundary(-12.0, 36.0), new Boundary(6.0, 18.0)));
 
 	@Test

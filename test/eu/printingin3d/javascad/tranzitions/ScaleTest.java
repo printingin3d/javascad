@@ -9,19 +9,19 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class ScaleTest {
 	private static final double EPSILON = 0.001;
 
 	@Test
 	public void testToScad() {
-		assertEqualsWithoutWhiteSpaces("scale([1,1.5,3.1416]) (model)", new Scale(TestModel.DEFAULT, new Coords3d(1, 1.5, Math.PI)).toScad());
+		assertEqualsWithoutWhiteSpaces("scale([1,1.5,3.1416]) (model)", new Scale(Test3dModel.DEFAULT, new Coords3d(1, 1.5, Math.PI)).toScad());
 	}
 	
 	@Test
 	public void testToScadWithIdentScale() {
-		assertEqualsWithoutWhiteSpaces("(model)", new Scale(TestModel.DEFAULT, new Coords3d(1, 1, 1)).toScad());
+		assertEqualsWithoutWhiteSpaces("(model)", new Scale(Test3dModel.DEFAULT, new Coords3d(1, 1, 1)).toScad());
 	}
 
 	@Test
@@ -30,7 +30,7 @@ public class ScaleTest {
 				new Boundary(50.2, 13.3), 
 				new Boundary(18.3, 78.3), 
 				new Boundary(10.0, 43.2));
-		Scale scale = new Scale(new TestModel("(model)", boundaries), new Coords3d(0.3, 2, 8));
+		Scale scale = new Scale(new Test3dModel("(model)", boundaries), new Coords3d(0.3, 2, 8));
 		Boundaries3d newBoundaries = scale.getBoundaries();
 		
 		Assert.assertEquals(  3.99, newBoundaries.getX().getMin(), EPSILON);
@@ -47,7 +47,7 @@ public class ScaleTest {
 				new Boundary(50.2, 13.3), 
 				new Boundary(18.3, 78.3), 
 				new Boundary(10.0, 43.2));
-		Scale scale = new Scale(new TestModel("(model)", boundaries), new Coords3d(1.0, 1.0, 1.0));
+		Scale scale = new Scale(new Test3dModel("(model)", boundaries), new Coords3d(1.0, 1.0, 1.0));
 		Boundaries3d newBoundaries = scale.getBoundaries();
 		
 		Assert.assertEquals(boundaries.getX().getMin(), newBoundaries.getX().getMin(), EPSILON);
@@ -65,6 +65,6 @@ public class ScaleTest {
 	
 	@Test(expected=IllegalValueException.class)
 	public void shouldThrowIllegalValueExceptionIfScaleIsNull() {
-		new Scale(TestModel.DEFAULT, null);
+		new Scale(Test3dModel.DEFAULT, null);
 	}
 }

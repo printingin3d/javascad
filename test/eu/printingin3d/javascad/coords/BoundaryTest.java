@@ -9,6 +9,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.enums.AlignType;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 
@@ -218,5 +219,13 @@ public class BoundaryTest {
 		Boundary b = new Boundary(3.0, 5.5);
 		
 		b.remove(a);
+	}
+	
+	@Test
+	public void symmetricBoundaryShouldBeCreated() {
+		Boundary testSubject = Boundary.createSymmetricBoundary(18.2);
+		
+		assertDoubleEquals(18.2, testSubject.getMax());
+		assertDoubleEquals(0.0, testSubject.getMiddle());
 	}
 }

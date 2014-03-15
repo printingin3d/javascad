@@ -18,13 +18,16 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
+import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.BoundedModel;
 import eu.printingin3d.javascad.models.Cube;
 import eu.printingin3d.javascad.models.Cylinder;
 import eu.printingin3d.javascad.models.Polyhedron;
 import eu.printingin3d.javascad.models.Prism;
+import eu.printingin3d.javascad.models.Ring;
 import eu.printingin3d.javascad.models.Sphere;
+import eu.printingin3d.javascad.models2d.Square;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 import eu.printingin3d.javascad.tranzitions.Colorize;
 import eu.printingin3d.javascad.tranzitions.Difference;
@@ -42,16 +45,11 @@ public class CloneModelTest {
 	
 	public static class TestCase {
 		private final Abstract3dModel model;
-		private final boolean expectSimpleResult;
-		private TestCase(Abstract3dModel model, boolean expectSimpleResult) {
+		private TestCase(Abstract3dModel model) {
 			this.model = model;
-			this.expectSimpleResult = expectSimpleResult;
 		}
 		public Abstract3dModel getModel() {
 			return model;
-		}
-		public boolean isExpectSimpleResult() {
-			return expectSimpleResult;
 		}
 	}
 	
@@ -65,26 +63,27 @@ public class CloneModelTest {
 		Abstract3dModel cube = new Cube(new Dims3d(67.0, 32.3, 98.3));
 		Abstract3dModel cylinder = new Cylinder(32.2, 9.3, 11.1);
 		return Arrays.<TestCase>asList(
-				new TestCase(cube.cloneModel(), false),
-				new TestCase(cylinder.cloneModel(), false),
-				new TestCase(new Prism(78.2, 10.1, 32.2, 5), false),
-				new TestCase(new Prism(78.2, 10.1, 5), false),
-				new TestCase(new Intersection(cube.cloneModel()), true),
-				new TestCase(new Intersection(cube.cloneModel(), cylinder.cloneModel()), false),
-				new TestCase(new Difference(cube.cloneModel(), cylinder.cloneModel()), false),
-				new TestCase(new Difference(cube.cloneModel()), true),
-				new TestCase(Mirror.mirrorX(cube.cloneModel()), false),
-				new TestCase(new Rotate(cylinder, new Angles3d(-21, 32.1, 331.4)), false),
-				new TestCase(new Scale(cylinder, new Coords3d(4.10, 1.0, 3.21)), false),
-				new TestCase(new Slicer(cube, Direction.X, 3, 0), true),
-				new TestCase(new Colorize(Color.black, cube), true),
-				new TestCase(new Sphere(3.1), false),
-				new TestCase(new Translate(cube, new Coords3d(-23, 33.2, 7.3)), false),
-				new TestCase(new BoundedModel(cube, RandomUtils.getRandomBoundaries()), true),
-				new TestCase(new Union(cube, cylinder), false),
-				new TestCase(cube.cloneModel().background(), false),
-				new TestCase(cube.cloneModel().debug(), false),
-				new TestCase(new Polyhedron(Arrays.asList(RandomUtils.getRandomTriangle(), RandomUtils.getRandomTriangle())), false)
+				new TestCase(cube.cloneModel()),
+				new TestCase(cylinder.cloneModel()),
+				new TestCase(new Prism(78.2, 10.1, 32.2, 5)),
+				new TestCase(new Prism(78.2, 10.1, 5)),
+				new TestCase(new Intersection(cube.cloneModel())),
+				new TestCase(new Intersection(cube.cloneModel(), cylinder.cloneModel())),
+				new TestCase(new Difference(cube.cloneModel(), cylinder.cloneModel())),
+				new TestCase(new Difference(cube.cloneModel())),
+				new TestCase(Mirror.mirrorX(cube.cloneModel())),
+				new TestCase(new Rotate(cylinder, new Angles3d(-21, 32.1, 331.4))),
+				new TestCase(new Scale(cylinder, new Coords3d(4.10, 1.0, 3.21))),
+				new TestCase(new Slicer(cube, Direction.X, 3, 0)),
+				new TestCase(new Colorize(Color.black, cube)),
+				new TestCase(new Sphere(3.1)),
+				new TestCase(new Translate(cube, new Coords3d(-23, 33.2, 7.3))),
+				new TestCase(new BoundedModel(cube, RandomUtils.getRandomBoundaries())),
+				new TestCase(new Union(cube, cylinder)),
+				new TestCase(cube.cloneModel().background()),
+				new TestCase(cube.cloneModel().debug()),
+				new TestCase(new Polyhedron(Arrays.asList(RandomUtils.getRandomTriangle(), RandomUtils.getRandomTriangle()))),
+				new TestCase(new Ring(12.2, new Square(new Dims2d(15.0, 12.2))))
 			);
 	}
 	

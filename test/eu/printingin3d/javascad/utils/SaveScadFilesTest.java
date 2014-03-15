@@ -19,7 +19,7 @@ import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.ConstsTest;
 import eu.printingin3d.javascad.models.IModel;
 import eu.printingin3d.javascad.testutils.FileMockBuilder;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 /**
  * Tests SaveScadFiles class - it's more like an integration test
@@ -105,7 +105,7 @@ public class SaveScadFilesTest {
 		saveScadFiles.addScadFile(new IScadFile() {
 			@Override
 			public Collection<IModel> getModels() {
-				return Arrays.<IModel>asList(new TestModel(model));
+				return Arrays.<IModel>asList(new Test3dModel(model));
 			}
 			
 			@Override
@@ -125,7 +125,7 @@ public class SaveScadFilesTest {
 		SaveScadFiles saveScadFiles = new SaveScadFiles(ROOT);
 		final File fileName = new File(ROOT.getAbsolutePath()+"/fileName2.scad");
 		Assert.assertFalse(fileName.exists());
-		saveScadFiles.addModels("fileName2.scad", Arrays.<IModel>asList(new TestModel(model)));
+		saveScadFiles.addModels("fileName2.scad", Arrays.<IModel>asList(new Test3dModel(model)));
 		saveScadFiles.saveScadFiles();
 		Assert.assertTrue(fileName.exists());
 		assertEqualsWithoutWhiteSpaces(model, readTheWholeFile(fileName));
@@ -138,7 +138,7 @@ public class SaveScadFilesTest {
 		SaveScadFiles saveScadFiles = new SaveScadFiles(ROOT);
 		final File fileName = new File(ROOT.getAbsolutePath()+"/fileName3.scad");
 		Assert.assertFalse(fileName.exists());
-		saveScadFiles.addModel("fileName3.scad", new TestModel(model));
+		saveScadFiles.addModel("fileName3.scad", new Test3dModel(model));
 		saveScadFiles.saveScadFiles();
 		Assert.assertTrue(fileName.exists());
 		assertEqualsWithoutWhiteSpaces(ConstsTest.DEFAULT_CONSTS+" "+model, readTheWholeFile(fileName));

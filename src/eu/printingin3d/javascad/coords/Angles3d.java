@@ -78,7 +78,7 @@ public class Angles3d extends Abstract3d {
 		super(normalize(x), normalize(y), normalize(z));
 	}
 	
-	private double simplicity(Coords3d temp, Normal3d normalAngle, Normal3d normalVectorA, Normal3d normalVectorB) {
+	private double simplicity(Coords3d temp, Normal3d normalVectorA, Normal3d normalVectorB) {
 		double result = 0.0;
 		double a = normalVectorA.normalValue(temp);
 		double b = normalVectorB.normalValue(temp);
@@ -96,21 +96,23 @@ public class Angles3d extends Abstract3d {
 	 */
 	public Angles3d rotate(Angles3d delta) {
 		Coords3d temp = Coords3d.xOnly(1.0).rotate(this).rotate(delta);
-		double gamma = simplicity(temp, Normal3d.Z, Normal3d.Y, Normal3d.X);
+		double gamma = simplicity(temp, Normal3d.Y, Normal3d.X);
 		
 		temp = Coords3d.zOnly(1.0).rotate(this).rotate(delta).rotate(zOnly(-gamma));
-		double beta = simplicity(temp, Normal3d.Y, Normal3d.X, Normal3d.Z);
+		double beta = simplicity(temp, Normal3d.X, Normal3d.Z);
 		
 		temp = Coords3d.yOnly(1.0).rotate(this).rotate(delta).rotate(zOnly(-gamma)).rotate(yOnly(-beta));
-		double alpha = simplicity(temp, Normal3d.X, Normal3d.Z, Normal3d.Y);
+		double alpha = simplicity(temp, Normal3d.Z, Normal3d.Y);
 
-		if (Coords3d.xOnly(1.0).rotate(this).rotate(delta).rotate(zOnly(-gamma)).rotate(yOnly(-beta)).rotate(xOnly(-alpha))
+		if (Coords3d.xOnly(1.0).rotate(this).rotate(delta)
+				.rotate(zOnly(-gamma)).rotate(yOnly(-beta)).rotate(xOnly(-alpha))
 				.equals(Coords3d.xOnly(-1.0))) {
 			alpha = -(180.0+alpha);
 			beta = -beta;
 			gamma = 180.0+gamma;
 		}
-		if (Coords3d.yOnly(1.0).rotate(this).rotate(delta).rotate(zOnly(-gamma)).rotate(yOnly(-beta)).rotate(xOnly(-alpha))
+		if (Coords3d.yOnly(1.0).rotate(this).rotate(delta)
+				.rotate(zOnly(-gamma)).rotate(yOnly(-beta)).rotate(xOnly(-alpha))
 				.equals(Coords3d.yOnly(-1.0))) {
 			alpha = -(180.0+alpha);
 		}

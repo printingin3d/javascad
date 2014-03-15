@@ -1,4 +1,4 @@
-package eu.printingin3d.javascad.coords;
+package eu.printingin3d.javascad.coords2d;
 
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
@@ -47,6 +47,20 @@ public class Abstract2d {
 				append(DoubleUtils.formatDouble(x)).append(',').
 				append(DoubleUtils.formatDouble(y)).append(']').
 				toString();
+	}
+
+	/**
+	 * @return the X coordinate
+	 */
+	public double getX() {
+		return x;
+	}
+
+	/**
+	 * @return the Y coordinate
+	 */
+	public double getY() {
+		return y;
 	}
 
 	@Override

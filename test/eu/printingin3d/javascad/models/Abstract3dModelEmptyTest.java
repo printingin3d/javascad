@@ -12,7 +12,9 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.enums.Side;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.Cube;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class Abstract3dModelEmptyTest {
 	private static final double MAX_BOUND = 15.0;
@@ -22,7 +24,7 @@ public class Abstract3dModelEmptyTest {
 	
 	@Before
 	public void init() {
-		testSubject = new TestModel("",
+		testSubject = new Test3dModel("",
 			new Boundaries3d(
 					new Boundary(MIN_BOUND, MAX_BOUND), 
 					new Boundary(MIN_BOUND, MAX_BOUND),

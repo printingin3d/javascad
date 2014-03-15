@@ -12,19 +12,19 @@ import org.junit.Test;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.models.Abstract3dModel;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class UnionTest {
 
 	@Test
 	public void testUnion1() {
-		Union union = new Union(new TestModel("(model1)"), new TestModel("(model2)"));
+		Union union = new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)"));
 		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2)}", union.toScad());
 	}
 	
 	@Test
 	public void testUnion2() {
-		Union union = new Union(Arrays.<Abstract3dModel>asList(new TestModel("(model1)"), new TestModel("(model2)")));
+		Union union = new Union(Arrays.<Abstract3dModel>asList(new Test3dModel("(model1)"), new Test3dModel("(model2)")));
 		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2)}", union.toScad());
 	}
 	
@@ -38,15 +38,15 @@ public class UnionTest {
 	@Test
 	public void unionShouldHandleNullElementsInTheList() {
 		Union union = new Union(Arrays.<Abstract3dModel>asList(
-				new TestModel("(model1)"), 
+				new Test3dModel("(model1)"), 
 				null, 
-				new TestModel("(model2)")));
+				new Test3dModel("(model2)")));
 		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2)}", union.toScad());
 	}
 	
 	@Test
 	public void testUnionWithOnlyOneModel() {
-		Union union = new Union(Arrays.<Abstract3dModel>asList(new TestModel("(model1)")));
+		Union union = new Union(Arrays.<Abstract3dModel>asList(new Test3dModel("(model1)")));
 		assertEqualsWithoutWhiteSpaces("(model1)", union.toScad());
 	}
 	
@@ -66,11 +66,11 @@ public class UnionTest {
 	
 	@Test
 	public void boundariesShouldBeTheLowestAndHighestValueOfTheList() {
-		TestModel model1 = new TestModel("(model1)", new Boundaries3d(
+		Test3dModel model1 = new Test3dModel("(model1)", new Boundaries3d(
 				new Boundary(10.2, 50.8), 
 				new Boundary(10.2, 50.8), 
 				new Boundary(10.2, 50.8)));
-		TestModel model2 = new TestModel("(model2)", new Boundaries3d(
+		Test3dModel model2 = new Test3dModel("(model2)", new Boundaries3d(
 				new Boundary(20.9, 51.1), 
 				new Boundary(20.9, 51.1), 
 				new Boundary(20.9, 51.1)));

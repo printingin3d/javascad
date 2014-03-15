@@ -8,14 +8,14 @@ import org.junit.Test;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class MirrorTest {
 	private static final double MAX = 50.8;
 	private static final double MIN = 10.2;
 	
 	private static final double EPSILON = 0.001;
-	private static final TestModel TEST_MODEL = new TestModel("(model)", 
+	private static final Test3dModel TEST_MODEL = new Test3dModel("(model)", 
 			new Boundaries3d(new Boundary(MIN, MAX), new Boundary(MIN, MAX), new Boundary(MIN, MAX)));
 
 	@Test(expected=IllegalValueException.class)

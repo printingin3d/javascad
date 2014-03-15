@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Dims3d;
+import eu.printingin3d.javascad.models.Cube;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 
 public class CubeTest {

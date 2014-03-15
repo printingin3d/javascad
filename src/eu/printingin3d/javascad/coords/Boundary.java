@@ -59,6 +59,15 @@ public class Boundary {
 	}
 	
 	/**
+	 * Creates a Boundary object which has the given maximum value and the middle is zero.
+	 * @param value the maximum value of the Boundary
+	 * @return the new symmetric Boundary object
+	 */
+	public static Boundary createSymmetricBoundary(double value) {
+		return new Boundary(-value, value);
+	}
+	
+	/**
 	 * Constructs an object using given values to calculate the minimum and maximum values.
 	 * @param values the values used by the calculation
 	 */
@@ -165,12 +174,12 @@ public class Boundary {
 	}
 	
 	/**
-	 * Removes the values of the given boundary from this boundary and returns with the remaining values
+	 * Removes the values of the given boundary from this boundary and returns with the remaining values.
 	 * @param b the boundary to be removed
 	 * @return the remaining values
 	 * @throws IllegalValueException if there is nothing left
 	 */
-	public Boundary remove(Boundary b) {
+	public Boundary remove(Boundary b) throws IllegalValueException {
 		if (this.max<=b.min || this.min>=b.max) {
 			return this;
 		}
@@ -197,9 +206,9 @@ public class Boundary {
 	}
 	
 	/**
-	 * Returns true if and only if this boundary is inside of the given boundary, which means
-	 * it gives true if the given boundary's minimum value is not greater then this boundary's minimum value and
-	 * the given boundary's maximum value is not less then this boundary's maximum value
+	 * Returns true if and only if this boundary is inside of the given boundary. It means
+	 * it gives true if the given boundary's minimum value is not greater then this boundary's minimum 
+	 * value and the given boundary's maximum value is not less then this boundary's maximum value.
 	 * @param b the given boundary
 	 * @return true if and only if this boundary is inside of the given boundary
 	 */

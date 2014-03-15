@@ -18,7 +18,7 @@ import eu.printingin3d.javascad.enums.AlignType;
 import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.RandomUtils;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 @RunWith(Parameterized.class)
 public class Abstract3dModelAlignBatchTest {
@@ -98,7 +98,7 @@ public class Abstract3dModelAlignBatchTest {
 	@Test
 	public void shouldPositionAccordingly() {
 		Boundaries3d boundaries = RandomUtils.getRandomBoundaries();
-		Abstract3dModel testSubject = new TestModel("(base)", boundaries);
+		Abstract3dModel testSubject = new Test3dModel("(base)", boundaries);
 		Coords3d coords = RandomUtils.getRandomCoords();
 		
 		testSubject.align(testCase.getSize(), coords);

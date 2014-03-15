@@ -7,10 +7,11 @@ import org.junit.Test;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.Boundary;
+import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.AssertEx;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 import eu.printingin3d.javascad.testutils.TestExtendable3dModel;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class Extendable3dModelTest {
 	private static final double MAX_BOUND = 15.0;
@@ -21,7 +22,7 @@ public class Extendable3dModelTest {
 
 	@Before
 	public void init() {
-		baseModel = new TestModel("(empty)",
+		baseModel = new Test3dModel("(empty)",
 				new Boundaries3d(
 						new Boundary(MIN_BOUND, MAX_BOUND), 
 						new Boundary(MIN_BOUND, MAX_BOUND),

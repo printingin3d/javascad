@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.models.Cylinder;
 
 public class CylinderTest {
 	private static final double EPSILON = 0.001;

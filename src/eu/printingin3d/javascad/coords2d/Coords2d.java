@@ -1,4 +1,6 @@
-package eu.printingin3d.javascad.coords;
+package eu.printingin3d.javascad.coords2d;
+
+import eu.printingin3d.javascad.coords.Coords3d;
 
 /**
  * Immutable representation of a 2D coordinate.

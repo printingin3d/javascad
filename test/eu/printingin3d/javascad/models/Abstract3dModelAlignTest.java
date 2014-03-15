@@ -9,8 +9,9 @@ import org.junit.Test;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.enums.AlignType;
 import eu.printingin3d.javascad.enums.Side;
+import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.RandomUtils;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class Abstract3dModelAlignTest {
 	private Abstract3dModel base;
@@ -20,8 +21,8 @@ public class Abstract3dModelAlignTest {
 	@Before
 	public void init() {
 		testSubjectsBoundaries = RandomUtils.getRandomBoundaries();
-		base = new TestModel("(base)", RandomUtils.getRandomBoundaries());
-		testSubject = new TestModel("(subject)", testSubjectsBoundaries);
+		base = new Test3dModel("(base)", RandomUtils.getRandomBoundaries());
+		testSubject = new Test3dModel("(subject)", testSubjectsBoundaries);
 	}
 	
 	private void assertXDidNotChanged() {

@@ -19,13 +19,13 @@ import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
-import eu.printingin3d.javascad.testutils.TestModel;
+import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class DifferenceTest {
 
 	@Test(expected=IllegalValueException.class)
 	public void shouldThrowExceptionIfFirstModelIsNull() {
-		new Difference(null, new TestModel("(model1)"));
+		new Difference(null, new Test3dModel("(model1)"));
 	}
 	
 	@Test(expected=IllegalValueException.class)
@@ -35,55 +35,55 @@ public class DifferenceTest {
 	
 	@Test(expected=IllegalValueException.class)
 	public void shouldThrowExceptionIfFirstModelIsNullWithList() {
-		new Difference(null, Arrays.<Abstract3dModel>asList(new TestModel("(model1)")));
+		new Difference(null, Arrays.<Abstract3dModel>asList(new Test3dModel("(model1)")));
 	}
 	
 	@Test
 	public void testToScad() {
-		Difference difference = new Difference(new TestModel("(model1)"), new TestModel("(model2)"));
+		Difference difference = new Difference(new Test3dModel("(model1)"), new Test3dModel("(model2)"));
 		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2)}", difference.toScad());
 	}
 	
 	@Test
 	public void testToScadWithOneModel() {
-		Difference difference = new Difference(new TestModel("(model1)"));
+		Difference difference = new Difference(new Test3dModel("(model1)"));
 		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad());
 	}
 	
 	@Test
 	public void testToScadWithModeThanOneModelToRemove() {
 		Difference difference = new Difference(
-				new TestModel("(model1)"), 
-				new TestModel("(model2)"),
-				new TestModel("(model3)"));
+				new Test3dModel("(model1)"), 
+				new Test3dModel("(model2)"),
+				new Test3dModel("(model3)"));
 		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2) (model3)}", difference.toScad());
 	}
 	
 	@Test
 	public void testToScadAbsenceOfSecondModel1() {
 		Abstract3dModel model2 = null;
-		Difference difference = new Difference(new TestModel("(model1)"), model2);
+		Difference difference = new Difference(new Test3dModel("(model1)"), model2);
 		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad());
 	}
 	
 	@Test
 	public void testToScadAbsenceOfSecondModel2() {
 		List<Abstract3dModel> model2 = null;
-		Difference difference = new Difference(new TestModel("(model1)"), model2);
+		Difference difference = new Difference(new Test3dModel("(model1)"), model2);
 		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad());
 	}
 	
 	@Test
 	public void testToScadWithEmptyList() {
-		Difference difference = new Difference(new TestModel("(model1)"), 
+		Difference difference = new Difference(new Test3dModel("(model1)"), 
 				Collections.<Abstract3dModel>emptyList());
 		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad());
 	}
 
 	@Test
 	public void boundaryShouldReturnTheBoundaryOfTheFirstParam() {
-		TestModel model1 = new TestModel("(model1)", new Boundaries3d(new Boundary(10.2, 50.8), new Boundary(10.2, 50.8), new Boundary(10.2, 50.8)));
-		TestModel model2 = new TestModel("(model2)", new Boundaries3d(new Boundary(20.9, 51.1), new Boundary(20.9, 51.1), new Boundary(20.9, 51.1)));
+		Test3dModel model1 = new Test3dModel("(model1)", new Boundaries3d(new Boundary(10.2, 50.8), new Boundary(10.2, 50.8), new Boundary(10.2, 50.8)));
+		Test3dModel model2 = new Test3dModel("(model2)", new Boundaries3d(new Boundary(20.9, 51.1), new Boundary(20.9, 51.1), new Boundary(20.9, 51.1)));
 		Difference difference = new Difference(model1, model2);
 		Boundaries3d boundaries = difference.getBoundaries();
 
@@ -97,7 +97,7 @@ public class DifferenceTest {
 	
 	@Test
 	public void boundaryShouldBeCalculatedWithCubes() {
-		TestModel model1 = new TestModel("(model1)", new Boundaries3d(new Boundary(10.0, 20.0), new Boundary(15.0, 25.0), new Boundary(0.0, 50.0)));
+		Test3dModel model1 = new Test3dModel("(model1)", new Boundaries3d(new Boundary(10.0, 20.0), new Boundary(15.0, 25.0), new Boundary(0.0, 50.0)));
 		Abstract3dModel model2 = new Cube(new Coords3d(5.5, 12.9, 20.9), new Coords3d(25.0, 25.1, 51.1));
 		Abstract3dModel model3 = new Cube(new Coords3d(5.5, 12.9, -2.0), new Coords3d(15.0, 25.1, 22.0));
 		Abstract3dModel model4 = new Cube(new Coords3d(10.0, 20.9, -2.0), new Coords3d(25.0, 25.1, 22.0));
@@ -114,7 +114,7 @@ public class DifferenceTest {
 	
 	@Test
 	public void boundaryShouldNotBeCalculatedWithCubesIfTheCubesAreRotated() {
-		TestModel model1 = new TestModel("(model1)", new Boundaries3d(new Boundary(10.0, 20.0), new Boundary(15.0, 25.0), new Boundary(0.0, 50.0)));
+		Test3dModel model1 = new Test3dModel("(model1)", new Boundaries3d(new Boundary(10.0, 20.0), new Boundary(15.0, 25.0), new Boundary(0.0, 50.0)));
 		Abstract3dModel model2 = new Cube(new Coords3d(5.5, 12.9, 20.9), new Coords3d(25.0, 25.1, 51.1)).rotate(new Angles3d(0.001, 0, 0));
 		Abstract3dModel model3 = new Cube(new Coords3d(5.5, 12.9, -2.0), new Coords3d(15.0, 25.1, 22.0)).rotate(new Angles3d(0, 0.001, 0));
 		Abstract3dModel model4 = new Cube(new Coords3d(10.0, 20.9, -2.0), new Coords3d(25.0, 25.1, 22.0)).rotate(new Angles3d(0, 0, 0.001));

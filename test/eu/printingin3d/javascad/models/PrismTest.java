@@ -5,6 +5,7 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import org.junit.Test;
 
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.models.Prism;
 
 public class PrismTest {
 

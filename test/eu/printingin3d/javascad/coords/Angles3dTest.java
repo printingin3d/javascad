@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 
 public class Angles3dTest {
