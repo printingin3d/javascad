@@ -1,6 +1,8 @@
 package eu.printingin3d.javascad.models;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * <p>There are cases, when we want to have an object, which boundaries differ from the calculated ones.
@@ -36,6 +38,11 @@ public class BoundedModel extends Abstract3dModel {
 	@Override
 	protected Boundaries3d getModelBoundaries() {
 		return boundaries3d;
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		return baseModel.toCSG(context);
 	}
 	
 }

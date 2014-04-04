@@ -1,5 +1,9 @@
 package eu.printingin3d.javascad.coords;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
 /**
@@ -69,6 +73,24 @@ public class Abstract3d {
 				append(DoubleUtils.formatDouble(z)).append(']').
 				toString();
 	}
+	
+	public String toStlString() {
+		return new StringBuilder().
+				append(DoubleUtils.formatDouble(x)).append(' ').
+				append(DoubleUtils.formatDouble(y)).append(' ').
+				append(DoubleUtils.formatDouble(z)).
+				toString();
+	}
+    
+    public byte[] toByteArray() throws IOException {
+		ByteBuffer byteBuffer = ByteBuffer.allocate(12).order(ByteOrder.LITTLE_ENDIAN);
+
+		byteBuffer.putFloat((float)x);
+		byteBuffer.putFloat((float)y);
+		byteBuffer.putFloat((float)z);
+    	
+    	return byteBuffer.array();
+    }
 
 	@Override
 	public int hashCode() {
@@ -122,4 +144,28 @@ public class Abstract3d {
 	public double getZ() {
 		return z;
 	}
+
+    /**
+     * Returns the dot product of this vector and the specified vector.
+     *
+     * <b>Note:</b> this vector is not modified.
+     *
+     * @param a the second vector
+     *
+     * @return the dot product of this vector and the specified vector
+     */
+    public double dot(Abstract3d a) {
+        return this.x * a.x + this.y * a.y + this.z * a.z;
+    }
+
+    /**
+     * Returns the magnitude of this vector.
+     *
+     * <b>Note:</b> this vector is not modified.
+     *
+     * @return the magnitude of this vector
+     */
+    public double magnitude() {
+        return Math.sqrt(this.dot(this));
+    }
 }

@@ -4,7 +4,10 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.tranform.TranformationFactory;
 import eu.printingin3d.javascad.utils.AssertValue;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * This represents a move transition, but used rarely, because the convenient
@@ -55,5 +58,10 @@ public class Translate extends Abstract3dModel {
 	@Override
 	protected Abstract3dModel innerCloneModel() {
 		return new Translate(model.cloneModel(), move);
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		return model.toCSG(context).transformed(TranformationFactory.getTranlationMatrix(move));
 	}
 }

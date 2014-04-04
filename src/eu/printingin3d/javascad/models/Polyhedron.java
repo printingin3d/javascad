@@ -9,7 +9,10 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.exceptions.NotImplementedException;
 import eu.printingin3d.javascad.utils.AssertValue;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * <p>
@@ -113,5 +116,10 @@ public class Polyhedron extends Abstract3dModel {
 			b.append(c.toTriangleString(points));
 		}
 		b.append("]");
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		throw new NotImplementedException();
 	}
 }

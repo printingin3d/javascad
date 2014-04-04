@@ -4,8 +4,11 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
+import eu.printingin3d.javascad.exceptions.NotImplementedException;
 import eu.printingin3d.javascad.models2d.Abstract2dModel;
 import eu.printingin3d.javascad.tranzitions.Translate;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 public class Ring extends Abstract3dModel {
 	private final Abstract2dModel model;
@@ -32,6 +35,11 @@ public class Ring extends Abstract3dModel {
 		Boundary z = modelBoundaries.getY();
 		Boundary xy = Boundary.createSymmetricBoundary(modelBoundaries.getX().getMax()+radius);
 		return new Boundaries3d(xy, xy, z);
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		throw new NotImplementedException();
 	}
 
 }

@@ -2,9 +2,12 @@ package eu.printingin3d.javascad.tranzitions;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
+import eu.printingin3d.javascad.exceptions.NotImplementedException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.tranzitions.slicer.Cover;
 import eu.printingin3d.javascad.utils.AssertValue;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * <p>Slice a model into pieces; the result is one of the slices. It is very useful if the model
@@ -114,5 +117,10 @@ public class Slicer extends Abstract3dModel {
 	@Override
 	protected Abstract3dModel innerCloneModel() {
 		return new Slicer(model.cloneModel(), direction, lowRate, highRate);
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		throw new NotImplementedException();
 	}
 }

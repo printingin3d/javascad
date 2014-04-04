@@ -1,5 +1,8 @@
 package eu.printingin3d.javascad.models;
 
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
+
 /**
  * Represents a renderable 3D model.
  *
@@ -11,4 +14,6 @@ public interface IModel {
 	 * @return the generated OpenSCAD code
 	 */
 	String toScad();
+	
+	CSG toCSG(FacetGenerationContext context);
 }

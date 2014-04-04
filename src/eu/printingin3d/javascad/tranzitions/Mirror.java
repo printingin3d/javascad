@@ -3,7 +3,11 @@ package eu.printingin3d.javascad.tranzitions;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.tranform.ITransformation;
+import eu.printingin3d.javascad.tranform.TranformationFactory;
 import eu.printingin3d.javascad.utils.AssertValue;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * Mirrors a model. The plane of the mirroring could only be the X, Y and Z plane, to make it easier 
@@ -69,5 +73,11 @@ public final class Mirror extends Abstract3dModel {
 	@Override
 	protected Abstract3dModel innerCloneModel() {
 		return new Mirror(model.cloneModel(), direction);
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		ITransformation tr = TranformationFactory.getMirrorMatrix(direction);
+		return model.toCSG(context).transformed(tr);
 	}
 }

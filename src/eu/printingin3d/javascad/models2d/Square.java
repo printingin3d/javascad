@@ -3,6 +3,9 @@ package eu.printingin3d.javascad.models2d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
+import eu.printingin3d.javascad.exceptions.NotImplementedException;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * Represents a 2D square object.
@@ -33,5 +36,11 @@ public class Square extends Abstract2dModel {
 		return new Boundaries2d(
 				Boundary.createSymmetricBoundary(size.getX()/2.0), 
 				Boundary.createSymmetricBoundary(size.getY()/2.0));
+	}
+
+
+	@Override
+	public CSG toCSG(FacetGenerationContext context) {
+		throw new NotImplementedException();
 	}
 }

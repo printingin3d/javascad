@@ -4,7 +4,10 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.tranform.TranformationFactory;
 import eu.printingin3d.javascad.utils.AssertValue;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * Scales a model by the given value on X, Y and Z plane. It is a descendant of {@link Abstract3dModel}, 
@@ -51,6 +54,11 @@ public class Scale extends Abstract3dModel {
 	@Override
 	protected Abstract3dModel innerCloneModel() {
 		return new Scale(model.cloneModel(), scale);
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		return model.toCSG(context).transformed(TranformationFactory.getScaleMatrix(scale));
 	}
 
 }

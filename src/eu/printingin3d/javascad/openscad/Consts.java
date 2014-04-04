@@ -1,6 +1,8 @@
 package eu.printingin3d.javascad.openscad;
 
 import eu.printingin3d.javascad.models.IModel;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * Represents the constants for $fs and $fa which controls the resolution of every circle, 
@@ -33,5 +35,12 @@ public class Consts implements IModel {
 	@Override
 	public String toScad() {
 		return "$fs="+fs+";$fa="+fa+";\n";
+	}
+
+	@Override
+	public CSG toCSG(FacetGenerationContext context) {
+		context.setFsAndFa(fs, fa);
+		
+		return CSG.fromPolygons();
 	}
 }

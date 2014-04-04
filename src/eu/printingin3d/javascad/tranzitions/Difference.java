@@ -12,6 +12,8 @@ import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.ListUtils;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * Difference operation. It subtracts from the first model all the others.
@@ -104,5 +106,16 @@ public class Difference extends Abstract3dModel {
 			cloneModels.add(model.cloneModel());
 		}
 		return new Difference(model1.cloneModel(), cloneModels);
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		CSG csg = model1.toCSG(context);
+		
+		for (Abstract3dModel model : model2) {
+			csg = csg.difference(model.toCSG(context));
+		}
+		
+		return csg;
 	}
 }

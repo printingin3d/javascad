@@ -12,11 +12,14 @@ import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.enums.Plane;
 import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.tranform.TranformationFactory;
 import eu.printingin3d.javascad.tranzitions.Rotate;
 import eu.printingin3d.javascad.tranzitions.Translate;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.Moves;
 import eu.printingin3d.javascad.utils.RoundProperties;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * <p>Implements IModel interface and adds convenient methods to make it easier to move or rotate
@@ -254,4 +257,43 @@ public abstract class Abstract3dModel implements IModel {
 		roundingPlane.put(plane, new RoundProperties(plane, radius));
 		return this;
 	}
+	
+	protected abstract CSG toInnerCSG(FacetGenerationContext context);
+	
+	@Override
+	public final CSG toCSG(FacetGenerationContext context) {
+		CSG csg = toInnerCSG(context);
+		
+		if (!rotate.isZero()) {
+			csg = csg.transformed(TranformationFactory.getRotationMatrix(rotate));
+		}
+		
+		if (isMulti()) {
+			CSG union = null;
+			for (Coords3d move : moves) {
+				CSG transformed = null;
+				if (!move.isZero()) {
+					transformed = csg.transformed(TranformationFactory.getTranlationMatrix(move));
+				}
+				else {
+					transformed = csg;
+				}
+				union = (union==null) ? transformed : union.union(transformed);
+			}			
+		} else {
+			for (Coords3d move : moves) {
+				if (!move.isZero()) {
+					csg = csg.transformed(TranformationFactory.getTranlationMatrix(move));
+				}
+			}
+		}
+		
+		return csg;
+	}
+	
+	public final CSG toCSG() {
+		FacetGenerationContext context = new FacetGenerationContext();
+		return toCSG(context);
+	}
+	
 }

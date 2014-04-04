@@ -5,6 +5,8 @@ import java.awt.Color;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.utils.DoubleUtils;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * Colors the object it contains. Please pay attention: colors are only supported in the 
@@ -52,6 +54,11 @@ public class Colorize extends Abstract3dModel {
 	@Override
 	protected Boundaries3d getModelBoundaries() {
 		return baseModel.getBoundaries();
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		return baseModel.toCSG(context);
 	}
 
 }

@@ -1,6 +1,5 @@
 package eu.printingin3d.javascad.coords;
 
-
 /**
  * Immutable representation of a 3D coordinate with useful helper methods.
  *
@@ -105,4 +104,60 @@ public class Coords3d extends Abstract3d {
 	public Coords3d inverse() {
 		return new Coords3d(-x, -y, -z);
 	}
+
+    /**
+     * Returns the cross product of this vector and the specified vector.
+     *
+     * <b>Note:</b> this vector is not modified.
+     *
+     * @param a the vector
+     *
+     * @return the cross product of this vector and the specified vector.
+     */
+    public Coords3d cross(Coords3d a) {
+        return new Coords3d(
+                this.y * a.z - this.z * a.y,
+                this.z * a.x - this.x * a.z,
+                this.x * a.y - this.y * a.x
+        );
+    }
+
+    /**
+     * Returns this vector devided by the specified value.
+     *
+     * @param a the value
+     *
+     * <b>Note:</b> this vector is not modified.
+     *
+     * @return this vector devided by the specified value
+     */
+    public Coords3d mul(double a) {
+        return new Coords3d(x * a, y * a, z * a);
+    }
+
+    /**
+     * Returns a normalized copy of this vector with {@code length}.
+     *
+     * <b>Note:</b> this vector is not modified.
+     *
+     * @return a normalized copy of this vector with {@code length}
+     */
+    public Coords3d unit() {
+        return this.mul(1.0/this.magnitude());
+    }
+
+    /**
+     * Linearly interpolates between this and the specified vector.
+     *
+     * <b>Note:</b> this vector is not modified.
+     *
+     * @param a vector
+     * @param t interpolation value
+     *
+     * @return copy of this vector if {@code t = 0}; copy of a if {@code t = 1};
+     * the point midway between this and the specified vector if {@code t = 0.5}
+     */
+    public Coords3d lerp(Coords3d a, double t) {
+        return this.move(a.move(this.inverse()).mul(t));
+    }
 }

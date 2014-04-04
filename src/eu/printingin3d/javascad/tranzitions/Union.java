@@ -9,6 +9,8 @@ import java.util.List;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.utils.ListUtils;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * <p>Represents an union of models. It is a descendant of {@link Abstract3dModel}, which means you
@@ -77,5 +79,19 @@ public class Union extends Abstract3dModel {
 			cloneModels.add(model.cloneModel());
 		}
 		return new Union(cloneModels);
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		CSG csg = null;
+		for (Abstract3dModel model : models) {
+			if (csg==null) {
+				csg = model.toCSG(context);
+			}
+			else {
+				csg = csg.union(model.toCSG(context));
+			}
+		}
+		return csg;
 	}
 }

@@ -6,6 +6,8 @@ import java.util.List;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * Intersection operation. The result of this operation is the common part of the child models.
@@ -71,5 +73,19 @@ public class Intersection extends Abstract3dModel {
 			boundaries.add(model.getBoundaries());
 		}
 		return Boundaries3d.intersect(boundaries);
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		CSG csg = null;
+		for (Abstract3dModel model : models) {
+			if (csg==null) {
+				csg = model.toCSG(context);
+			}
+			else {
+				csg = csg.intersect(model.toCSG(context));
+			}
+		}
+		return csg;
 	}
 }

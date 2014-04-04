@@ -1,6 +1,8 @@
 package eu.printingin3d.javascad.models;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 public abstract class Extendable3dModel extends Abstract3dModel {
 	protected Abstract3dModel baseModel;
@@ -21,4 +23,9 @@ public abstract class Extendable3dModel extends Abstract3dModel {
 		return baseModel.getBoundaries();
 	}
 
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		return baseModel.toCSG(context);
+	}
 }

@@ -2,6 +2,8 @@ package eu.printingin3d.javascad.testutils;
 
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.models2d.Abstract2dModel;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 public class Test2dModel extends Abstract2dModel {
 	private final String model;
@@ -25,5 +27,10 @@ public class Test2dModel extends Abstract2dModel {
 	@Override
 	protected Boundaries2d getModelBoundaries() {
 		return boundaries;
+	}
+
+	@Override
+	public CSG toCSG(FacetGenerationContext context) {
+		return null;
 	}
 }

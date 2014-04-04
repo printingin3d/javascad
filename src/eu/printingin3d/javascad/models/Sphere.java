@@ -1,10 +1,18 @@
 package eu.printingin3d.javascad.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
+import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.DoubleUtils;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
+import eu.printingin3d.javascad.vrl.Polygon;
+import eu.printingin3d.javascad.vrl.Vertex;
 
 /**
  * Represents a sphere. It is a descendant of {@link Abstract3dModel}, which means you
@@ -42,4 +50,51 @@ public class Sphere extends Abstract3dModel {
 	protected Abstract3dModel innerCloneModel() {
 		return new Sphere(r);
 	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+        List<Polygon> polygons = new ArrayList<>();
+
+        int numSlices = context.calculateNumberOfSlices(r);
+        int numStacks = numSlices/2;
+        for (int i = 0; i < numSlices; i++) {
+            for (int j = 0; j < numStacks; j++) {
+                final List<Vertex> vertices = new ArrayList<>();
+
+                vertices.add(
+                        sphereVertex(r, i / (double) numSlices,
+                                j / (double) numStacks)
+                );
+                if (j > 0) {
+                    vertices.add(
+                            sphereVertex(r, (i + 1) / (double) numSlices,
+                                    j / (double) numStacks)
+                    );
+                }
+                if (j < numStacks - 1) {
+                    vertices.add(
+                            sphereVertex(r, (i + 1) / (double) numSlices,
+                                    (j + 1) / (double) numStacks)
+                    );
+                }
+                vertices.add(
+                        sphereVertex(r, i / (double) numSlices,
+                                (j + 1) / (double) numStacks)
+                );
+                polygons.add(new Polygon(vertices));
+            }
+        }
+        return new CSG(polygons);
+	}
+
+    private Vertex sphereVertex(double r, double theta, double phi) {
+        theta *= Math.PI * 2;
+        phi *= Math.PI;
+        Coords3d dir = new Coords3d(
+                Math.cos(theta) * Math.sin(phi),
+                Math.cos(phi),
+                Math.sin(theta) * Math.sin(phi)
+        );
+        return new Vertex(dir.mul(r), dir);
+    }
 }

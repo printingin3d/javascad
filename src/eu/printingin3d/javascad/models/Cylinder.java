@@ -1,10 +1,20 @@
 package eu.printingin3d.javascad.models;
 
 import static eu.printingin3d.javascad.utils.AssertValue.isNotNegative;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
+import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.DoubleUtils;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
+import eu.printingin3d.javascad.vrl.Polygon;
+import eu.printingin3d.javascad.vrl.Vertex;
 
 /**
  * Represents a cylinder, a truncated cone or a cone. It is a descendant of {@link Abstract3dModel}, 
@@ -77,4 +87,52 @@ public class Cylinder extends Abstract3dModel {
 	protected Abstract3dModel innerCloneModel() {
 		return new Cylinder(length, bottomRadius, topRadius);
 	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		double z = length/2.0;
+		
+        Vertex startV = new Vertex(Coords3d.zOnly(+z), Coords3d.zOnly(+1.0));
+        Vertex endV = new Vertex(Coords3d.zOnly(-z), Coords3d.zOnly(-1.0));
+        List<Polygon> polygons = new ArrayList<>();
+
+        int numSlices = context.calculateNumberOfSlices(Math.min(topRadius, bottomRadius));
+        for (int i = 0; i < numSlices; i++) {
+            double t0 = i / (double) numSlices;
+            double t1 = (i + 1) / (double) numSlices;
+            polygons.add(new Polygon(Arrays.asList(
+                    startV,
+                    cylPoint(+z, topRadius, t0, -1),
+                    cylPoint(+z, topRadius, t1, -1))
+            ));
+            polygons.add(new Polygon(Arrays.asList(
+                    cylPoint(+z, topRadius, t1, 0),
+                    cylPoint(+z, topRadius, t0, 0),
+                    cylPoint(-z, bottomRadius, t0, 0),
+                    cylPoint(-z, bottomRadius, t1, 0))
+            ));
+            polygons.add(new Polygon(
+                            endV,
+                            cylPoint(-z, bottomRadius, t1, 1),
+                            cylPoint(-z, bottomRadius, t0, 1)
+            )
+            );
+        }
+
+        return new CSG(polygons);
+	}
+
+    private Vertex cylPoint(double z, double r, double slice, double normalBlend) {
+        double angle = slice * Math.PI * 2;
+        Coords3d out = new Coords3d(Math.cos(angle), Math.sin(angle), 0.0);
+        Coords3d pos = out.mul(r).move(Coords3d.zOnly(z));
+        Coords3d normal;
+        if (normalBlend==0) {
+        	normal = out;
+        }
+        else {
+        	normal = Coords3d.zOnly(normalBlend);
+        }
+        return new Vertex(pos, normal);
+    }
 }
