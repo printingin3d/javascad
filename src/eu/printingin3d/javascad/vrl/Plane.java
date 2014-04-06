@@ -121,8 +121,8 @@ public class Plane {
         // four classes.
         int polygonType = 0;
         List<Integer> types = new ArrayList<>();
-        for (Vertex v : polygon.vertices) {
-            double t = this.normal.dot(v.getPos()) - this.dist;
+        for (Coords3d v : polygon.vertices) {
+            double t = this.normal.dot(v) - this.dist;
             int type = (t < -Plane.EPSILON) ? BACK : (t > Plane.EPSILON) ? FRONT : COPLANAR;
             polygonType |= type;
             types.add(type);
@@ -140,14 +140,14 @@ public class Plane {
                 back.add(polygon);
                 break;
             case SPANNING:
-                List<Vertex> f = new ArrayList<>();
-                List<Vertex> b = new ArrayList<>();
+                List<Coords3d> f = new ArrayList<>();
+                List<Coords3d> b = new ArrayList<>();
                 for (int i = 0; i < polygon.vertices.size(); i++) {
                     int j = (i + 1) % polygon.vertices.size();
                     int ti = types.get(i);
                     int tj = types.get(j);
-                    Vertex vi = polygon.vertices.get(i);
-                    Vertex vj = polygon.vertices.get(j);
+                    Coords3d vi = polygon.vertices.get(i);
+                    Coords3d vj = polygon.vertices.get(j);
                     if (ti != BACK) {
                         f.add(vi);
                     }
@@ -155,8 +155,8 @@ public class Plane {
                         b.add(vi);
                     }
                     if ((ti | tj) == SPANNING) {
-                        double t = (this.dist - this.normal.dot(vi.getPos())) / this.normal.dot(vj.getPos().move(vi.getPos().inverse()));
-                        Vertex v = vi.interpolate(vj, t);
+                        double t = (this.dist - this.normal.dot(vi)) / this.normal.dot(vj.move(vi.inverse()));
+                        Coords3d v = vi.lerp(vj, t);
                         f.add(v);
                         b.add(v);
                     }

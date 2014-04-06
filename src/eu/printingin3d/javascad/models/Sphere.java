@@ -12,7 +12,6 @@ import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 import eu.printingin3d.javascad.vrl.Polygon;
-import eu.printingin3d.javascad.vrl.Vertex;
 
 /**
  * Represents a sphere. It is a descendant of {@link Abstract3dModel}, which means you
@@ -59,7 +58,7 @@ public class Sphere extends Abstract3dModel {
         int numStacks = numSlices/2;
         for (int i = 0; i < numSlices; i++) {
             for (int j = 0; j < numStacks; j++) {
-                final List<Vertex> vertices = new ArrayList<>();
+                List<Coords3d> vertices = new ArrayList<>();
 
                 vertices.add(
                         sphereVertex(r, i / (double) numSlices,
@@ -87,7 +86,7 @@ public class Sphere extends Abstract3dModel {
         return new CSG(polygons);
 	}
 
-    private Vertex sphereVertex(double r, double theta, double phi) {
+    private Coords3d sphereVertex(double r, double theta, double phi) {
         theta *= Math.PI * 2;
         phi *= Math.PI;
         Coords3d dir = new Coords3d(
@@ -95,6 +94,6 @@ public class Sphere extends Abstract3dModel {
                 Math.cos(phi),
                 Math.sin(theta) * Math.sin(phi)
         );
-        return new Vertex(dir.mul(r), dir);
+        return dir.mul(r);
     }
 }

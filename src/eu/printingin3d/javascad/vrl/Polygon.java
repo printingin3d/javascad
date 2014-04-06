@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
 import eu.printingin3d.javascad.tranform.ITransformation;
 
@@ -54,7 +55,7 @@ public final class Polygon {
     /**
      * Polygon vertices
      */
-    public final List<Vertex> vertices;
+    public final List<Coords3d> vertices;
 
     /**
      * Plane defined by this polygon.
@@ -63,7 +64,7 @@ public final class Polygon {
      */
     public final Plane plane;
     
-    private Polygon(List<Vertex> vertices, Plane plane) {
+    private Polygon(List<Coords3d> vertices, Plane plane) {
 		this.vertices = Collections.unmodifiableList(vertices);
 		this.plane = plane;
 	}
@@ -77,11 +78,11 @@ public final class Polygon {
      *
      * @param vertices polygon vertices
      */
-    public Polygon(List<Vertex> vertices) {
+    public Polygon(List<Coords3d> vertices) {
     	this(vertices, Plane.createFromPoints(
-                vertices.get(0).getPos(),
-                vertices.get(1).getPos(),
-                vertices.get(2).getPos()));
+                vertices.get(0),
+                vertices.get(1),
+                vertices.get(2)));
     }
 
     /**
@@ -94,7 +95,7 @@ public final class Polygon {
      * @param vertices polygon vertices
      *
      */
-    public Polygon(Vertex... vertices) {
+    public Polygon(Coords3d... vertices) {
         this(Arrays.asList(vertices));
     }
 
@@ -104,11 +105,8 @@ public final class Polygon {
      * @return this polygon
      */
     public Polygon flip() {
-    	List<Vertex> newVertices = new ArrayList<>();
+    	List<Coords3d> newVertices = new ArrayList<>(vertices);
     	
-    	for (Vertex vertex : vertices) {
-    		newVertices.add(vertex.flip());
-    	}
         Collections.reverse(newVertices);
 
         return new Polygon(newVertices, plane.flip());
@@ -117,12 +115,12 @@ public final class Polygon {
     public List<Facet> toFacets() {
     	List<Facet> facets = new ArrayList<>();
         if (this.vertices.size() >= 3) {
-        	Vertex firstVertex = vertices.get(0);
+        	Coords3d firstVertex = vertices.get(0);
 	        for (int i = 0; i < this.vertices.size() - 2; i++) {
 	        	Triangle3d triangle = new Triangle3d(
-	        			firstVertex.getPos(), 
-	        			vertices.get(i + 1).getPos(), 
-	        			vertices.get(i + 2).getPos());
+	        			firstVertex, 
+	        			vertices.get(i + 1), 
+	        			vertices.get(i + 2));
 				facets.add(new Facet(triangle, plane.getNormal()));
 	        }
         }
@@ -141,10 +139,10 @@ public final class Polygon {
      * @return a transformed copy of this polygon
      */
     public Polygon transformed(ITransformation transform) {
-    	List<Vertex> newVertices = new ArrayList<>();
+    	List<Coords3d> newVertices = new ArrayList<>();
     	
-    	for (Vertex v : vertices) {
-    		newVertices.add(v.transformed(transform));
+    	for (Coords3d v : vertices) {
+    		newVertices.add(transform.transform(v));
     	}
     	
     	Polygon result = new Polygon(newVertices);

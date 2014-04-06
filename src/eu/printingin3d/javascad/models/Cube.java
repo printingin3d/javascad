@@ -12,7 +12,6 @@ import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 import eu.printingin3d.javascad.vrl.Polygon;
-import eu.printingin3d.javascad.vrl.Vertex;
 
 /**
  * Represents a cuboid. 
@@ -78,29 +77,25 @@ public class Cube extends Abstract3dModel {
 
 	@Override
 	protected CSG toInnerCSG(FacetGenerationContext context) {
-        int[][][] a = {
-            // position     // normal
-            {{0, 4, 6, 2}, {-1, 0, 0}},
-            {{1, 3, 7, 5}, {+1, 0, 0}},
-            {{0, 1, 5, 4}, {0, -1, 0}},
-            {{2, 6, 7, 3}, {0, +1, 0}},
-            {{0, 2, 3, 1}, {0, 0, -1}},
-            {{4, 5, 7, 6}, {0, 0, +1}}
+        int[][] a = {
+            // position
+            {0, 4, 6, 2},
+            {1, 3, 7, 5},
+            {0, 1, 5, 4},
+            {2, 6, 7, 3},
+            {0, 2, 3, 1},
+            {4, 5, 7, 6}
         };
         List<Polygon> polygons = new ArrayList<>();
-        for (int[][] info : a) {
-            List<Vertex> vertices = new ArrayList<>();
-            for (int i : info[0]) {
+        for (int[] info : a) {
+            List<Coords3d> vertices = new ArrayList<>();
+            for (int i : info) {
             	Coords3d pos = new Coords3d(
                         size.getX() * (1 * Math.min(1, i & 1) - 0.5),
                         size.getY() * (1 * Math.min(1, i & 2) - 0.5),
                         size.getZ() * (1 * Math.min(1, i & 4) - 0.5)
                 );
-                vertices.add(new Vertex(pos, new Coords3d(
-                        info[1][0],
-                        info[1][1],
-                        info[1][2]
-                )));
+                vertices.add(pos);
             }
             polygons.add(new Polygon(vertices));
         }
