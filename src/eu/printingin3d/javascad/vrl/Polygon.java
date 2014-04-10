@@ -55,14 +55,14 @@ public final class Polygon {
     /**
      * Polygon vertices
      */
-    public final List<Coords3d> vertices;
+    private final List<Coords3d> vertices;
 
     /**
      * Plane defined by this polygon.
      *
      * <b>Note:</b> uses first three vertices to define the plane.
      */
-    public final Plane plane;
+    private final Plane plane;
     
     private Polygon(List<Coords3d> vertices, Plane plane) {
 		this.vertices = Collections.unmodifiableList(vertices);
@@ -149,4 +149,12 @@ public final class Polygon {
 
     	return transform.isMirror() ? result.flip() : result;
     }
+
+	public Plane getPlane() {
+		return plane;
+	}
+
+	public List<Coords3d> getVertices() {
+		return vertices;
+	}
 }

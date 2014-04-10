@@ -56,7 +56,7 @@ public class Plane {
      */
     private final Coords3d normal;
     /**
-     * Distance to origin.
+     * Square of the distance to origin.
      */
     private final double dist;
 
@@ -121,7 +121,7 @@ public class Plane {
         // four classes.
         int polygonType = 0;
         List<Integer> types = new ArrayList<>();
-        for (Coords3d v : polygon.vertices) {
+        for (Coords3d v : polygon.getVertices()) {
             double t = this.normal.dot(v) - this.dist;
             int type = (t < -Plane.EPSILON) ? BACK : (t > Plane.EPSILON) ? FRONT : COPLANAR;
             polygonType |= type;
@@ -131,7 +131,7 @@ public class Plane {
         // Put the polygon in the correct list, splitting it when necessary.
         switch (polygonType) {
             case COPLANAR:
-                (this.normal.dot(polygon.plane.normal) > 0 ? coplanarFront : coplanarBack).add(polygon);
+                (this.normal.dot(polygon.getPlane().normal) > 0 ? coplanarFront : coplanarBack).add(polygon);
                 break;
             case FRONT:
                 front.add(polygon);
@@ -142,12 +142,12 @@ public class Plane {
             case SPANNING:
                 List<Coords3d> f = new ArrayList<>();
                 List<Coords3d> b = new ArrayList<>();
-                for (int i = 0; i < polygon.vertices.size(); i++) {
-                    int j = (i + 1) % polygon.vertices.size();
+                for (int i = 0; i < polygon.getVertices().size(); i++) {
+                    int j = (i + 1) % polygon.getVertices().size();
                     int ti = types.get(i);
                     int tj = types.get(j);
-                    Coords3d vi = polygon.vertices.get(i);
-                    Coords3d vj = polygon.vertices.get(j);
+                    Coords3d vi = polygon.getVertices().get(i);
+                    Coords3d vj = polygon.getVertices().get(j);
                     if (ti != BACK) {
                         f.add(vi);
                     }

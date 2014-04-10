@@ -67,7 +67,7 @@ final class Node {
         		this.plane = null;
         	}
         	else {
-        		this.plane = polygons.get(0).plane;
+        		this.plane = polygons.get(0).getPlane();
         	}
         } else {
 			this.plane = plane;
@@ -88,7 +88,7 @@ final class Node {
 			return new Node();
 		}
     	
-    	Plane newPlane = polygons.get(0).plane;
+    	Plane newPlane = polygons.get(0).getPlane();
 
     	List<Polygon> newPolygons = new ArrayList<>();
         List<Polygon> frontP = new ArrayList<>();
@@ -263,7 +263,7 @@ final class Node {
     	Plane newPlane = plane;
     	
         if (newPlane == null) {
-        	newPlane = polygons.get(0).plane;
+        	newPlane = polygons.get(0).getPlane();
         }
 
         List<Polygon> frontP = new ArrayList<>();

@@ -38,9 +38,6 @@ public final class DoubleUtils {
 		if (equalsEps(Math.round(value), value)) {
 			return Long.toString(Math.round(value));
 		}
-/*		if (Math.abs(value)<1E-3) {
-			return "0";
-		}*/
 		return Double.toString(Math.round(value*10000.0)/10000.0);
 	}
 

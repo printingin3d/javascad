@@ -78,7 +78,7 @@ public class Angles3d extends Abstract3d {
 		super(normalize(x), normalize(y), normalize(z));
 	}
 	
-	private double simplicity(Coords3d temp, Normal3d normalVectorA, Normal3d normalVectorB) {
+	private static double simplicity(Coords3d temp, Normal3d normalVectorA, Normal3d normalVectorB) {
 		double result = 0.0;
 		double a = normalVectorA.normalValue(temp);
 		double b = normalVectorB.normalValue(temp);
