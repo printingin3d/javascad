@@ -50,7 +50,7 @@ import eu.printingin3d.javascad.tranform.ITransformation;
  * same polygon. This can be used to define per-polygon properties (such as
  * surface color).
  */
-public final class Polygon {
+public class Polygon {
 
     /**
      * Polygon vertices

@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.printingin3d.javascad.coords.Coords3d;
+import eu.printingin3d.javascad.utils.AssertValue;
+import eu.printingin3d.javascad.utils.DoubleUtils;
 
 /**
  * Represents a plane in 3D space.
@@ -45,11 +47,6 @@ import eu.printingin3d.javascad.coords.Coords3d;
  * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
  */
 public class Plane {
-
-    /**
-     * EPSILON is the tolerance used by {@link #splitPolygon(Polygon, List, List, List, List)} to decide if a point is on the plane.
-     */
-    private static final double EPSILON = 1e-6;
 
     /**
      * Normal vector.
@@ -68,6 +65,10 @@ public class Plane {
      * @param dist distance from origin
      */
     public Plane(Coords3d normal, double dist) {
+    	AssertValue.isTrue(DoubleUtils.equalsEps(normal.magnitude(), 1.0), 
+    			"The length of the normal vector must be 1.0, but was "+normal.magnitude()+
+    			", the vector itself was "+normal);
+    	
         this.normal = normal;
         this.dist = dist;
     }
@@ -112,19 +113,14 @@ public class Plane {
             List<Polygon> coplanarBack,
             List<Polygon> front,
             List<Polygon> back) {
-        final int COPLANAR = 0;
-        final int FRONT = 1;
-        final int BACK = 2;
-        final int SPANNING = 3;
 
-        // Classify each point as well as the entire polygon into one of the above
-        // four classes.
-        int polygonType = 0;
-        List<Integer> types = new ArrayList<>();
+        // Classify each point as well as the entire polygon into one of the four possible classes.
+        VertexPosition polygonType = VertexPosition.COPLANAR;
+        List<VertexPosition> types = new ArrayList<>();
         for (Coords3d v : polygon.getVertices()) {
             double t = this.normal.dot(v) - this.dist;
-            int type = (t < -Plane.EPSILON) ? BACK : (t > Plane.EPSILON) ? FRONT : COPLANAR;
-            polygonType |= type;
+            VertexPosition type = VertexPosition.fromSquareDistance(t);
+            polygonType = polygonType.add(type);
             types.add(type);
         }
 
@@ -144,17 +140,17 @@ public class Plane {
                 List<Coords3d> b = new ArrayList<>();
                 for (int i = 0; i < polygon.getVertices().size(); i++) {
                     int j = (i + 1) % polygon.getVertices().size();
-                    int ti = types.get(i);
-                    int tj = types.get(j);
+                    VertexPosition ti = types.get(i);
+                    VertexPosition tj = types.get(j);
                     Coords3d vi = polygon.getVertices().get(i);
                     Coords3d vj = polygon.getVertices().get(j);
-                    if (ti != BACK) {
+                    if (ti != VertexPosition.BACK) {
                         f.add(vi);
                     }
-                    if (ti != FRONT) {
+                    if (ti != VertexPosition.FRONT) {
                         b.add(vi);
                     }
-                    if ((ti | tj) == SPANNING) {
+                    if (ti.add(tj) == VertexPosition.SPANNING) {
                         double t = (this.dist - this.normal.dot(vi)) / this.normal.dot(vj.move(vi.inverse()));
                         Coords3d v = vi.lerp(vj, t);
                         f.add(v);
@@ -173,5 +169,9 @@ public class Plane {
 
 	public Coords3d getNormal() {
 		return normal;
+	}
+
+	public double getDist() {
+		return dist;
 	}
 }

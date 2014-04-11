@@ -270,8 +270,7 @@ final class Node {
         List<Polygon> backP = new ArrayList<>();
 
         for (Polygon polygon : polygons) {
-        	newPlane.splitPolygon(
-                    polygon, this.polygons, this.polygons, frontP, backP);
+        	newPlane.splitPolygon(polygon, polygons, polygons, frontP, backP);
         }
         if (!frontP.isEmpty()) {
             if (front == null) {
