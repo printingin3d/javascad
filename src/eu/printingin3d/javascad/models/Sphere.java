@@ -80,7 +80,7 @@ public class Sphere extends Abstract3dModel {
                         sphereVertex(r, i / (double) numSlices,
                                 (j + 1) / (double) numStacks)
                 );
-                polygons.add(new Polygon(vertices));
+                polygons.add(Polygon.fromPolygons(vertices));
             }
         }
         return new CSG(polygons);

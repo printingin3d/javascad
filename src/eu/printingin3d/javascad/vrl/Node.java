@@ -33,6 +33,8 @@ package eu.printingin3d.javascad.vrl;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.printingin3d.javascad.utils.AssertValue;
+
 /**
  * Holds a node in a BSP tree. A BSP tree is built from a collection of polygons
  * by picking a polygon to split along. That polygon (and all other coplanar
@@ -40,16 +42,12 @@ import java.util.List;
  * the front and/or back subtrees. This is not a leafy BSP tree since there is
  * no distinction between internal and leaf nodes.
  */
-final class Node {
+public class Node {
 
     /**
      * Polygons.
      */
     private final List<Polygon> polygons;
-    /**
-     * Plane used for BSP.
-     */
-    private final Plane plane;
     /**
      * Polygons in front of the plane.
      */
@@ -59,19 +57,8 @@ final class Node {
      */
     private Node back;
 
-    private Node(List<Polygon> polygons, Plane plane, Node front, Node back) {
+    private Node(List<Polygon> polygons, Node front, Node back) {
 		this.polygons = polygons;
-		
-        if (plane == null) {
-        	if (polygons.isEmpty()) {
-        		this.plane = null;
-        	}
-        	else {
-        		this.plane = polygons.get(0).getPlane();
-        	}
-        } else {
-			this.plane = plane;
-		}
 		this.front = front;
 		this.back = back;
 	}
@@ -84,11 +71,9 @@ final class Node {
      * @param polygons polygons
      */
     public static Node fromPoligons(List<Polygon> polygons) {
-    	if (polygons == null || polygons.isEmpty()) {
-			return new Node();
-		}
+    	AssertValue.isNotEmpty(polygons, "Cannot create a Node from an empty list!");
     	
-    	Plane newPlane = polygons.get(0).getPlane();
+    	Polygon newPlane = polygons.get(0);
 
     	List<Polygon> newPolygons = new ArrayList<>();
         List<Polygon> frontP = new ArrayList<>();
@@ -107,33 +92,23 @@ final class Node {
         if (!backP.isEmpty()) {
         	newBack = fromPoligons(backP);
         }
-        return new Node(newPolygons, newPlane, newFront, newBack);
-    	
+        return new Node(newPolygons, newFront, newBack);
     }
 
-    /**
-     * Constructor. Creates a node without polygons.
-     */
-    private Node() {
-        this(new ArrayList<Polygon>(), null, null, null);
-    }
-
-    /**
-     * Converts solid space to empty space and vice verca.
-     */
-    public Node invert() {
+    /* (non-Javadoc)
+	 * @see eu.printingin3d.javascad.vrl.INode#invert()
+	 */
+	public Node invert() {
     	List<Polygon> newPolygons = new ArrayList<>();
 
         for (Polygon polygon : this.polygons) {
         	newPolygons.add(polygon.flip());
         }
 
-        Plane newPlane = plane == null ? null : plane.flip();
-        
         Node newBack = this.front == null ? null : this.front.invert();
         Node newFront = this.back == null ? null : this.back.invert();
         
-        return new Node(newPolygons, newPlane, newFront, newBack);
+        return new Node(newPolygons, newFront, newBack);
     }
 
     /**
@@ -146,9 +121,9 @@ final class Node {
      *
      * @return the cliped list of polygons
      */
-    private List<Polygon> clipPolygons(List<Polygon> polys) {
+	public List<Polygon> clipPolygons(List<Polygon> polys) {
 
-        if (this.plane == null || polys.isEmpty()) {
+        if (polys.isEmpty()) {
             return new ArrayList<>(polys);
         }
 
@@ -156,7 +131,7 @@ final class Node {
         List<Polygon> backP = new ArrayList<>();
 
         for (Polygon polygon : polys) {
-            this.plane.splitPolygon(polygon, frontP, backP, frontP, backP);
+            polygons.get(0).splitPolygon(polygon, frontP, backP, frontP, backP);
         }
         if (this.front != null) {
             frontP = this.front.clipPolygons(frontP);
@@ -173,15 +148,7 @@ final class Node {
 
     // Remove all polygons in this BSP tree that are inside the other BSP tree
     // `bsp`.
-    /**
-     * Removes all polygons in this BSP tree that are inside the specified BSP
-     * tree ({@code bsp}).
-     *
-     * <b>Note:</b> polygons are splitted if necessary.
-     *
-     * @param bsp bsp that shall be used for clipping
-     */
-    public Node clipTo(Node bsp) {
+	public Node clipTo(Node bsp) {
         List<Polygon> newPolygons = bsp.clipPolygons(this.polygons);
         Node newFront = null;
         Node newBack = null;
@@ -192,15 +159,10 @@ final class Node {
             newBack = back.clipTo(bsp);
         }
         
-        return new Node(newPolygons, plane, newFront, newBack);
+        return new Node(newPolygons, newFront, newBack);
     }
 
-    /**
-     * Returns a list of all polygons in this BSP tree.
-     *
-     * @return a list of all polygons in this BSP tree
-     */
-    public List<Polygon> allPolygons() {
+	public List<Polygon> allPolygons() {
         List<Polygon> localPolygons = new ArrayList<>(polygons);
         if (front != null) {
             localPolygons.addAll(front.allPolygons());
@@ -212,59 +174,12 @@ final class Node {
         return localPolygons;
     }
 
-    /**
-     * Build a BSP tree out of {@code polygons}. When called on an existing
-     * tree, the new polygons are filtered down to the bottom of the tree and
-     * become new nodes there. Each set of polygons is partitioned using the
-     * first polygon (no heuristic is used to pick a good split).
-     *
-     * @param polygons polygons used to build the BSP
-     */
-/*    public Node build(List<Polygon> polygons) {
-    	Plane newPlane = plane;
-
-    	if (newPlane == null) {
-    		if (polygons.isEmpty()) {
-    			return this;
-    		}
-    		newPlane = polygons.get(0).plane;
-    	}
-
-    	List<Polygon> newPolygons = new ArrayList<>(polygons);
-        List<Polygon> frontP = new ArrayList<>();
-        List<Polygon> backP = new ArrayList<>();
-        Node newFront = front;
-        Node newBack = back;
-
-        for (Polygon polygon : polygons) {
-        	newPlane.splitPolygon(
-                    polygon, newPolygons, newPolygons, frontP, backP);
-        }
-        if (!frontP.isEmpty()) {
-            if (newFront == null) {
-            	newFront = new Node();
-            }
-            newFront = newFront.build(frontP);
-        }
-        if (!backP.isEmpty()) {
-            if (newBack == null) {
-                newBack = new Node();
-            }
-            newBack = newBack.build(backP);
-        }
-        
-        return new Node(newPolygons, newPlane, newFront, newBack);
-    }*/
-    public Node build(List<Polygon> polygons) {
+	public Node build(List<Polygon> polygons) {
     	if (polygons==null || polygons.isEmpty()) {
 			return this;
 		}
     	
-    	Plane newPlane = plane;
-    	
-        if (newPlane == null) {
-        	newPlane = polygons.get(0).getPlane();
-        }
+    	Polygon newPlane = (this.polygons.isEmpty() ? polygons : this.polygons).get(0);
 
         List<Polygon> frontP = new ArrayList<>();
         List<Polygon> backP = new ArrayList<>();
@@ -286,8 +201,6 @@ final class Node {
             	back.build(backP);
 			}
         }
-        return new Node(this.polygons, this.plane, front, back);
+        return new Node(this.polygons, front, back);
     }
-    
-    
 }

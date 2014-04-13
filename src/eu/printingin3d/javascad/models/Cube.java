@@ -97,7 +97,7 @@ public class Cube extends Abstract3dModel {
                 );
                 vertices.add(pos);
             }
-            polygons.add(new Polygon(vertices));
+            polygons.add(Polygon.fromPolygons(vertices));
         }
         
 		return new CSG(polygons);

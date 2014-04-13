@@ -34,7 +34,6 @@
 package eu.printingin3d.javascad.vrl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,19 +57,22 @@ public class Polygon {
     private final List<Coords3d> vertices;
 
     /**
-     * Plane defined by this polygon.
-     *
-     * <b>Note:</b> uses first three vertices to define the plane.
+     * Normal vector.
      */
-    private final Plane plane;
-    
-    private Polygon(List<Coords3d> vertices, Plane plane) {
-		this.vertices = Collections.unmodifiableList(vertices);
-		this.plane = plane;
+    private final Coords3d normal;
+    /**
+     * Square of the distance to origin.
+     */
+    private final double dist;
+
+	private Polygon(List<Coords3d> vertices, Coords3d normal, double dist) {
+		this.vertices = vertices;
+		this.normal = normal;
+		this.dist = dist;
 	}
 
 	/**
-     * Constructor. Creates a new polygon that consists of the specified
+     * Creates a new polygon that consists of the specified
      * vertices.
      *
      * <b>Note:</b> the vertices used to initialize a polygon must be coplanar
@@ -78,25 +80,13 @@ public class Polygon {
      *
      * @param vertices polygon vertices
      */
-    public Polygon(List<Coords3d> vertices) {
-    	this(vertices, Plane.createFromPoints(
-                vertices.get(0),
-                vertices.get(1),
-                vertices.get(2)));
-    }
-
-    /**
-     * Constructor. Creates a new polygon that consists of the specified
-     * vertices.
-     *
-     * <b>Note:</b> the vertices used to initialize a polygon must be coplanar
-     * and form a convex loop.
-     *
-     * @param vertices polygon vertices
-     *
-     */
-    public Polygon(Coords3d... vertices) {
-        this(Arrays.asList(vertices));
+    public static Polygon fromPolygons(List<Coords3d> vertices) {
+    	Coords3d a = vertices.get(0);
+    	Coords3d b = vertices.get(1);
+    	Coords3d c = vertices.get(2);
+    	Coords3d n = b.move(a.inverse()).cross(c.move(a.inverse())).unit();
+        
+    	return new Polygon(vertices, n, n.dot(a));
     }
 
     /**
@@ -109,7 +99,7 @@ public class Polygon {
     	
         Collections.reverse(newVertices);
 
-        return new Polygon(newVertices, plane.flip());
+        return new Polygon(newVertices, normal.inverse(), -dist);
     }
 
     public List<Facet> toFacets() {
@@ -121,7 +111,7 @@ public class Polygon {
 	        			firstVertex, 
 	        			vertices.get(i + 1), 
 	        			vertices.get(i + 2));
-				facets.add(new Facet(triangle, plane.getNormal()));
+				facets.add(new Facet(triangle, normal));
 	        }
         }
         return facets;
@@ -145,15 +135,85 @@ public class Polygon {
     		newVertices.add(transform.transform(v));
     	}
     	
-    	Polygon result = new Polygon(newVertices);
+    	Polygon result = fromPolygons(newVertices);
 
     	return transform.isMirror() ? result.flip() : result;
     }
 
-	public Plane getPlane() {
-		return plane;
-	}
+    /**
+     * Splits a {@link Polygon} by this plane if needed. After that it puts the
+     * polygons or the polygon fragments in the appropriate lists
+     * ({@code front}, {@code back}). Coplanar polygons go into either
+     * {@code coplanarFront}, {@code coplanarBack} depending on their
+     * orientation with respect to this plane. Polygons in front or back of this
+     * plane go into either {@code front} or {@code back}.
+     *
+     * @param polygon polygon to split
+     * @param coplanarFront "coplanar front" polygons
+     * @param coplanarBack "coplanar back" polygons
+     * @param front front polygons
+     * @param back back polgons
+     */
+    public void splitPolygon(
+            Polygon polygon,
+            List<Polygon> coplanarFront,
+            List<Polygon> coplanarBack,
+            List<Polygon> front,
+            List<Polygon> back) {
 
+        // Classify each point as well as the entire polygon into one of the four possible classes.
+        VertexPosition polygonType = VertexPosition.COPLANAR;
+        List<VertexPosition> types = new ArrayList<>();
+        for (Coords3d v : polygon.getVertices()) {
+            double t = this.normal.dot(v) - this.dist;
+            VertexPosition type = VertexPosition.fromSquareDistance(t);
+            polygonType = polygonType.add(type);
+            types.add(type);
+        }
+
+        // Put the polygon in the correct list, splitting it when necessary.
+        switch (polygonType) {
+            case COPLANAR:
+                (this.normal.dot(polygon.normal) > 0 ? coplanarFront : coplanarBack).add(polygon);
+                break;
+            case FRONT:
+                front.add(polygon);
+                break;
+            case BACK:
+                back.add(polygon);
+                break;
+            case SPANNING:
+                List<Coords3d> f = new ArrayList<>();
+                List<Coords3d> b = new ArrayList<>();
+                for (int i = 0; i < polygon.getVertices().size(); i++) {
+                    int j = (i + 1) % polygon.getVertices().size();
+                    VertexPosition ti = types.get(i);
+                    VertexPosition tj = types.get(j);
+                    Coords3d vi = polygon.getVertices().get(i);
+                    Coords3d vj = polygon.getVertices().get(j);
+                    if (ti != VertexPosition.BACK) {
+                        f.add(vi);
+                    }
+                    if (ti != VertexPosition.FRONT) {
+                        b.add(vi);
+                    }
+                    if (ti.add(tj) == VertexPosition.SPANNING) {
+                        double t = (this.dist - this.normal.dot(vi)) / this.normal.dot(vj.move(vi.inverse()));
+                        Coords3d v = vi.lerp(vj, t);
+                        f.add(v);
+                        b.add(v);
+                    }
+                }
+                if (f.size() >= 3) {
+                    front.add(fromPolygons(f));
+                }
+                if (b.size() >= 3) {
+                    back.add(fromPolygons(b));
+                }
+                break;
+        }
+    }
+    
 	public List<Coords3d> getVertices() {
 		return vertices;
 	}

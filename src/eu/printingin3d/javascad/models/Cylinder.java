@@ -99,22 +99,22 @@ public class Cylinder extends Abstract3dModel {
         for (int i = 0; i < numSlices; i++) {
             double t0 = i / (double) numSlices;
             double t1 = (i + 1) / (double) numSlices;
-            polygons.add(new Polygon(Arrays.asList(
+            polygons.add(Polygon.fromPolygons(Arrays.asList(
                     startV,
                     cylPoint(+z, topRadius, t0),
                     cylPoint(+z, topRadius, t1))
             ));
-            polygons.add(new Polygon(Arrays.asList(
+            polygons.add(Polygon.fromPolygons(Arrays.asList(
                     cylPoint(+z, topRadius, t1),
                     cylPoint(+z, topRadius, t0),
                     cylPoint(-z, bottomRadius, t0),
                     cylPoint(-z, bottomRadius, t1))
             ));
-            polygons.add(new Polygon(
+            polygons.add(Polygon.fromPolygons(Arrays.asList(
                             endV,
                             cylPoint(-z, bottomRadius, t1),
                             cylPoint(-z, bottomRadius, t0)
-            )
+            ))
             );
         }
 
