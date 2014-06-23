@@ -1,6 +1,7 @@
 package eu.printingin3d.javascad.openscad;
 
 import eu.printingin3d.javascad.models.IModel;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
@@ -33,7 +34,7 @@ public class Consts implements IModel {
 	}
 
 	@Override
-	public String toScad() {
+	public String toScad(ScadGenerationContext context) {
 		return "$fs="+fs+";$fa="+fa+";\n";
 	}
 

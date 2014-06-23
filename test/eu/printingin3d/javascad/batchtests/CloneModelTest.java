@@ -26,6 +26,7 @@ import eu.printingin3d.javascad.models.Cylinder;
 import eu.printingin3d.javascad.models.Polyhedron;
 import eu.printingin3d.javascad.models.Prism;
 import eu.printingin3d.javascad.models.Ring;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.models.Sphere;
 import eu.printingin3d.javascad.models2d.Square;
 import eu.printingin3d.javascad.testutils.RandomUtils;
@@ -103,14 +104,14 @@ public class CloneModelTest {
 	
 	@Test
 	public void shouldRepresentsTheSameOpenScadObject() {
-		assertEquals(original.toScad(), original.cloneModel().toScad());
+		assertEquals(original.toScad(ScadGenerationContext.DEFAULT), original.cloneModel().toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void shouldBeIndependent() {
 		Abstract3dModel clone = original.cloneModel();
 		original.move(RandomUtils.getRandomCoords());
-		assertFalse(clone.toScad().equals(original.toScad()));
+		assertFalse(clone.toScad(ScadGenerationContext.DEFAULT).equals(original.toScad(ScadGenerationContext.DEFAULT)));
 	}
 	
 	@Test

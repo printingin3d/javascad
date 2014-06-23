@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
@@ -30,7 +31,7 @@ public class Colorize extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append('[').
@@ -43,7 +44,7 @@ public class Colorize extends Abstract3dModel {
 		}
 		sb.append(']');
 		
-		return "color("+sb+")"+baseModel.toScad();
+		return "color("+sb+")"+baseModel.toScad(context);
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class ScaleTest {
@@ -16,12 +17,13 @@ public class ScaleTest {
 
 	@Test
 	public void testToScad() {
-		assertEqualsWithoutWhiteSpaces("scale([1,1.5,3.1416]) (model)", new Scale(Test3dModel.DEFAULT, new Coords3d(1, 1.5, Math.PI)).toScad());
+		assertEqualsWithoutWhiteSpaces("scale([1,1.5,3.1416]) (model)", 
+				new Scale(Test3dModel.DEFAULT, new Coords3d(1, 1.5, Math.PI)).toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void testToScadWithIdentScale() {
-		assertEqualsWithoutWhiteSpaces("(model)", new Scale(Test3dModel.DEFAULT, new Coords3d(1, 1, 1)).toScad());
+		assertEqualsWithoutWhiteSpaces("(model)", new Scale(Test3dModel.DEFAULT, new Coords3d(1, 1, 1)).toScad(ScadGenerationContext.DEFAULT));
 	}
 
 	@Test

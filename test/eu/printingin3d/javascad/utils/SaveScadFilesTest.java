@@ -18,6 +18,7 @@ import org.junit.Test;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.ConstsTest;
 import eu.printingin3d.javascad.models.IModel;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.testutils.FileMockBuilder;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
@@ -92,7 +93,7 @@ public class SaveScadFilesTest {
 	@Test
 	public void shouldDoNothingIfNoFileWasAdded() throws IOException {
 		File root = new FileMockBuilder().isADirectory().build();
-		new SaveScadFiles(root).saveScadFiles();
+		new SaveScadFiles(root).saveScadFiles(ScadGenerationContext.DEFAULT);
 	}
 	
 	@Test
@@ -113,7 +114,7 @@ public class SaveScadFilesTest {
 				return fileName;
 			}
 		});
-		saveScadFiles.saveScadFiles();
+		saveScadFiles.saveScadFiles(ScadGenerationContext.DEFAULT);
 		Assert.assertTrue(fileName.exists());
 		assertEqualsWithoutWhiteSpaces(model, readTheWholeFile(fileName));
 	}
@@ -126,7 +127,7 @@ public class SaveScadFilesTest {
 		final File fileName = new File(ROOT.getAbsolutePath()+"/fileName2.scad");
 		Assert.assertFalse(fileName.exists());
 		saveScadFiles.addModels("fileName2.scad", Arrays.<IModel>asList(new Test3dModel(model)));
-		saveScadFiles.saveScadFiles();
+		saveScadFiles.saveScadFiles(ScadGenerationContext.DEFAULT);
 		Assert.assertTrue(fileName.exists());
 		assertEqualsWithoutWhiteSpaces(model, readTheWholeFile(fileName));
 	}
@@ -139,7 +140,7 @@ public class SaveScadFilesTest {
 		final File fileName = new File(ROOT.getAbsolutePath()+"/fileName3.scad");
 		Assert.assertFalse(fileName.exists());
 		saveScadFiles.addModel("fileName3.scad", new Test3dModel(model));
-		saveScadFiles.saveScadFiles();
+		saveScadFiles.saveScadFiles(ScadGenerationContext.DEFAULT);
 		Assert.assertTrue(fileName.exists());
 		assertEqualsWithoutWhiteSpaces(ConstsTest.DEFAULT_CONSTS+" "+model, readTheWholeFile(fileName));
 	}
@@ -150,7 +151,7 @@ public class SaveScadFilesTest {
 		final File fileName = new File(ROOT.getAbsolutePath()+"/fileName4.scad");
 		Assert.assertFalse(fileName.exists());
 		saveScadFiles.addModels("fileName4.scad", Collections.<IModel>emptyList());
-		saveScadFiles.saveScadFiles();
+		saveScadFiles.saveScadFiles(ScadGenerationContext.DEFAULT);
 		Assert.assertTrue(fileName.exists());
 		assertEqualsWithoutWhiteSpaces("", readTheWholeFile(fileName));
 	}

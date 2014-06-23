@@ -148,8 +148,6 @@ public class Abstract3d {
     /**
      * Returns the dot product of this vector and the specified vector.
      *
-     * <b>Note:</b> this vector is not modified.
-     *
      * @param a the second vector
      *
      * @return the dot product of this vector and the specified vector

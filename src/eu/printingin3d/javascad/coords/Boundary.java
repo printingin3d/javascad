@@ -48,10 +48,10 @@ public class Boundary {
 		for (Boundary b : boundaries) {
 			minValue = Math.max(b.getMin(), minValue);
 			maxValue = Math.min(b.getMax(), maxValue);
-			AssertValue.isTrue(minValue<b.getMax(), 
+			AssertValue.isTrue(minValue<=b.getMax(), 
 					"The boundaries should intersect with each other, " +
 							"but there is a gap between "+minValue+" and "+b.getMax());
-			AssertValue.isTrue(maxValue>b.getMin(), 
+			AssertValue.isTrue(maxValue>=b.getMin(), 
 					"The boundaries should intersect with each other, " +
 							"but there is a gap between "+maxValue+" and "+b.getMin());
 		}

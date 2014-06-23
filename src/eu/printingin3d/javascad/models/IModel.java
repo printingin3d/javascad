@@ -13,7 +13,7 @@ public interface IModel {
 	 * Renders this model and returns with the generated OpenSCAD code.
 	 * @return the generated OpenSCAD code
 	 */
-	String toScad();
+	String toScad(ScadGenerationContext context);
 	
 	CSG toCSG(FacetGenerationContext context);
 }

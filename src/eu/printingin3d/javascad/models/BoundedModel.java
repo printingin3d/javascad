@@ -31,8 +31,8 @@ public class BoundedModel extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
-		return baseModel==null ? "" : baseModel.toScad();
+	protected String innerToScad(ScadGenerationContext context) {
+		return baseModel==null ? "" : baseModel.toScad(context);
 	}
 
 	@Override

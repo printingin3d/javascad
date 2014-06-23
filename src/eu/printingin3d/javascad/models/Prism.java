@@ -46,7 +46,7 @@ public class Prism extends Cylinder {
 	}
 	
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		if (DoubleUtils.equalsEps(bottomRadius, topRadius)) {
 			return "cylinder(h="+DoubleUtils.formatDouble(length)+
 					", r="+DoubleUtils.formatDouble(bottomRadius)+

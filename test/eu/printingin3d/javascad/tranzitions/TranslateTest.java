@@ -9,6 +9,7 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class TranslateTest {
@@ -27,13 +28,13 @@ public class TranslateTest {
 	@Test
 	public void testToScad() {
 		Translate translate = new Translate(new Test3dModel("(model)"), new Coords3d(30, 20, 10));
-		assertEqualsWithoutWhiteSpaces("translate([30,20,10]) (model)", translate.toScad());
+		assertEqualsWithoutWhiteSpaces("translate([30,20,10]) (model)", translate.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void toScadWithZeroMoveShouldDoNothing() {
 		Translate translate = new Translate(new Test3dModel("(model)"), Coords3d.ZERO);
-		assertEqualsWithoutWhiteSpaces("(model)", translate.toScad());
+		assertEqualsWithoutWhiteSpaces("(model)", translate.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test

@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.models.Cylinder;
 
 public class CylinderTest {
 	private static final double EPSILON = 0.001;
@@ -16,7 +15,7 @@ public class CylinderTest {
 	@Test
 	public void testCylinder() {
 		Cylinder cylinder = new Cylinder(10.0, 20.0);
-		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", cylinder.toScad());
+		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", cylinder.toScad(ScadGenerationContext.DEFAULT));
 	}
 
 	@Test(expected = IllegalValueException.class)
@@ -47,13 +46,13 @@ public class CylinderTest {
 	@Test
 	public void testCylinderWhenTheTwoRadiusesAreTheSame() {
 		Cylinder cylinder = new Cylinder(10.0, 20.0, 20.0);
-		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", cylinder.toScad());
+		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", cylinder.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void testCone() {
 		Cylinder cylinder = new Cylinder(10.0, 20.0, 5.0);
-		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r1=20, r2=5, center=true);", cylinder.toScad());
+		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r1=20, r2=5, center=true);", cylinder.toScad(ScadGenerationContext.DEFAULT));
 	}
 
 	@Test

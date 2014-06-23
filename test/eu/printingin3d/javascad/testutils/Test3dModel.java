@@ -2,6 +2,7 @@ package eu.printingin3d.javascad.testutils;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
@@ -21,7 +22,7 @@ public class Test3dModel extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		return model;
 	}
 

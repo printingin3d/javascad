@@ -40,6 +40,7 @@ import java.util.List;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
 import eu.printingin3d.javascad.tranform.ITransformation;
+import eu.printingin3d.javascad.utils.AssertValue;
 
 /**
  * Represents a convex polygon.
@@ -69,6 +70,11 @@ public class Polygon {
 		this.vertices = vertices;
 		this.normal = normal;
 		this.dist = dist;
+		
+		for (Coords3d v : vertices) {
+			VertexPosition position = calculateVertexPosition(v);
+			AssertValue.isTrue(position==VertexPosition.COPLANAR, "Every vertex in a polygon must be coplanar, but was "+position+"!");
+		}
 	}
 
 	/**
@@ -139,6 +145,11 @@ public class Polygon {
 
     	return transform.isMirror() ? result.flip() : result;
     }
+    
+    private VertexPosition calculateVertexPosition(Coords3d v) {
+        double t = this.normal.dot(v) - this.dist;
+        return VertexPosition.fromSquareDistance(t);
+    }
 
     /**
      * Splits a {@link Polygon} by this plane if needed. After that it puts the
@@ -165,8 +176,7 @@ public class Polygon {
         VertexPosition polygonType = VertexPosition.COPLANAR;
         List<VertexPosition> types = new ArrayList<>();
         for (Coords3d v : polygon.getVertices()) {
-            double t = this.normal.dot(v) - this.dist;
-            VertexPosition type = VertexPosition.fromSquareDistance(t);
+            VertexPosition type = calculateVertexPosition(v);
             polygonType = polygonType.add(type);
             types.add(type);
         }
@@ -192,16 +202,20 @@ public class Polygon {
                     Coords3d vi = polygon.getVertices().get(i);
                     Coords3d vj = polygon.getVertices().get(j);
                     if (ti != VertexPosition.BACK) {
-                        f.add(vi);
+                    	addVertexToList(f, vi);
+                        //f.add(vi);
                     }
                     if (ti != VertexPosition.FRONT) {
-                        b.add(vi);
+                    	addVertexToList(b, vi);
+                        //b.add(vi);
                     }
                     if (ti.add(tj) == VertexPosition.SPANNING) {
                         double t = (this.dist - this.normal.dot(vi)) / this.normal.dot(vj.move(vi.inverse()));
                         Coords3d v = vi.lerp(vj, t);
-                        f.add(v);
-                        b.add(v);
+                    	addVertexToList(f, v);
+                    	addVertexToList(b, v);
+                        //f.add(v);
+                        //b.add(v);
                     }
                 }
                 if (f.size() >= 3) {
@@ -212,6 +226,22 @@ public class Polygon {
                 }
                 break;
         }
+    }
+    
+    private void addVertexToList(List<Coords3d> list, Coords3d newVertex) {
+/*    	if (!list.isEmpty()) {
+    		Coords3d lastVertex = list.get(list.size()-1);
+    		
+    		Coords3d prev = vertices.get(vertices.size()-1);
+    		for (Coords3d c : vertices) {
+    			Coords3d cross = EdgeCrossSolver.findIntersection(prev, c, lastVertex, newVertex);
+    			if (cross!=null) {
+    				list.add(cross);
+    				break;
+    			}
+    		}
+    	}*/
+    	list.add(newVertex);
     }
     
 	public List<Coords3d> getVertices() {

@@ -10,6 +10,7 @@ import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.ListUtils;
 import eu.printingin3d.javascad.vrl.CSG;
@@ -56,18 +57,18 @@ public class Difference extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		if (model2.isEmpty()) {
-			return model1.toScad();
+			return model1.toScad(context);
 		}
 		
 		String attributes;
 		StringBuilder result = new StringBuilder();
 		result.append("difference()");
 		attributes = "";
-		result.append('{').append(model1.toScad());
+		result.append('{').append(model1.toScad(context));
 		for (Abstract3dModel model : model2) {
-			result.append(model.toScad());
+			result.append(model.toScad(context));
 		}
 		return result.append(attributes).append('}').toString();
 	}

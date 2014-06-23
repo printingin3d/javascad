@@ -14,7 +14,6 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.models.Polyhedron;
 
 public class PolyhedronTest {
 	
@@ -87,7 +86,7 @@ public class PolyhedronTest {
 		triangles.add(new Triangle3d(c2,c1,c3));
 		Polyhedron p=new Polyhedron(triangles);
 		
-		String scad = p.toScad();
+		String scad = p.toScad(ScadGenerationContext.DEFAULT);
 		
 		List<PositionAndIndex> posList = new ArrayList<>();
 		posList.add(new PositionAndIndex(scad.indexOf("[10,10,0]"), 0));

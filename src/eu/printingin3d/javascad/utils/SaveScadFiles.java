@@ -9,6 +9,7 @@ import java.util.List;
 
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.IModel;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.openscad.Consts;
 
 /**
@@ -88,11 +89,11 @@ public class SaveScadFiles {
 	 * Save the added SCAD files into the corresponding files. 
 	 * @throws IOException if any IO error happens during the file write
 	 */
-	public void saveScadFiles() throws IOException {
+	public void saveScadFiles(ScadGenerationContext context) throws IOException {
 		for (IScadFile scadFile : scadFiles) {
 			File file = scadFile.getFile(root);
 			file.getParentFile().mkdirs();
-			new ModelToFile(file).addModels(scadFile.getModels()).saveToFile();
+			new ModelToFile(file).addModels(scadFile.getModels()).saveToFile(context);
 		}
 	}
 }

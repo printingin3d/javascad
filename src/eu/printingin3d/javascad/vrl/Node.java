@@ -95,9 +95,6 @@ public class Node {
         return new Node(newPolygons, newFront, newBack);
     }
 
-    /* (non-Javadoc)
-	 * @see eu.printingin3d.javascad.vrl.INode#invert()
-	 */
 	public Node invert() {
     	List<Polygon> newPolygons = new ArrayList<>();
 
@@ -185,7 +182,7 @@ public class Node {
         List<Polygon> backP = new ArrayList<>();
 
         for (Polygon polygon : polygons) {
-        	newPlane.splitPolygon(polygon, polygons, polygons, frontP, backP);
+        	newPlane.splitPolygon(polygon, this.polygons, this.polygons, frontP, backP);
         }
         if (!frontP.isEmpty()) {
             if (front == null) {

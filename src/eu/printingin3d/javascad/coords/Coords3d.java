@@ -108,8 +108,6 @@ public class Coords3d extends Abstract3d {
     /**
      * Returns the cross product of this vector and the specified vector.
      *
-     * <b>Note:</b> this vector is not modified.
-     *
      * @param a the vector
      *
      * @return the cross product of this vector and the specified vector.
@@ -159,5 +157,14 @@ public class Coords3d extends Abstract3d {
      */
     public Coords3d lerp(Coords3d a, double t) {
         return this.move(a.move(this.inverse()).mul(t));
+    }
+    
+    /**
+     * Calculates the distance between this coordinate and the given coordinate.
+     * @param d
+     * @return
+     */
+    public double distance(Coords3d d) {
+    	return this.move(d.inverse()).magnitude();
     }
 }

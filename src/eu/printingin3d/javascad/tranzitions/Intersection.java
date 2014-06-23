@@ -6,6 +6,7 @@ import java.util.List;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
@@ -45,20 +46,20 @@ public class Intersection extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		StringBuilder result = new StringBuilder();
 		switch (models.size()) {
 		case 0:
 			break;
 		case 1:
-			result.append(models.get(0).toScad());
+			result.append(models.get(0).toScad(context));
 			break;
 		default:
 			result.append("intersection()");
 			
 			result.append("{\n");
 			for (Abstract3dModel model : models) {
-				result.append(model.toScad());
+				result.append(model.toScad(context));
 			}
 			result.append("}\n");
 			break;

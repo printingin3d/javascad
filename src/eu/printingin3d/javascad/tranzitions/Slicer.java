@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.tranzitions;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.tranzitions.slicer.Cover;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.vrl.CSG;
@@ -82,8 +83,8 @@ public class Slicer extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
-		return new Difference(model, sliceModel()).toScad();
+	protected String innerToScad(ScadGenerationContext context) {
+		return new Difference(model, sliceModel()).toScad(context);
 	}
 
 	@Override

@@ -129,10 +129,10 @@ public abstract class Abstract3dModel implements IModel {
 	 * and moves or rotations 
 	 * @return the representation of the model
 	 */
-	protected abstract String innerToScad();
+	protected abstract String innerToScad(ScadGenerationContext context);
 	
-	private String getOne() {
-		String item = innerToScad();
+	private String getOne(ScadGenerationContext context) {
+		String item = innerToScad(context);
 		if (item==null || item.isEmpty()) {
 			return "";
 		}
@@ -145,8 +145,8 @@ public abstract class Abstract3dModel implements IModel {
 		return sb.toString();
 	}
 	
-	private boolean addMovesScad(StringBuilder sb) {
-		String oneItem = getOne();
+	private boolean addMovesScad(StringBuilder sb, ScadGenerationContext context) {
+		String oneItem = getOne(context);
 		if (oneItem!=null && !oneItem.isEmpty()) {
 			for (Coords3d coord : moves) {
 				sb.append(Translate.getTranslate(coord))
@@ -169,7 +169,7 @@ public abstract class Abstract3dModel implements IModel {
 	}
 	
 	@Override
-	public final String toScad() {
+	public final String toScad(ScadGenerationContext context) {
 		StringBuilder sb = new StringBuilder(getPrefix());
 		StringBuilder ending = new StringBuilder();
 		if (!roundingPlane.isEmpty()) {
@@ -183,7 +183,7 @@ public abstract class Abstract3dModel implements IModel {
 			sb.append("union(){");
 			ending.insert(0, '}');
 		}
-		if (!addMovesScad(sb)) {
+		if (!addMovesScad(sb, context)) {
 			return "";
 		}
 		

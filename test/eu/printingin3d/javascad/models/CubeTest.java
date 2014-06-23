@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Dims3d;
-import eu.printingin3d.javascad.models.Cube;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 
 public class CubeTest {
@@ -16,19 +15,19 @@ public class CubeTest {
 	@Test
 	public void testToScad1() {
 		Cube cube = new Cube(10.0);
-		assertEqualsWithoutWhiteSpaces("cube([10,10,10],center=true);", cube.toScad());
+		assertEqualsWithoutWhiteSpaces("cube([10,10,10],center=true);", cube.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void testToScad2() {
 		Cube cube = new Cube(new Dims3d(10.0, 20.0, 30.0));
-		assertEqualsWithoutWhiteSpaces("cube([10,20,30],center=true);", cube.toScad());
+		assertEqualsWithoutWhiteSpaces("cube([10,20,30],center=true);", cube.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void toScadShouldBeRounded() {
 		Cube cube = new Cube(new Dims3d(Math.PI, 20.0, 30.0));
-		assertEqualsWithoutWhiteSpaces("cube([3.1416,20,30],center=true);", cube.toScad());
+		assertEqualsWithoutWhiteSpaces("cube([3.1416,20,30],center=true);", cube.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test

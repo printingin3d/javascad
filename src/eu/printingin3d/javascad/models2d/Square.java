@@ -4,6 +4,7 @@ import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.exceptions.NotImplementedException;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
@@ -26,7 +27,7 @@ public class Square extends Abstract2dModel {
 	
 	
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		return "square("+size+", center=true);\n";
 	}
 

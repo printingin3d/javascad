@@ -78,7 +78,7 @@ public class Polyhedron extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		List<Coords3d> points = getPoints();
 
 		StringBuffer b = new StringBuffer("");

@@ -62,7 +62,7 @@ public class Cylinder extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		if (DoubleUtils.equalsEps(bottomRadius, topRadius)) {
 			return "cylinder(h="+DoubleUtils.formatDouble(length)+
 						", r="+DoubleUtils.formatDouble(bottomRadius)+", center=true);\n";

@@ -33,7 +33,7 @@ public class Sphere extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		return "sphere(r="+DoubleUtils.formatDouble(r)+");\n";
 	}
 

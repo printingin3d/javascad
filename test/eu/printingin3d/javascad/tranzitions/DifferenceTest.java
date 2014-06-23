@@ -19,6 +19,7 @@ import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class DifferenceTest {
@@ -41,13 +42,14 @@ public class DifferenceTest {
 	@Test
 	public void testToScad() {
 		Difference difference = new Difference(new Test3dModel("(model1)"), new Test3dModel("(model2)"));
-		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2)}", difference.toScad());
+		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2)}", 
+				difference.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void testToScadWithOneModel() {
 		Difference difference = new Difference(new Test3dModel("(model1)"));
-		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
@@ -56,28 +58,29 @@ public class DifferenceTest {
 				new Test3dModel("(model1)"), 
 				new Test3dModel("(model2)"),
 				new Test3dModel("(model3)"));
-		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2) (model3)}", difference.toScad());
+		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2) (model3)}", 
+				difference.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void testToScadAbsenceOfSecondModel1() {
 		Abstract3dModel model2 = null;
 		Difference difference = new Difference(new Test3dModel("(model1)"), model2);
-		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void testToScadAbsenceOfSecondModel2() {
 		List<Abstract3dModel> model2 = null;
 		Difference difference = new Difference(new Test3dModel("(model1)"), model2);
-		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void testToScadWithEmptyList() {
 		Difference difference = new Difference(new Test3dModel("(model1)"), 
 				Collections.<Abstract3dModel>emptyList());
-		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ScadGenerationContext.DEFAULT));
 	}
 
 	@Test

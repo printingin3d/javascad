@@ -25,8 +25,8 @@ public class Ring extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
-		return "rotate_extrude() "+Translate.getTranslate(Coords3d.xOnly(radius))+model.toScad()+";";
+	protected String innerToScad(ScadGenerationContext context) {
+		return "rotate_extrude() "+Translate.getTranslate(Coords3d.xOnly(radius))+model.toScad(context)+";";
 	}
 
 	@Override

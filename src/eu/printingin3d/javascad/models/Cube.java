@@ -55,7 +55,7 @@ public class Cube extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		return "cube("+size+",center=true);\n";
 	}
 

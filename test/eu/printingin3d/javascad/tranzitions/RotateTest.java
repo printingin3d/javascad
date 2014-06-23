@@ -8,6 +8,7 @@ import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
@@ -20,7 +21,8 @@ public class RotateTest {
 	
 	@Test
 	public void testToScad() {
-		assertEqualsWithoutWhiteSpaces("rotate([5,100,50]) (model)", new Rotate(new Test3dModel("(model)"), new Angles3d(5, 100, 50)).toScad());
+		assertEqualsWithoutWhiteSpaces("rotate([5,100,50]) (model)", 
+				new Rotate(new Test3dModel("(model)"), new Angles3d(5, 100, 50)).toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test

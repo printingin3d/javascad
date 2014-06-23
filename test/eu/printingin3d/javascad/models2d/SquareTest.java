@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 
 public class SquareTest {
 
@@ -15,13 +16,13 @@ public class SquareTest {
 	@Test
 	public void testToScad() {
 		Square square = new Square(new Dims2d(10.0, 20.0));
-		assertEqualsWithoutWhiteSpaces("square([10,20],center=true);", square.toScad());
+		assertEqualsWithoutWhiteSpaces("square([10,20],center=true);", square.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void toScadShouldBeRounded() {
 		Square square = new Square(new Dims2d(Math.PI, 20.0));
-		assertEqualsWithoutWhiteSpaces("square([3.1416,20],center=true);", square.toScad());
+		assertEqualsWithoutWhiteSpaces("square([3.1416,20],center=true);", square.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test

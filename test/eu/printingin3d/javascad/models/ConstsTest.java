@@ -12,12 +12,12 @@ public class ConstsTest {
 	@Test
 	public void testDefaultContructor() {
 		Consts consts = new Consts();
-		assertEqualsWithoutWhiteSpaces(DEFAULT_CONSTS, consts.toScad());
+		assertEqualsWithoutWhiteSpaces(DEFAULT_CONSTS, consts.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void testContructor() {
 		Consts consts = new Consts(5.0, 10);
-		assertEqualsWithoutWhiteSpaces("$fs=5.0;$fa=10;", consts.toScad());
+		assertEqualsWithoutWhiteSpaces("$fs=5.0;$fa=10;", consts.toScad(ScadGenerationContext.DEFAULT));
 	}
 }

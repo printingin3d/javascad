@@ -14,8 +14,8 @@ public abstract class Extendable3dModel extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
-		return baseModel.toScad();
+	protected String innerToScad(ScadGenerationContext context) {
+		return baseModel.toScad(context);
 	}
 
 	@Override

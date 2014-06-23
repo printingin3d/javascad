@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.models.Sphere;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 
 public class SphereTest {
@@ -16,13 +15,13 @@ public class SphereTest {
 	@Test
 	public void testToScad() {
 		Sphere sphere = new Sphere(10.0);
-		assertEqualsWithoutWhiteSpaces("sphere(r=10);", sphere.toScad());
+		assertEqualsWithoutWhiteSpaces("sphere(r=10);", sphere.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test
 	public void toScadShouldBeRounded() {
 		Sphere sphere = new Sphere(Math.PI);
-		assertEqualsWithoutWhiteSpaces("sphere(r=3.1416);", sphere.toScad());
+		assertEqualsWithoutWhiteSpaces("sphere(r=3.1416);", sphere.toScad(ScadGenerationContext.DEFAULT));
 	}
 	
 	@Test(expected = IllegalValueException.class)

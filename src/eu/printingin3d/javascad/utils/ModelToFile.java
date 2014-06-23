@@ -11,6 +11,7 @@ import java.util.List;
 
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.IModel;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 
 /**
  * This class can be used to write models to file. It can be used directly, but it is
@@ -56,11 +57,11 @@ public class ModelToFile {
 	 * Saves the models to the file.
 	 * @throws IOException if any IO error happens during opening, writing or closing the file
 	 */
-	public void saveToFile() throws IOException {
+	public void saveToFile(ScadGenerationContext context) throws IOException {
 		Writer writer = new FileWriter(file);
 		try {
 			for (IModel model : models) {
-				writer.append(model.toScad());
+				writer.append(model.toScad(context));
 			}
 		}
 		finally {

@@ -4,6 +4,7 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.tranform.TranformationFactory;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.vrl.CSG;
@@ -35,11 +36,11 @@ public class Scale extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad() {
+	protected String innerToScad(ScadGenerationContext context) {
 		if (scale.isIdent()) {
-			return model.toScad();
+			return model.toScad(context);
 		}
-		return "scale("+scale+")"+model.toScad();	
+		return "scale("+scale+")"+model.toScad(context);	
 	}
 
 	@Override
