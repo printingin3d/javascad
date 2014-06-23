@@ -34,6 +34,7 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	public static final String ATTRIBUTES_PLACEHOLDER = "#attributes";
 	
+	private int tag = 0;
 	private Moves moves = new Moves();
 	private Angles3d rotate = Angles3d.ZERO;
 	private boolean debug = false;
@@ -114,6 +115,7 @@ public abstract class Abstract3dModel implements IModel {
 	public final Abstract3dModel cloneModel() {
 		Abstract3dModel model = innerCloneModel();
 		
+		model.tag = tag;
 		model.moves = moves.cloneMoves();
 		model.rotate = rotate;
 		model.debug = debug;
@@ -170,6 +172,10 @@ public abstract class Abstract3dModel implements IModel {
 	
 	@Override
 	public final String toScad(ScadGenerationContext context) {
+		if (!context.isTagIncluded(tag)) {
+			return "";
+		}
+		
 		StringBuilder sb = new StringBuilder(getPrefix());
 		StringBuilder ending = new StringBuilder();
 		if (!roundingPlane.isEmpty()) {
@@ -295,5 +301,9 @@ public abstract class Abstract3dModel implements IModel {
 		FacetGenerationContext context = new FacetGenerationContext();
 		return toCSG(context);
 	}
-	
+
+	public Abstract3dModel withTag(int tag) {
+		this.tag = tag;
+		return this;
+	}
 }
