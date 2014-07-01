@@ -1,7 +1,8 @@
 package eu.printingin3d.javascad.testutils;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
-import eu.printingin3d.javascad.models.ScadGenerationContext;
+import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.models2d.Abstract2dModel;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
@@ -21,8 +22,8 @@ public class Test2dModel extends Abstract2dModel {
 	}
 	
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
-		return model;
+	protected SCAD innerToScad(IScadGenerationContext context) {
+		return new SCAD(model);
 	}
 
 	@Override

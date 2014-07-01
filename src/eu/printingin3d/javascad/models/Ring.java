@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.models;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
@@ -25,8 +26,8 @@ public class Ring extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
-		return "rotate_extrude() "+Translate.getTranslate(Coords3d.xOnly(radius))+model.toScad(context)+";";
+	protected SCAD innerToScad(IScadGenerationContext context) {
+		return new SCAD("rotate_extrude() "+Translate.getTranslate(Coords3d.xOnly(radius))).append(model.toScad(context)).append(";");
 	}
 
 	@Override

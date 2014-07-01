@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
@@ -62,14 +63,14 @@ public class Cylinder extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
+	protected SCAD innerToScad(IScadGenerationContext context) {
 		if (DoubleUtils.equalsEps(bottomRadius, topRadius)) {
-			return "cylinder(h="+DoubleUtils.formatDouble(length)+
-						", r="+DoubleUtils.formatDouble(bottomRadius)+", center=true);\n";
+			return new SCAD("cylinder(h="+DoubleUtils.formatDouble(length)+
+						", r="+DoubleUtils.formatDouble(bottomRadius)+", center=true);\n");
 		}
-		return "cylinder(h="+DoubleUtils.formatDouble(length)+
+		return new SCAD("cylinder(h="+DoubleUtils.formatDouble(length)+
 					", r1="+DoubleUtils.formatDouble(bottomRadius)+
-					", r2="+DoubleUtils.formatDouble(topRadius)+", center=true);\n";
+					", r2="+DoubleUtils.formatDouble(topRadius)+", center=true);\n");
 	}
 
 	@Override

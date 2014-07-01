@@ -1,10 +1,11 @@
 package eu.printingin3d.javascad.tranzitions;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
-import eu.printingin3d.javascad.models.ScadGenerationContext;
+import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.tranform.TranformationFactory;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.vrl.CSG;
@@ -47,8 +48,8 @@ public class Translate extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
-		return getTranslate(move)+model.toScad(context);
+	protected SCAD innerToScad(IScadGenerationContext context) {
+		return new SCAD(getTranslate(move)).append(model.toScad(context));
 	}
 
 	@Override

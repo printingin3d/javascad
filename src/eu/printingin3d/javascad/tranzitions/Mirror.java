@@ -1,9 +1,10 @@
 package eu.printingin3d.javascad.tranzitions;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
-import eu.printingin3d.javascad.models.ScadGenerationContext;
+import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.tranform.ITransformation;
 import eu.printingin3d.javascad.tranform.TranformationFactory;
 import eu.printingin3d.javascad.utils.AssertValue;
@@ -58,8 +59,8 @@ public final class Mirror extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
-		return "mirror(["+direction.getOpenScadMirrorParams()+"])"+model.toScad(context);
+	protected SCAD innerToScad(IScadGenerationContext context) {
+		return new SCAD("mirror(["+direction.getOpenScadMirrorParams()+"])").append(model.toScad(context));
 	}
 
 	@Override

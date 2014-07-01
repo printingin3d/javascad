@@ -6,6 +6,7 @@ import static eu.printingin3d.javascad.testutils.RandomUtils.getRandomDouble;
 import org.junit.Assert;
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 
@@ -15,7 +16,8 @@ public class CylinderTest {
 	@Test
 	public void testCylinder() {
 		Cylinder cylinder = new Cylinder(10.0, 20.0);
-		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", cylinder.toScad(ScadGenerationContext.DEFAULT));
+		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", 
+				cylinder.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 
 	@Test(expected = IllegalValueException.class)
@@ -46,13 +48,15 @@ public class CylinderTest {
 	@Test
 	public void testCylinderWhenTheTwoRadiusesAreTheSame() {
 		Cylinder cylinder = new Cylinder(10.0, 20.0, 20.0);
-		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", cylinder.toScad(ScadGenerationContext.DEFAULT));
+		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", 
+				cylinder.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testCone() {
 		Cylinder cylinder = new Cylinder(10.0, 20.0, 5.0);
-		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r1=20, r2=5, center=true);", cylinder.toScad(ScadGenerationContext.DEFAULT));
+		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r1=20, r2=5, center=true);", 
+				cylinder.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 
 	@Test

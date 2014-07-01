@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
@@ -86,7 +87,7 @@ public class PolyhedronTest {
 		triangles.add(new Triangle3d(c2,c1,c3));
 		Polyhedron p=new Polyhedron(triangles);
 		
-		String scad = p.toScad(ScadGenerationContext.DEFAULT);
+		String scad = p.toScad(ScadGenerationContextFactory.DEFAULT).getScad();
 		
 		List<PositionAndIndex> posList = new ArrayList<>();
 		posList.add(new PositionAndIndex(scad.indexOf("[10,10,0]"), 0));

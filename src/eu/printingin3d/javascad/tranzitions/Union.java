@@ -6,9 +6,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
-import eu.printingin3d.javascad.models.ScadGenerationContext;
+import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.utils.ListUtils;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
@@ -45,23 +46,19 @@ public class Union extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
-		StringBuilder result = new StringBuilder();
+	protected SCAD innerToScad(IScadGenerationContext context) {
 		switch (models.size()) {
 		case 0:
-			break;
+			return SCAD.EMPTY;
 		case 1:
-			result.append(models.get(0).toScad(context));
-			break;
+			return models.get(0).toScad(context);
 		default:
-			result.append("union() {\n");
+			SCAD result = new SCAD("union() {\n");
 			for (Abstract3dModel model : models) {
-				result.append(model.toScad(context));
+				result = result.append(model.toScad(context));
 			}
-			result.append("}\n");
-			break;
+			return result.append("}\n");
 		}
-		return result.toString();
 	}
 
 	@Override

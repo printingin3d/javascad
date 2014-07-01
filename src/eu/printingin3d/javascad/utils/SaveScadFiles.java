@@ -7,9 +7,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.IModel;
-import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.openscad.Consts;
 
 /**
@@ -59,7 +60,20 @@ public class SaveScadFiles {
 	 * @param models the models to be saved
 	 * @return return this object to make it possible to chain more method call
 	 */
-	public SaveScadFiles addModels(final String fileName, final Collection<IModel> models) {
+	public SaveScadFiles addModels(String fileName, Collection<IModel> models) {
+		addModels(fileName, models, ScadGenerationContextFactory.DEFAULT);
+		return this;
+	}
+	
+	/**
+	 * Adds a SCAD file with the given file name and the given model list.
+	 * @param fileName the name of the file where the model will be saved
+	 * @param models the models to be saved
+	 * @param context the context used for the scad file generation
+	 * @return return this object to make it possible to chain more method call
+	 */
+	public SaveScadFiles addModels(final String fileName, final Collection<IModel> models,
+			final IScadGenerationContext context) {
 		addScadFile(new IScadFile() {
 			@Override
 			public File getFile(File root) {
@@ -70,30 +84,47 @@ public class SaveScadFiles {
 			public Collection<IModel> getModels() {
 				return models;
 			}
+
+			@Override
+			public IScadGenerationContext getContext() {
+				return context;
+			}
 		});
 		return this;
 	}
 
 	/**
-	 * Adds a SCAD file with the given file name and the given model. 
+	 * Adds a SCAD file with the given file name and the given model using the default generation context. 
 	 * A default {@link Consts} is added before the model.
 	 * @param fileName the name of the file where the model will be saved
 	 * @param model the model to be saved
 	 * @return return this object to make it possible to chain more method call
 	 */
 	public SaveScadFiles addModel(String fileName, IModel model) {
-		return addModels(fileName, Arrays.asList(new Consts(), model));
+		return addModel(fileName, model, ScadGenerationContextFactory.DEFAULT);
+	}
+	
+	/**
+	 * Adds a SCAD file with the given file name and the given model. 
+	 * A default {@link Consts} is added before the model.
+	 * @param fileName the name of the file where the model will be saved
+	 * @param model the model to be saved
+	 * @param context the context used for the scad file generation
+	 * @return return this object to make it possible to chain more method call
+	 */
+	public SaveScadFiles addModel(String fileName, IModel model, IScadGenerationContext context) {
+		return addModels(fileName, Arrays.asList(new Consts(), model), context);
 	}
 	
 	/**
 	 * Save the added SCAD files into the corresponding files. 
 	 * @throws IOException if any IO error happens during the file write
 	 */
-	public void saveScadFiles(ScadGenerationContext context) throws IOException {
+	public void saveScadFiles() throws IOException {
 		for (IScadFile scadFile : scadFiles) {
 			File file = scadFile.getFile(root);
 			file.getParentFile().mkdirs();
-			new ModelToFile(file).addModels(scadFile.getModels()).saveToFile(context);
+			new ModelToFile(file).addModels(scadFile.getModels()).saveToFile(scadFile.getContext());
 		}
 	}
 }

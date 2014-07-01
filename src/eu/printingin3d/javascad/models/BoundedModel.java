@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.models;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
@@ -31,8 +32,8 @@ public class BoundedModel extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
-		return baseModel==null ? "" : baseModel.toScad(context);
+	protected SCAD innerToScad(IScadGenerationContext context) {
+		return baseModel==null ? SCAD.EMPTY : baseModel.toScad(context);
 	}
 
 	@Override

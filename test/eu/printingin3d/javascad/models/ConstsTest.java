@@ -4,6 +4,7 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.openscad.Consts;
 
 public class ConstsTest {
@@ -12,12 +13,12 @@ public class ConstsTest {
 	@Test
 	public void testDefaultContructor() {
 		Consts consts = new Consts();
-		assertEqualsWithoutWhiteSpaces(DEFAULT_CONSTS, consts.toScad(ScadGenerationContext.DEFAULT));
+		assertEqualsWithoutWhiteSpaces(DEFAULT_CONSTS, consts.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testContructor() {
 		Consts consts = new Consts(5.0, 10);
-		assertEqualsWithoutWhiteSpaces("$fs=5.0;$fa=10;", consts.toScad(ScadGenerationContext.DEFAULT));
+		assertEqualsWithoutWhiteSpaces("$fs=5.0;$fa=10;", consts.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 }

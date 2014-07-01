@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -33,16 +34,16 @@ public class Extendable3dModelTest {
 	
 	@Test
 	public void toScadShouldReturnWithTheSameAsTheBaseModel() {
-		AssertEx.assertEqualsWithoutWhiteSpaces(baseModel.toScad(ScadGenerationContext.DEFAULT), 
-				testSubject.toScad(ScadGenerationContext.DEFAULT));
+		AssertEx.assertEqualsWithoutWhiteSpaces(baseModel.toScad(ScadGenerationContextFactory.DEFAULT).getScad(), 
+				testSubject.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 
 	@Test
 	public void operationOnTheExtendableModelShouldNotAffectTheBaseModel() {
 		testSubject.move(RandomUtils.getRandomCoords());
 		
-		Assert.assertNotEquals(baseModel.toScad(ScadGenerationContext.DEFAULT), 
-				testSubject.toScad(ScadGenerationContext.DEFAULT));
+		Assert.assertNotEquals(baseModel.toScad(ScadGenerationContextFactory.DEFAULT), 
+				testSubject.toScad(ScadGenerationContextFactory.DEFAULT));
 	}
 	
 	@Test(expected=UnsupportedOperationException.class)

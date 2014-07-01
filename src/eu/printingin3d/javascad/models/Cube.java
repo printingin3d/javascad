@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
@@ -55,8 +56,8 @@ public class Cube extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
-		return "cube("+size+",center=true);\n";
+	protected SCAD innerToScad(IScadGenerationContext context) {
+		return new SCAD("cube("+size+",center=true);\n");
 	}
 
 	@Override

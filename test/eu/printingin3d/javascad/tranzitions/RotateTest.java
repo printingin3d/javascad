@@ -4,11 +4,11 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
@@ -22,7 +22,8 @@ public class RotateTest {
 	@Test
 	public void testToScad() {
 		assertEqualsWithoutWhiteSpaces("rotate([5,100,50]) (model)", 
-				new Rotate(new Test3dModel("(model)"), new Angles3d(5, 100, 50)).toScad(ScadGenerationContext.DEFAULT));
+				new Rotate(new Test3dModel("(model)"), 
+						new Angles3d(5, 100, 50)).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 	
 	@Test

@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
@@ -33,8 +34,8 @@ public class Sphere extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
-		return "sphere(r="+DoubleUtils.formatDouble(r)+");\n";
+	protected SCAD innerToScad(IScadGenerationContext context) {
+		return new SCAD("sphere(r="+DoubleUtils.formatDouble(r)+");\n");
 	}
 
 	@Override

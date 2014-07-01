@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.utils;
 import java.io.File;
 import java.util.Collection;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.models.IModel;
 
 /**
@@ -22,4 +23,9 @@ public interface IScadFile {
 	 * @return the models which should be included in this OpenSCAD file.
 	 */
 	Collection<IModel> getModels();
+	/**
+	 * The context which will be used during the generation process.
+	 * @return the context
+	 */
+	IScadGenerationContext getContext();
 }

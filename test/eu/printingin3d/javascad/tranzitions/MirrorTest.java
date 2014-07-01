@@ -5,10 +5,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class MirrorTest {
@@ -37,19 +37,19 @@ public class MirrorTest {
 	@Test
 	public void testMirrorX() {
 		assertEqualsWithoutWhiteSpaces("mirror([1,0,0]) (model)", 
-				Mirror.mirrorX(TEST_MODEL).toScad(ScadGenerationContext.DEFAULT));
+				Mirror.mirrorX(TEST_MODEL).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 
 	@Test
 	public void testMirrorY() {
 		assertEqualsWithoutWhiteSpaces("mirror([0,1,0]) (model)", 
-				Mirror.mirrorY(TEST_MODEL).toScad(ScadGenerationContext.DEFAULT));
+				Mirror.mirrorY(TEST_MODEL).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 
 	@Test
 	public void testMirrorZ() {
 		assertEqualsWithoutWhiteSpaces("mirror([0,0,1]) (model)", 
-				Mirror.mirrorZ(TEST_MODEL).toScad(ScadGenerationContext.DEFAULT));
+				Mirror.mirrorZ(TEST_MODEL).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 
 	@Test

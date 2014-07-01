@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.models;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.DoubleUtils;
@@ -46,16 +47,16 @@ public class Prism extends Cylinder {
 	}
 	
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
+	protected SCAD innerToScad(IScadGenerationContext context) {
 		if (DoubleUtils.equalsEps(bottomRadius, topRadius)) {
-			return "cylinder(h="+DoubleUtils.formatDouble(length)+
+			return new SCAD("cylinder(h="+DoubleUtils.formatDouble(length)+
 					", r="+DoubleUtils.formatDouble(bottomRadius)+
-					", $fn="+numberOfSides+", center=true);\n";
+					", $fn="+numberOfSides+", center=true);\n");
 		}
-		return "cylinder(h="+DoubleUtils.formatDouble(length)+
+		return new SCAD("cylinder(h="+DoubleUtils.formatDouble(length)+
 				", r1="+DoubleUtils.formatDouble(bottomRadius)+
 				", r2="+DoubleUtils.formatDouble(topRadius)+
-				", $fn="+numberOfSides+", center=true);\n";
+				", $fn="+numberOfSides+", center=true);\n");
 	}
 
 	@Override

@@ -7,26 +7,29 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+
 public class ScadGenerationContextTest {
 	@Test
 	public void allTagsShouldBeIncludedByDefault() {
-		assertTrue(ScadGenerationContext.DEFAULT.isTagIncluded(21));
+		assertTrue(ScadGenerationContextFactory.DEFAULT.isTagIncluded());
 	}
 	
 	@Test
 	public void excludedTag() {
-		ScadGenerationContext testSubject = ScadGenerationContext.excludeThese(Arrays.asList(11, 32));
-		assertFalse(testSubject.isTagIncluded(11));
-		assertTrue(testSubject.isTagIncluded(55));
+		IScadGenerationContext testSubject = ScadGenerationContextFactory.excludeThese(Arrays.asList(11, 32));
+		assertFalse(testSubject.applyTag(11).isTagIncluded());
+		assertTrue(testSubject.applyTag(55).isTagIncluded());
 	}
 	
 	@Test
 	public void includeTag() {
-		ScadGenerationContext testSubject = ScadGenerationContext.includeThese(Arrays.asList(21, 88));
-		assertFalse(testSubject.isTagIncluded(5));
-		assertFalse(testSubject.isTagIncluded(11));
-		assertTrue(testSubject.isTagIncluded(21));
-		assertTrue(testSubject.isTagIncluded(88));
-		assertFalse(testSubject.isTagIncluded(111));
+		IScadGenerationContext testSubject = ScadGenerationContextFactory.includeThese(Arrays.asList(21, 88));
+		assertFalse(testSubject.applyTag(5).isTagIncluded());
+		assertFalse(testSubject.applyTag(11).isTagIncluded());
+		assertTrue(testSubject.applyTag(21).isTagIncluded());
+		assertTrue(testSubject.applyTag(88).isTagIncluded());
+		assertFalse(testSubject.applyTag(111).isTagIncluded());
 	}
 }

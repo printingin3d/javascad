@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
@@ -131,32 +132,37 @@ public abstract class Abstract3dModel implements IModel {
 	 * and moves or rotations 
 	 * @return the representation of the model
 	 */
-	protected abstract String innerToScad(ScadGenerationContext context);
+	protected abstract SCAD innerToScad(IScadGenerationContext context);
 	
-	private String getOne(ScadGenerationContext context) {
-		String item = innerToScad(context);
-		if (item==null || item.isEmpty()) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder();
-		if (!rotate.isZero()) {
-			sb.append(Rotate.getRotate(rotate));
-		}
-		sb.append(item);
+	private SCAD getOne(IScadGenerationContext context) {
+		SCAD item = innerToScad(context);
 		
-		return sb.toString();
+		if (context.isTagIncluded()) {
+			item = item.include();
+		}
+		
+		if (item==null || !item.isIncluded()) {
+			return SCAD.EMPTY;
+		}
+
+		if (!rotate.isZero()) {
+			item = item.prepend(Rotate.getRotate(rotate));
+		}
+		
+		return item;
 	}
 	
-	private boolean addMovesScad(StringBuilder sb, ScadGenerationContext context) {
-		String oneItem = getOne(context);
-		if (oneItem!=null && !oneItem.isEmpty()) {
+	private SCAD addMovesScad(IScadGenerationContext context) {
+		SCAD oneItem = getOne(context);
+		if (oneItem.isIncluded()) {
+			SCAD result = SCAD.EMPTY;
 			for (Coords3d coord : moves) {
-				sb.append(Translate.getTranslate(coord))
-				  .append(oneItem);
+				result = result.append(Translate.getTranslate(coord))
+				      .append(oneItem);
 			}
-			return true;
+			return result;
 		}
-		return false;
+		return SCAD.EMPTY;
 	}
 	
 	private String getPrefix() {
@@ -171,10 +177,8 @@ public abstract class Abstract3dModel implements IModel {
 	}
 	
 	@Override
-	public final String toScad(ScadGenerationContext context) {
-		if (!context.isTagIncluded(tag)) {
-			return "";
-		}
+	public final SCAD toScad(IScadGenerationContext context) {
+		IScadGenerationContext currentContext = context.applyTag(tag);
 		
 		StringBuilder sb = new StringBuilder(getPrefix());
 		StringBuilder ending = new StringBuilder();
@@ -189,11 +193,13 @@ public abstract class Abstract3dModel implements IModel {
 			sb.append("union(){");
 			ending.insert(0, '}');
 		}
-		if (!addMovesScad(sb, context)) {
-			return "";
+		SCAD result = addMovesScad(currentContext);
+		if (result.isIncluded()) {
+			return result
+					.prepend(sb.toString())
+					.append(ending.toString());
 		}
-		
-		return sb.toString()+ending.toString();
+		return SCAD.EMPTY;
 	}
 	
 	protected abstract Boundaries3d getModelBoundaries();

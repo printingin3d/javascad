@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
@@ -78,44 +79,43 @@ public class Polyhedron extends Abstract3dModel {
 	}
 
 	@Override
-	protected String innerToScad(ScadGenerationContext context) {
+	protected SCAD innerToScad(IScadGenerationContext context) {
 		List<Coords3d> points = getPoints();
 
-		StringBuffer b = new StringBuffer("");
-		b.append("polyhedron(");
-		addPoints(b, points);
-		b.append(",");
-		addTriangles(b, points);
-		b.append("\n);");
-		return b.toString();
+		SCAD b = new SCAD("polyhedron(");
+		b = addPoints(b, points)
+				.append(",");
+		b = addTriangles(b, points)
+				.append("\n);");
+		return b;
 	}
 
-	private void addPoints(StringBuffer b, List<Coords3d> points) {
-		b.append("\n  points=[");
+	private SCAD addPoints(SCAD b, List<Coords3d> points) {
+		b = b.append("\n  points=[");
 		boolean first = true;
 		for (Coords3d c : points) {
 			if (first) {
 				first = false;
 			} else {
-				b.append(", ");
+				b = b.append(", ");
 			}
-			b.append(c.toString());
+			b = b.append(c.toString());
 		}
-		b.append("]");
+		return b.append("]");
 	}
 
-	private void addTriangles(StringBuffer b, List<Coords3d> points) {
-		b.append("\n  triangles=[");
+	private SCAD addTriangles(SCAD b, List<Coords3d> points) {
+		b = b.append("\n  triangles=[");
 		boolean first = true;
 		for (Triangle3d c : triangles) {
 			if (first) {
 				first = false;
 			} else {
-				b.append(", ");
+				b = b.append(", ");
 			}
-			b.append(c.toTriangleString(points));
+			b = b.append(c.toTriangleString(points));
 		}
-		b.append("]");
+		return b.append("]");
 	}
 
 	@Override

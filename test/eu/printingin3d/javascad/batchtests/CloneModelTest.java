@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
@@ -26,7 +27,6 @@ import eu.printingin3d.javascad.models.Cylinder;
 import eu.printingin3d.javascad.models.Polyhedron;
 import eu.printingin3d.javascad.models.Prism;
 import eu.printingin3d.javascad.models.Ring;
-import eu.printingin3d.javascad.models.ScadGenerationContext;
 import eu.printingin3d.javascad.models.Sphere;
 import eu.printingin3d.javascad.models2d.Square;
 import eu.printingin3d.javascad.testutils.RandomUtils;
@@ -104,14 +104,14 @@ public class CloneModelTest {
 	
 	@Test
 	public void shouldRepresentsTheSameOpenScadObject() {
-		assertEquals(original.toScad(ScadGenerationContext.DEFAULT), original.cloneModel().toScad(ScadGenerationContext.DEFAULT));
+		assertEquals(original.toScad(ScadGenerationContextFactory.DEFAULT), original.cloneModel().toScad(ScadGenerationContextFactory.DEFAULT));
 	}
 	
 	@Test
 	public void shouldBeIndependent() {
 		Abstract3dModel clone = original.cloneModel();
 		original.move(RandomUtils.getRandomCoords());
-		assertFalse(clone.toScad(ScadGenerationContext.DEFAULT).equals(original.toScad(ScadGenerationContext.DEFAULT)));
+		assertFalse(clone.toScad(ScadGenerationContextFactory.DEFAULT).equals(original.toScad(ScadGenerationContextFactory.DEFAULT)));
 	}
 	
 	@Test
