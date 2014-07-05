@@ -5,6 +5,7 @@ import java.awt.Color;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.Complex3dModel;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.vrl.CSG;
@@ -17,7 +18,7 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Colorize extends Abstract3dModel {
+public class Colorize extends Complex3dModel {
 	private final Color color;
 	private final Abstract3dModel baseModel;
 

@@ -20,7 +20,7 @@ import eu.printingin3d.javascad.vrl.Polygon;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Sphere extends Abstract3dModel {
+public class Sphere extends Atomic3dModel {
 	private final double r;
 
 	/**

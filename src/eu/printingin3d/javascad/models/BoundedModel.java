@@ -12,7 +12,7 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class BoundedModel extends Abstract3dModel {
+public class BoundedModel extends Complex3dModel {
 	private final Abstract3dModel baseModel;
 	private final Boundaries3d boundaries3d;
 

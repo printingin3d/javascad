@@ -11,7 +11,7 @@ import eu.printingin3d.javascad.tranzitions.Translate;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
-public class Ring extends Abstract3dModel {
+public class Ring extends Atomic3dModel {
 	private final Abstract2dModel model;
 	private final double radius;
 	

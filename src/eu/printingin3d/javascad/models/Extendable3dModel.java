@@ -5,7 +5,7 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
-public abstract class Extendable3dModel extends Abstract3dModel {
+public abstract class Extendable3dModel extends Complex3dModel {
 	protected Abstract3dModel baseModel;
 
 	@Override

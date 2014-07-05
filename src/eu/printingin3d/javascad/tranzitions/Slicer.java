@@ -4,6 +4,7 @@ import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.Complex3dModel;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.tranzitions.slicer.Cover;
 import eu.printingin3d.javascad.utils.AssertValue;
@@ -19,7 +20,7 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Slicer extends Abstract3dModel {
+public class Slicer extends Complex3dModel {
 	private static final double EPSILON = 10e-6;
 	
 	private final Abstract3dModel model;

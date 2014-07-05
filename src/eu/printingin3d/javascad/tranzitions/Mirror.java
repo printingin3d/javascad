@@ -4,6 +4,7 @@ import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.Complex3dModel;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.tranform.ITransformation;
 import eu.printingin3d.javascad.tranform.TranformationFactory;
@@ -17,7 +18,7 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public final class Mirror extends Abstract3dModel {
+public final class Mirror extends Complex3dModel {
 	/**
 	 * Mirrors the given model using the X plane as a mirror.
 	 * @param model the model to be mirrored

@@ -5,6 +5,7 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.Complex3dModel;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.tranform.TranformationFactory;
 import eu.printingin3d.javascad.utils.AssertValue;
@@ -17,7 +18,7 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Translate extends Abstract3dModel {
+public class Translate extends Complex3dModel {
 	private final Abstract3dModel model;
 	private final Coords3d move;
 

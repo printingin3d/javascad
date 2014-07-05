@@ -19,7 +19,7 @@ import eu.printingin3d.javascad.vrl.Polygon;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Cube extends Abstract3dModel {
+public class Cube extends Atomic3dModel {
 	private final Dims3d size;
 	
 	/**

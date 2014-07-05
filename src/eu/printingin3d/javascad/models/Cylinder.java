@@ -22,7 +22,7 @@ import eu.printingin3d.javascad.vrl.Polygon;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Cylinder extends Abstract3dModel {
+public class Cylinder extends Atomic3dModel {
 	protected final double length;
 	protected final double bottomRadius;
 	protected final double topRadius;

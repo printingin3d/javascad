@@ -24,7 +24,7 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  * 
  * @author Rob van der Veer
  */
-public class Polyhedron extends Abstract3dModel {
+public class Polyhedron extends Atomic3dModel {
 
 	private final List<Triangle3d> triangles;
 

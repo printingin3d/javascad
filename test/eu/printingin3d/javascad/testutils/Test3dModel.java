@@ -3,11 +3,12 @@ package eu.printingin3d.javascad.testutils;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.Atomic3dModel;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
-public class Test3dModel extends Abstract3dModel {
+public class Test3dModel extends Atomic3dModel {
 	public static final Test3dModel DEFAULT = new Test3dModel("(model)");
 	
 	private final String model;

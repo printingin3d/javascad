@@ -134,6 +134,13 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	protected abstract SCAD innerToScad(IScadGenerationContext context);
 	
+	/**
+	 * Returns true if and only if this object represents a primitive, atomic 3D object. This method used internally and must return 
+	 * true in build in primitives.
+	 * @return true if and only if this object represents a primitive, atomic 3D object
+	 */
+	protected abstract boolean isPrimitive();
+	
 	private SCAD getOne(IScadGenerationContext context) {
 		SCAD item = innerToScad(context);
 		
