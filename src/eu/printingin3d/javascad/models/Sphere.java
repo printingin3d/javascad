@@ -81,7 +81,7 @@ public class Sphere extends Atomic3dModel {
                         sphereVertex(r, i / (double) numSlices,
                                 (j + 1) / (double) numStacks)
                 );
-                polygons.add(Polygon.fromPolygons(vertices));
+                polygons.add(Polygon.fromPolygons(vertices, context.getColor()));
             }
         }
         return new CSG(polygons);

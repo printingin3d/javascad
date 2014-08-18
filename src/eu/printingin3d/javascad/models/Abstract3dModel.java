@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.models;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import eu.printingin3d.javascad.enums.Plane;
 import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.tranform.TranformationFactory;
+import eu.printingin3d.javascad.tranzitions.Colorize;
 import eu.printingin3d.javascad.tranzitions.Rotate;
 import eu.printingin3d.javascad.tranzitions.Translate;
 import eu.printingin3d.javascad.utils.AssertValue;
@@ -189,6 +191,15 @@ public abstract class Abstract3dModel implements IModel {
 		
 		StringBuilder sb = new StringBuilder(getPrefix());
 		StringBuilder ending = new StringBuilder();
+		
+		if (isPrimitive()) {
+			Color color = currentContext.getColor();
+			if (color!=null) {
+				sb.append(Colorize.getStringRepresentation(color)).append("{\n");
+				ending.append("}\n");
+			}
+		}
+		
 		if (!roundingPlane.isEmpty()) {
 			sb.append("minkowski() {");
 			ending.insert(0, "}");
@@ -280,7 +291,9 @@ public abstract class Abstract3dModel implements IModel {
 	protected abstract CSG toInnerCSG(FacetGenerationContext context);
 	
 	@Override
-	public final CSG toCSG(FacetGenerationContext context) {
+	public final CSG toCSG(FacetGenerationContext aContext) {
+		FacetGenerationContext context = aContext.applyTag(tag);
+		
 		CSG csg = toInnerCSG(context);
 		
 		if (!rotate.isZero()) {
@@ -311,8 +324,7 @@ public abstract class Abstract3dModel implements IModel {
 	}
 	
 	public final CSG toCSG() {
-		FacetGenerationContext context = new FacetGenerationContext();
-		return toCSG(context);
+		return toCSG(FacetGenerationContext.DEFAULT);
 	}
 
 	public Abstract3dModel withTag(int tag) {

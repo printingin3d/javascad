@@ -1,10 +1,9 @@
 package eu.printingin3d.javascad.context;
 
-public class ExcludedScadGenerationContext implements IScadGenerationContext {
-	private static final IScadGenerationContext instance = new ExcludedScadGenerationContext();
-	
-	public static IScadGenerationContext getInstance() {
-		return instance;
+public class ExcludedScadGenerationContext extends AbstractColorHandlingContext implements IScadGenerationContext {
+
+	public ExcludedScadGenerationContext(TagColors tagColors, IColorGenerationContext parent, int tag) {
+		super(tagColors, parent, tag);
 	}
 
 	@Override
@@ -14,7 +13,8 @@ public class ExcludedScadGenerationContext implements IScadGenerationContext {
 
 	@Override
 	public IScadGenerationContext applyTag(int tag) {
-		return this;
+		return (tag==0 || (tag==this.tag)) ? this : 
+			new ExcludedScadGenerationContext(tagColors, this, tag);
 	}
 
 }

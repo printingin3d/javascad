@@ -123,6 +123,6 @@ public class Slicer extends Complex3dModel {
 
 	@Override
 	protected CSG toInnerCSG(FacetGenerationContext context) {
-		return new Difference(model, sliceModel()).toCSG();
+		return new Difference(model, sliceModel()).toCSG(context);
 	}
 }

@@ -1,9 +1,9 @@
 package eu.printingin3d.javascad.context;
 
-public interface IScadGenerationContext {
 
-	public abstract boolean isTagIncluded();
+public interface IScadGenerationContext extends IColorGenerationContext {
 
-	public abstract IScadGenerationContext applyTag(int tag);
+	boolean isTagIncluded();
 
+	IScadGenerationContext applyTag(int tag);
 }

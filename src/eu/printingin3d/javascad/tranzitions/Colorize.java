@@ -34,19 +34,7 @@ public class Colorize extends Complex3dModel {
 
 	@Override
 	protected SCAD innerToScad(IScadGenerationContext context) {
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append('[').
-				append(DoubleUtils.formatDouble(color.getRed()/255.0)).append(',').
-				append(DoubleUtils.formatDouble(color.getGreen()/255.0)).append(',').
-				append(DoubleUtils.formatDouble(color.getBlue()/255.0));
-
-		if (color.getAlpha()<255) {
-			sb.append(',').append(DoubleUtils.formatDouble(color.getAlpha()/255.0));
-		}
-		sb.append(']');
-		
-		return baseModel.toScad(context).prepend("color("+sb+")");
+		return baseModel.toScad(context).prepend(getStringRepresentation(color));
 	}
 
 	@Override
@@ -64,4 +52,18 @@ public class Colorize extends Complex3dModel {
 		return baseModel.toCSG(context);
 	}
 
+	public static String getStringRepresentation(Color color) {
+		StringBuilder sb = new StringBuilder();
+		sb.append('[').
+				append(DoubleUtils.formatDouble(color.getRed()/255.0)).append(',').
+				append(DoubleUtils.formatDouble(color.getGreen()/255.0)).append(',').
+				append(DoubleUtils.formatDouble(color.getBlue()/255.0));
+
+		if (color.getAlpha()<255) {
+			sb.append(',').append(DoubleUtils.formatDouble(color.getAlpha()/255.0));
+		}
+		sb.append(']');
+		
+		return "color("+sb+")";
+	}
 }

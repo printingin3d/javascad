@@ -33,6 +33,7 @@
  */
 package eu.printingin3d.javascad.vrl;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +57,6 @@ public class Polygon {
      * Polygon vertices
      */
     private final List<Coords3d> vertices;
-
     /**
      * Normal vector.
      */
@@ -65,11 +65,16 @@ public class Polygon {
      * Square of the distance to origin.
      */
     private final double dist;
+    /**
+     * The color of the polygon. 
+     */
+    private final Color color;
 
-	private Polygon(List<Coords3d> vertices, Coords3d normal, double dist) {
+	private Polygon(List<Coords3d> vertices, Coords3d normal, double dist, Color color) {
 		this.vertices = vertices;
 		this.normal = normal;
 		this.dist = dist;
+		this.color = color;
 		
 		for (Coords3d v : vertices) {
 			VertexPosition position = calculateVertexPosition(v);
@@ -86,13 +91,13 @@ public class Polygon {
      *
      * @param vertices polygon vertices
      */
-    public static Polygon fromPolygons(List<Coords3d> vertices) {
+    public static Polygon fromPolygons(List<Coords3d> vertices, Color color) {
     	Coords3d a = vertices.get(0);
     	Coords3d b = vertices.get(1);
     	Coords3d c = vertices.get(2);
     	Coords3d n = b.move(a.inverse()).cross(c.move(a.inverse())).unit();
         
-    	return new Polygon(vertices, n, n.dot(a));
+    	return new Polygon(vertices, n, n.dot(a), color);
     }
 
     /**
@@ -105,7 +110,7 @@ public class Polygon {
     	
         Collections.reverse(newVertices);
 
-        return new Polygon(newVertices, normal.inverse(), -dist);
+        return new Polygon(newVertices, normal.inverse(), -dist, color);
     }
 
     public List<Facet> toFacets() {
@@ -117,7 +122,7 @@ public class Polygon {
 	        			firstVertex, 
 	        			vertices.get(i + 1), 
 	        			vertices.get(i + 2));
-				facets.add(new Facet(triangle, normal));
+				facets.add(new Facet(triangle, normal, color));
 	        }
         }
         return facets;
@@ -141,7 +146,7 @@ public class Polygon {
     		newVertices.add(transform.transform(v));
     	}
     	
-    	Polygon result = fromPolygons(newVertices);
+    	Polygon result = fromPolygons(newVertices, color);
 
     	return transform.isMirror() ? result.flip() : result;
     }
@@ -219,10 +224,10 @@ public class Polygon {
                     }
                 }
                 if (f.size() >= 3) {
-                    front.add(fromPolygons(f));
+                    front.add(fromPolygons(f, polygon.color));
                 }
                 if (b.size() >= 3) {
-                    back.add(fromPolygons(b));
+                    back.add(fromPolygons(b, polygon.color));
                 }
                 break;
         }

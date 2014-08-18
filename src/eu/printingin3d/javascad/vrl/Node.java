@@ -49,6 +49,10 @@ public class Node {
      */
     private final List<Polygon> polygons;
     /**
+     * Plane used if polygons is empty.
+     */
+    private final Polygon basePlane;
+    /**
      * Polygons in front of the plane.
      */
     private Node front;
@@ -58,10 +62,22 @@ public class Node {
     private Node back;
 
     private Node(List<Polygon> polygons, Node front, Node back) {
-		this.polygons = polygons;
+    	AssertValue.isNotEmpty(polygons, "Polygons should be provided! If it is empty use the other constructor with the basePlane.");
+    	
+    	this.polygons = polygons;
+    	this.basePlane = null;
 		this.front = front;
 		this.back = back;
 	}
+    
+    private Node(Polygon basePlane, Node front, Node back) {
+    	AssertValue.isNotNull(basePlane, "Baseplane should be provided if polygons is missing!");
+    	
+    	this.polygons = new ArrayList<>();
+    	this.basePlane = basePlane;
+    	this.front = front;
+    	this.back = back;
+    }
 
 	/**
      * Constructor.
@@ -105,7 +121,7 @@ public class Node {
         Node newBack = this.front == null ? null : this.front.invert();
         Node newFront = this.back == null ? null : this.back.invert();
         
-        return new Node(newPolygons, newFront, newBack);
+        return createNewNode(newPolygons, newFront, newBack);
     }
 
     /**
@@ -123,12 +139,13 @@ public class Node {
         if (polys.isEmpty()) {
             return new ArrayList<>(polys);
         }
+        Polygon plane = getPlane();
 
         List<Polygon> frontP = new ArrayList<>();
         List<Polygon> backP = new ArrayList<>();
 
         for (Polygon polygon : polys) {
-            polygons.get(0).splitPolygon(polygon, frontP, backP, frontP, backP);
+        	plane.splitPolygon(polygon, frontP, backP, frontP, backP);
         }
         if (this.front != null) {
             frontP = this.front.clipPolygons(frontP);
@@ -156,7 +173,7 @@ public class Node {
             newBack = back.clipTo(bsp);
         }
         
-        return new Node(newPolygons, newFront, newBack);
+        return createNewNode(newPolygons, newFront, newBack);
     }
 
 	public List<Polygon> allPolygons() {
@@ -200,4 +217,15 @@ public class Node {
         }
         return new Node(this.polygons, front, back);
     }
+	
+	private Polygon getPlane() {
+		return polygons.isEmpty() ? basePlane : polygons.get(0);
+	}
+	
+	private Node createNewNode(List<Polygon> newPolygons, Node newFront, Node newBack) {
+        return newPolygons.isEmpty() ? new Node(getPlane(), newFront, newBack) :
+    		new Node(newPolygons, newFront, newBack);
+
+	}
+	
 }

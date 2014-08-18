@@ -103,19 +103,22 @@ public class Cylinder extends Atomic3dModel {
             polygons.add(Polygon.fromPolygons(Arrays.asList(
                     startV,
                     cylPoint(+z, topRadius, t0),
-                    cylPoint(+z, topRadius, t1))
+                    cylPoint(+z, topRadius, t1)
+                ), context.getColor()
             ));
             polygons.add(Polygon.fromPolygons(Arrays.asList(
                     cylPoint(+z, topRadius, t1),
                     cylPoint(+z, topRadius, t0),
                     cylPoint(-z, bottomRadius, t0),
-                    cylPoint(-z, bottomRadius, t1))
-            ));
+                    cylPoint(-z, bottomRadius, t1)
+                
+            ), context.getColor()));
             polygons.add(Polygon.fromPolygons(Arrays.asList(
                             endV,
                             cylPoint(-z, bottomRadius, t1),
                             cylPoint(-z, bottomRadius, t0)
-            ))
+            ), context.getColor())
+            
             );
         }
 

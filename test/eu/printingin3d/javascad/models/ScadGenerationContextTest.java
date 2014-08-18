@@ -3,8 +3,6 @@ package eu.printingin3d.javascad.models;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-
 import org.junit.Test;
 
 import eu.printingin3d.javascad.context.IScadGenerationContext;
@@ -18,14 +16,14 @@ public class ScadGenerationContextTest {
 	
 	@Test
 	public void excludedTag() {
-		IScadGenerationContext testSubject = ScadGenerationContextFactory.excludeThese(Arrays.asList(11, 32));
+		IScadGenerationContext testSubject = new ScadGenerationContextFactory().exclude(11, 32).create();
 		assertFalse(testSubject.applyTag(11).isTagIncluded());
 		assertTrue(testSubject.applyTag(55).isTagIncluded());
 	}
 	
 	@Test
 	public void includeTag() {
-		IScadGenerationContext testSubject = ScadGenerationContextFactory.includeThese(Arrays.asList(21, 88));
+		IScadGenerationContext testSubject = new ScadGenerationContextFactory().include(21, 88).create();
 		assertFalse(testSubject.applyTag(5).isTagIncluded());
 		assertFalse(testSubject.applyTag(11).isTagIncluded());
 		assertTrue(testSubject.applyTag(21).isTagIncluded());

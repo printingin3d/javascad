@@ -98,7 +98,7 @@ public class Cube extends Atomic3dModel {
                 );
                 vertices.add(pos);
             }
-            polygons.add(Polygon.fromPolygons(vertices));
+            polygons.add(Polygon.fromPolygons(vertices, context.getColor()));
         }
         
 		return new CSG(polygons);
