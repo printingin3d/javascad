@@ -26,32 +26,10 @@ public class TransformationMatrix implements ITransformation {
 	}
 	
 	private double getValue(int row, int column) {
-		AssertValue.isTrue(row>=0 && row<4, "Row number should be between 0 and 3, but was "+row);
-		
-		if (row==3) {
-			return column==3 ? 1.0 : 0.0; 
-		}
-		
 		return matrix[getValuePosition(row, column)];
 	}
 	
-	public TransformationMatrix mul(TransformationMatrix m) {
-		double[] result = new double[12];
-		
-		for (int row=0;row<3;row++) {
-			for (int column=0;column<4;column++) {
-				result[getValuePosition(row, column)] = 
-						getValue(row, 0)*m.getValue(0, column)+
-						getValue(row, 1)*m.getValue(1, column)+
-						getValue(row, 2)*m.getValue(2, column)+
-						getValue(row, 3)*m.getValue(3, column);
-			}
-		}
-		
-		return new TransformationMatrix(result);
-	}
-	
-	public double getDeterminant() {
+	private double getDeterminant() {
 		return 
 			+ getValue(0,0)*getValue(1,1)*getValue(2,2)
 			+ getValue(0,1)*getValue(1,2)*getValue(2,0)

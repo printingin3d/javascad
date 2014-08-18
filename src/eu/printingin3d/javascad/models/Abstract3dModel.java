@@ -14,7 +14,7 @@ import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.enums.Plane;
 import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.tranform.TranformationFactory;
+import eu.printingin3d.javascad.tranform.TransformationFactory;
 import eu.printingin3d.javascad.tranzitions.Colorize;
 import eu.printingin3d.javascad.tranzitions.Rotate;
 import eu.printingin3d.javascad.tranzitions.Translate;
@@ -297,7 +297,7 @@ public abstract class Abstract3dModel implements IModel {
 		CSG csg = toInnerCSG(context);
 		
 		if (!rotate.isZero()) {
-			csg = csg.transformed(TranformationFactory.getRotationMatrix(rotate));
+			csg = csg.transformed(TransformationFactory.getRotationMatrix(rotate));
 		}
 		
 		if (isMulti()) {
@@ -305,17 +305,18 @@ public abstract class Abstract3dModel implements IModel {
 			for (Coords3d move : moves) {
 				CSG transformed = null;
 				if (!move.isZero()) {
-					transformed = csg.transformed(TranformationFactory.getTranlationMatrix(move));
+					transformed = csg.transformed(TransformationFactory.getTranlationMatrix(move));
 				}
 				else {
 					transformed = csg;
 				}
 				union = (union==null) ? transformed : union.union(transformed);
-			}			
+			}
+			csg = union;
 		} else {
 			for (Coords3d move : moves) {
 				if (!move.isZero()) {
-					csg = csg.transformed(TranformationFactory.getTranlationMatrix(move));
+					csg = csg.transformed(TransformationFactory.getTranlationMatrix(move));
 				}
 			}
 		}

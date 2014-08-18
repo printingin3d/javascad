@@ -7,7 +7,7 @@ import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Complex3dModel;
 import eu.printingin3d.javascad.models.SCAD;
-import eu.printingin3d.javascad.tranform.TranformationFactory;
+import eu.printingin3d.javascad.tranform.TransformationFactory;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
@@ -62,6 +62,6 @@ public class Rotate extends Complex3dModel {
 
 	@Override
 	protected CSG toInnerCSG(FacetGenerationContext context) {
-		return model.toCSG(context).transformed(TranformationFactory.getRotationMatrix(angles));
+		return model.toCSG(context).transformed(TransformationFactory.getRotationMatrix(angles));
 	}
 }

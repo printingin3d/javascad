@@ -7,7 +7,7 @@ import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Complex3dModel;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.tranform.ITransformation;
-import eu.printingin3d.javascad.tranform.TranformationFactory;
+import eu.printingin3d.javascad.tranform.TransformationFactory;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
@@ -80,7 +80,7 @@ public final class Mirror extends Complex3dModel {
 
 	@Override
 	protected CSG toInnerCSG(FacetGenerationContext context) {
-		ITransformation tr = TranformationFactory.getMirrorMatrix(direction);
+		ITransformation tr = TransformationFactory.getMirrorMatrix(direction);
 		return model.toCSG(context).transformed(tr);
 	}
 }
