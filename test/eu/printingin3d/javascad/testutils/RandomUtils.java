@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.testutils;
 
+import java.awt.Color;
 import java.util.Random;
 
 import eu.printingin3d.javascad.coords.Angles3d;
@@ -8,6 +9,7 @@ import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
+import eu.printingin3d.javascad.vrl.Vertex;
 
 public class RandomUtils {
 	private static final Random RND = new Random();
@@ -27,6 +29,14 @@ public class RandomUtils {
 				return coords3d;
 			}
 		}
+	}
+	
+	public static Color getRandomColor() {
+		return new Color(RND.nextInt());
+	}
+	
+	public static Vertex getRandomVertex() {
+		return new Vertex(getRandomCoords(), getRandomColor());
 	}
 
 	public static Triangle3d getRandomTriangle() {

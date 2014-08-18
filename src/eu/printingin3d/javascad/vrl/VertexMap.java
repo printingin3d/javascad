@@ -1,6 +1,7 @@
 package eu.printingin3d.javascad.vrl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,7 +11,7 @@ public class VertexMap {
 	private final Map<Vertex, Integer> vertexMap = new HashMap<>();
 	private final List<Vertex> vertexes = new ArrayList<>();
 	
-	public VertexMap(List<Vertex> vertexes) {
+	public VertexMap(Collection<Vertex> vertexes) {
 		int index = 0;
 		for (Vertex v : new HashSet<Vertex>(vertexes)) {
 			vertexMap.put(v, Integer.valueOf(index));

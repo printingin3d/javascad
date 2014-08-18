@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.vrl;
 import java.awt.Color;
 
 import eu.printingin3d.javascad.coords.Coords3d;
+import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
 public class Vertex {
@@ -10,6 +11,8 @@ public class Vertex {
 	public final Color color;
 	
 	public Vertex(Coords3d coords, Color color) {
+		AssertValue.isNotNull(coords, "Coords must not be null for a vertex!");
+		
 		this.coords = coords;
 		this.color = color;
 	}
@@ -27,7 +30,7 @@ public class Vertex {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((color == null) ? 0 : color.hashCode());
-		result = prime * result + ((coords == null) ? 0 : coords.hashCode());
+		result = prime * result + coords.hashCode();
 		return result;
 	}
 
@@ -50,14 +53,7 @@ public class Vertex {
 		} else if (!color.equals(other.color)) {
 			return false;
 		}
-		if (coords == null) {
-			if (other.coords != null) {
-				return false;
-			}
-		} else if (!coords.equals(other.coords)) {
-			return false;
-		}
-		return true;
+		return coords.equals(other.coords);
 	}
 
 	@Override
