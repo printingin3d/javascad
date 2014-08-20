@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import eu.printingin3d.javascad.enums.OutputFormat;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
 /**
@@ -67,18 +68,14 @@ public class Abstract3d {
 	
 	@Override
 	public String toString() {
-		return new StringBuilder().append('[').
-				append(DoubleUtils.formatDouble(x)).append(',').
-				append(DoubleUtils.formatDouble(y)).append(',').
-				append(DoubleUtils.formatDouble(z)).append(']').
-				toString();
+		return format(OutputFormat.SCAD);
 	}
 	
-	public String toStlString() {
-		return new StringBuilder().
-				append(DoubleUtils.formatDouble(x)).append(' ').
-				append(DoubleUtils.formatDouble(y)).append(' ').
-				append(DoubleUtils.formatDouble(z)).
+	public String format(OutputFormat outputFormat) {
+		return new StringBuilder().append(outputFormat.getPreText()).
+				append(DoubleUtils.formatDouble(x)).append(outputFormat.getSeparator()).
+				append(DoubleUtils.formatDouble(y)).append(outputFormat.getSeparator()).
+				append(DoubleUtils.formatDouble(z)).append(outputFormat.getPostText()).
 				toString();
 	}
     

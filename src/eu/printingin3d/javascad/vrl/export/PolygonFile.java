@@ -1,4 +1,4 @@
-package eu.printingin3d.javascad.vrl;
+package eu.printingin3d.javascad.vrl.export;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,14 +6,20 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PolygonFile {
-	private final List<Facet> facets;
+import eu.printingin3d.javascad.utils.DoubleUtils;
+import eu.printingin3d.javascad.vrl.Facet;
+import eu.printingin3d.javascad.vrl.Vertex;
+import eu.printingin3d.javascad.vrl.VertexMap;
+
+public class PolygonFile implements IFileExporter {
+	private final File file;
 	
-	public PolygonFile(List<Facet> facets) {
-		this.facets = facets;
+	public PolygonFile(File file) {
+		this.file = file;
 	}
-	
-	public void writeToFile(File file) throws IOException {
+
+	@Override
+	public void writeToFile(List<Facet> facets) throws IOException {
 		List<Vertex> vertexes = new ArrayList<>();
 		for (Facet f : facets) {
 			vertexes.addAll(f.getVertexes());
@@ -46,7 +52,7 @@ public class PolygonFile {
 			
 			// list of vertexes
 			for (Vertex v : sortedList) {
-				ps.println(v);
+				ps.println(vertexToString(v) );
 			}
 			
 			for (Facet f : facets) {
@@ -62,5 +68,15 @@ public class PolygonFile {
 		finally {
 			ps.close();
 		}
+	}
+
+	public static String vertexToString(Vertex v) {
+		return 
+			DoubleUtils.formatDouble(v.getCoords().getX())+" "+
+			DoubleUtils.formatDouble(v.getCoords().getY())+" "+
+			DoubleUtils.formatDouble(v.getCoords().getZ())+" "+
+			v.getColor().getRed()+" "+
+			v.getColor().getGreen()+" "+
+			v.getColor().getBlue();
 	}
 }

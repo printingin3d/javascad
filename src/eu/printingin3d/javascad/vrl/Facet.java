@@ -1,9 +1,6 @@
 package eu.printingin3d.javascad.vrl;
 
 import java.awt.Color;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,33 +30,6 @@ public class Facet {
 		this.color = color;
 	}
 	
-	public String toStlString() {
-		List<Coords3d> points = triangle.getPoints();
-		
-		return new StringBuilder().
-        append("  facet normal ").append(normal.toStlString()).append('\n').
-        append("    outer loop\n").
-        append("    vertex ").append(points.get(0).toStlString()).append('\n').
-        append("    vertex ").append(points.get(1).toStlString()).append('\n').
-        append("    vertex ").append(points.get(2).toStlString()).append('\n').
-        append("    endloop\n").
-        append("  endfacet\n").toString();
-	}
-	
-	public byte[] toBinaryStl() throws IOException {
-		ByteBuffer byteBuffer = ByteBuffer.allocate(50).order(ByteOrder.LITTLE_ENDIAN);
-		
-		byteBuffer.put(normal.toByteArray());
-		
-		byteBuffer.put(triangle.getPoints().get(0).toByteArray());
-		byteBuffer.put(triangle.getPoints().get(1).toByteArray());
-		byteBuffer.put(triangle.getPoints().get(2).toByteArray());
-		
-		byteBuffer.putShort((short)0);
-		
-		return byteBuffer.array();
-	}
-	
 	public List<Vertex> getVertexes() {
 		List<Vertex> vertexes = new ArrayList<>();
 		for (Coords3d c : triangle.getPoints()) {
@@ -67,4 +37,9 @@ public class Facet {
 		}
 		return vertexes;
 	}
+
+	public Coords3d getNormal() {
+		return normal;
+	}
+	
 }

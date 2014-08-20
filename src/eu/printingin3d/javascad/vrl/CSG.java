@@ -33,11 +33,6 @@
  */
 package eu.printingin3d.javascad.vrl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -222,38 +217,6 @@ public class CSG {
         a = a.build(b.allPolygons());
         a = a.invert();
         return new CSG(a.allPolygons());
-    }
-
-    /**
-     * Returns this csg in STL string format.
-     *
-     * @return this csg in STL string format
-     */
-    public String toStlString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("solid v3d.csg\n");
-        for (Facet facet : toFacets()) {
-        	sb.append(facet.toStlString());
-        }
-        sb.append("endsolid v3d.csg\n");
-        return sb.toString();
-    }
-    
-    public void toBinaryStlFile(File output) throws IOException {
-    	FileOutputStream out = new FileOutputStream(output);
-    	try {
-	    	out.write(new byte[80]);
-	    	List<Facet> facets = toFacets();
-	    	
-	    	out.write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(facets.size()).array());
-	    	
-	    	for (Facet facet : facets) {
-	    		out.write(facet.toBinaryStl());
-	    	}
-    	}
-    	finally {
-	    	out.close();
-    	}
     }
 
     public List<Facet> toFacets() {

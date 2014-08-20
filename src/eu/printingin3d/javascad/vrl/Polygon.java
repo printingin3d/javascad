@@ -44,12 +44,10 @@ import eu.printingin3d.javascad.tranform.ITransformation;
 import eu.printingin3d.javascad.utils.AssertValue;
 
 /**
- * Represents a convex polygon.
+ * Represents a convex polygon. A polygon is represented by its points which should be on the same plane (not tested, 
+ * but guaranteed by the used algorithms), its normal (calculated from the points), 
+ * its color and its distance from the origin.
  *
- * Each convex polygon has a {@code shared} property, disthich is shared
- * betdisteen all polygons that are clones of each other or where split from the
- * same polygon. This can be used to define per-polygon properties (such as
- * surface color).
  */
 public class Polygon {
 
@@ -178,13 +176,7 @@ public class Polygon {
             List<Polygon> back) {
 
         // Classify each point as well as the entire polygon into one of the four possible classes.
-        VertexPosition polygonType = VertexPosition.COPLANAR;
-        List<VertexPosition> types = new ArrayList<>();
-        for (Coords3d v : polygon.getVertices()) {
-            VertexPosition type = calculateVertexPosition(v);
-            polygonType = polygonType.add(type);
-            types.add(type);
-        }
+        VertexPosition polygonType = calculatePolygonPosition(polygon);
 
         // Put the polygon in the correct list, splitting it when necessary.
         switch (polygonType) {
@@ -198,40 +190,62 @@ public class Polygon {
                 back.add(polygon);
                 break;
             case SPANNING:
-                List<Coords3d> f = new ArrayList<>();
-                List<Coords3d> b = new ArrayList<>();
-                for (int i = 0; i < polygon.getVertices().size(); i++) {
-                    int j = (i + 1) % polygon.getVertices().size();
-                    VertexPosition ti = types.get(i);
-                    VertexPosition tj = types.get(j);
-                    Coords3d vi = polygon.getVertices().get(i);
-                    Coords3d vj = polygon.getVertices().get(j);
-                    if (ti != VertexPosition.BACK) {
-                    	addVertexToList(f, vi);
-                        //f.add(vi);
-                    }
-                    if (ti != VertexPosition.FRONT) {
-                    	addVertexToList(b, vi);
-                        //b.add(vi);
-                    }
-                    if (ti.add(tj) == VertexPosition.SPANNING) {
-                        double t = (this.dist - this.normal.dot(vi)) / this.normal.dot(vj.move(vi.inverse()));
-                        Coords3d v = vi.lerp(vj, t);
-                    	addVertexToList(f, v);
-                    	addVertexToList(b, v);
-                        //f.add(v);
-                        //b.add(v);
-                    }
-                }
-                if (f.size() >= 3) {
-                    front.add(fromPolygons(f, polygon.color));
-                }
-                if (b.size() >= 3) {
-                    back.add(fromPolygons(b, polygon.color));
-                }
+            	splitPolygon(polygon, front, back);
                 break;
         }
     }
+    
+    // Classify the entire polygon into one of the four possible classes.
+    private VertexPosition calculatePolygonPosition(Polygon polygon) {
+        VertexPosition polygonType = VertexPosition.COPLANAR;
+        for (Coords3d v : polygon.getVertices()) {
+            polygonType = polygonType.add(calculateVertexPosition(v));
+        }
+    	
+        return polygonType;
+    }    
+
+	private void splitPolygon(Polygon polygon, List<Polygon> front, List<Polygon> back) {
+		List<Coords3d> f = new ArrayList<>();
+		List<Coords3d> b = new ArrayList<>();
+		for (int i = 0; i < polygon.getVertices().size(); i++) {
+		    int j = (i + 1) % polygon.getVertices().size();
+		    Coords3d vi = polygon.getVertices().get(i);
+		    Coords3d vj = polygon.getVertices().get(j);
+		    classifyAndSplitVertex(vi, vj, f, b);
+		}
+		AssertValue.isTrue(f.size() >= 3, "The front list shouldn't have less than 3 values!");
+		front.add(fromPolygons(f, polygon.color));
+	    
+		AssertValue.isTrue(b.size() >= 3, "The back list shouldn't have less than 3 values!");
+		back.add(fromPolygons(b, polygon.color));
+	}
+
+	private void classifyAndSplitVertex(Coords3d currentVertex, Coords3d nextVertex,
+			List<Coords3d> f, List<Coords3d> b) {
+		VertexPosition position = calculateVertexPosition(currentVertex);
+		
+		switch (position) {
+		case FRONT:
+			addVertexToList(f, currentVertex);
+			break;
+		case BACK:
+			addVertexToList(b, currentVertex);
+			break;
+		default:
+			addVertexToList(f, currentVertex);
+			addVertexToList(b, currentVertex);
+			break;
+		}
+		if (position.add(calculateVertexPosition(nextVertex)) == VertexPosition.SPANNING) {
+		    double t = (this.dist - this.normal.dot(currentVertex)) / this.normal.dot(nextVertex.move(currentVertex.inverse()));
+		    Coords3d v = currentVertex.lerp(nextVertex, t);
+			addVertexToList(f, v);
+			addVertexToList(b, v);
+		    //f.add(v);
+		    //b.add(v);
+		}
+	}
     
     private void addVertexToList(List<Coords3d> list, Coords3d newVertex) {
 /*    	if (!list.isEmpty()) {

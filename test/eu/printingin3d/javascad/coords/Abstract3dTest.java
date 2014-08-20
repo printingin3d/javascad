@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.coords.Abstract3d;
+import eu.printingin3d.javascad.enums.OutputFormat;
 
 public class Abstract3dTest {
 	
@@ -59,6 +59,18 @@ public class Abstract3dTest {
 	public void testToStringRounding() {
 		TestAbstract3d testSubject = new TestAbstract3d(10.7, Math.E, Math.PI);
 		assertEqualsWithoutWhiteSpaces("[10.7,2.7183,3.1416]", testSubject.toString());
+	}
+	
+	@Test
+	public void testFormat() {
+		TestAbstract3d testSubject = new TestAbstract3d(10.0, 20.0, 30.0);
+		assertEqualsWithoutWhiteSpaces("10 20 30", testSubject.format(OutputFormat.STL));
+	}
+	
+	@Test
+	public void testFormatRounding() {
+		TestAbstract3d testSubject = new TestAbstract3d(10.7, Math.E, Math.PI);
+		assertEqualsWithoutWhiteSpaces("10.7 2.7183 3.1416", testSubject.format(OutputFormat.STL));
 	}
 	
 	@Test

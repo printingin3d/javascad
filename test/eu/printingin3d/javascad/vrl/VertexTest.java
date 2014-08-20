@@ -67,14 +67,6 @@ public class VertexTest {
 		
 		shouldEqual(v1, v2);
 	}
-	
-	@Test
-	public void testToString() {
-		Coords3d c = new Coords3d(55, 67.2, Math.PI);
-		Vertex v = new Vertex(c, new Color(211, 32, 44));
-		
-		assertEquals("55 67.2 3.1416 211 32 44", v.toString());
-	}
 
 	private static void shouldEqual(Vertex v1, Vertex v2) {
 		assertTrue(v1.equals(v2));

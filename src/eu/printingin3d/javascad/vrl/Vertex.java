@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.utils.AssertValue;
-import eu.printingin3d.javascad.utils.DoubleUtils;
 
 public class Vertex {
 	public final Coords3d coords;
@@ -55,17 +54,4 @@ public class Vertex {
 		}
 		return coords.equals(other.coords);
 	}
-
-	@Override
-	public String toString() {
-		return 
-			DoubleUtils.formatDouble(coords.getX())+" "+
-			DoubleUtils.formatDouble(coords.getY())+" "+
-			DoubleUtils.formatDouble(coords.getZ())+" "+
-			color.getRed()+" "+
-			color.getGreen()+" "+
-			color.getBlue();
-	}
-	
-	
 }
