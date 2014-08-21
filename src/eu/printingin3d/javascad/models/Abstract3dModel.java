@@ -189,35 +189,45 @@ public abstract class Abstract3dModel implements IModel {
 	public final SCAD toScad(IScadGenerationContext context) {
 		IScadGenerationContext currentContext = context.applyTag(tag);
 		
-		StringBuilder sb = new StringBuilder(getPrefix());
-		StringBuilder ending = new StringBuilder();
+		ScadSurroundings surroundings = ScadSurroundings.EMPTY.appendPrefix(getPrefix())
+				.include(getScadColor(currentContext))
+				.include(getScadRounding());
+		
+		if (isMulti()) {
+			surroundings = surroundings.appendPrefix("union(){")
+					.appendPostfix("}");
+		}
+		SCAD result = addMovesScad(currentContext);
+		if (result.isIncluded()) {
+			return surroundings.surroundScad(result);
+		}
+		return SCAD.EMPTY;
+	}
+	
+	private ScadSurroundings getScadColor(IScadGenerationContext currentContext) {
+		ScadSurroundings surroundings = ScadSurroundings.EMPTY;
 		
 		if (isPrimitive()) {
 			Color color = currentContext.getColor();
 			if (color!=null) {
-				sb.append(Colorize.getStringRepresentation(color)).append("{\n");
-				ending.append("}\n");
+				surroundings = surroundings.appendPrefix(Colorize.getStringRepresentation(color) + "{\n")
+						.appendPostfix("}\n");
 			}
 		}
+		return surroundings;
+	}
+	
+	private ScadSurroundings getScadRounding() {
+		ScadSurroundings surroundings = ScadSurroundings.EMPTY;
 		
 		if (!roundingPlane.isEmpty()) {
-			sb.append("minkowski() {");
-			ending.insert(0, "}");
+			surroundings = surroundings.appendPrefix("minkowski() {")
+					.appendPostfix("}");
 			for (RoundProperties rp : roundingPlane.values()) {
-				ending.insert(0, rp.getRounding());
+				surroundings = surroundings.appendPostfix(rp.getRounding());
 			}
 		}
-		if (isMulti()) {
-			sb.append("union(){");
-			ending.insert(0, '}');
-		}
-		SCAD result = addMovesScad(currentContext);
-		if (result.isIncluded()) {
-			return result
-					.prepend(sb.toString())
-					.append(ending.toString());
-		}
-		return SCAD.EMPTY;
+		return surroundings;
 	}
 	
 	protected abstract Boundaries3d getModelBoundaries();
