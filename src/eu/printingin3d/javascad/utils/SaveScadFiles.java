@@ -117,6 +117,30 @@ public class SaveScadFiles {
 	}
 	
 	/**
+	 * Adds a model provider with the default generation context.
+	 * A default {@link Consts} is added before the model.
+	 * @param provider the provider to be added
+	 * @return return this object to make it possible to chain more method call
+	 */
+	public SaveScadFiles addModelProvider(IModelProvider provider) {
+		return addModelProvider(provider, ScadGenerationContextFactory.DEFAULT);
+	}
+	
+	/**
+	 * Adds a model provider with the given generation context.
+	 * A default {@link Consts} is added before the model.
+	 * @param provider the provider to be added
+	 * @param context the context used for the scad file generation
+	 * @return return this object to make it possible to chain more method call
+	 */
+	public SaveScadFiles addModelProvider(IModelProvider provider, IScadGenerationContext context) {
+		for (ModelWithPath mp : provider.getModelsAndPaths()) {
+			addModel(mp.getRelPath(), mp.getModel(), context);
+		}
+		return this;
+	}
+	
+	/**
 	 * Save the added SCAD files into the corresponding files. 
 	 * @throws IOException if any IO error happens during the file write
 	 */

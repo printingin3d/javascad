@@ -150,7 +150,7 @@
       </fileset>
 
       <doctitle><![CDATA[<h1>JavaSCAD</h1>]]></doctitle>
-      <bottom><![CDATA[<i>Copyright &#169; 2013 Printing In 3D. All Rights Reserved.</i>]]></bottom>
+      <bottom><![CDATA[<i>Copyright &#169; 2014 Printing In 3D. All Rights Reserved.</i>]]></bottom>
       <tag name="todo" scope="all" description="To do:"/>
     </javadoc>
     <zip destfile="jar/javadoc.zip"
