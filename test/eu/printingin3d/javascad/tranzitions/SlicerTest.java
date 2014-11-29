@@ -144,6 +144,36 @@ public class SlicerTest {
 		assertEqualsWithoutWhiteSpaces("difference() {(model) union() { translate([12,12,7.5]) cube([25,49,5],center=true);translate([12,12,16.5]) cube([25,49,5],center=true);}}", 
 				new Slicer(TEST_MODEL, Direction.Z, 3, 1).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
+
+	@Test
+	public void shouldHandleTagsFirst() {
+		assertEqualsWithoutWhiteSpaces("difference() {(model) translate([18.5,12,12]) cube([13,49,13],center=true);}", 
+				new Slicer(TEST_MODEL.cloneModel().withTag(5), Direction.X, 2, 0).toScad(
+						new ScadGenerationContextFactory()
+								.include(5)
+								.create()
+					).getScad());
+	}
+	
+	@Test
+	public void shouldHandleTagsLast() {
+		assertEqualsWithoutWhiteSpaces("difference() {(model) translate([5.5,12,12]) cube([13,49,13],center=true);}", 
+				new Slicer(TEST_MODEL.cloneModel().withTag(5), Direction.X, 2, 1).toScad(
+						new ScadGenerationContextFactory()
+								.include(5)
+								.create()
+					).getScad());
+	}
+	
+	@Test
+	public void shouldHandleTagsMiddle() {
+		assertEqualsWithoutWhiteSpaces("difference() {(model) union() { translate([12,12,7.5]) cube([25,49,5],center=true);translate([12,12,16.5]) cube([25,49,5],center=true);}}", 
+				new Slicer(new Union(TEST_MODEL.cloneModel().withTag(5)), Direction.Z, 3, 1).toScad(
+						new ScadGenerationContextFactory()
+								.include(5)
+								.create()
+						).getScad());
+	}
 	
 	
 	@Test

@@ -254,7 +254,8 @@ public class Polygon {
     		Coords3d prev = vertices.get(vertices.size()-1);
     		for (Coords3d c : vertices) {
     			Coords3d cross = EdgeCrossSolver.findIntersection(prev, c, lastVertex, newVertex);
-    			if (cross!=null) {
+    			if (cross!=null && !cross.equals(newVertex) && !cross.equals(lastVertex)) {
+    				System.out.println("Added new vertex: "+cross+" between "+lastVertex+" and "+newVertex+" ("+prev+", "+c+")");
     				list.add(cross);
     				break;
     			}

@@ -41,4 +41,16 @@ public final class DoubleUtils {
 		return Double.toString(Math.round(value*10000.0)/10000.0);
 	}
 
+	/**
+	 * Returns true if and only if the given value is between value1 and value2. It doesn't matter 
+	 * if value1 is bigger than value2 or vica-versa.
+	 * 
+	 * @param value the value to be checked
+	 * @param value1 the border of the interval
+	 * @param value2 the border of the interval.
+	 * @return  true if and only if the given value is between value1 and value2
+	 */
+	public static boolean between(double value, double value1, double value2) {
+		return (value1<=value && value<=value2) || (value2<=value && value<=value1);
+	}
 }

@@ -58,20 +58,27 @@ public class Difference extends Complex3dModel {
 		this(model1, Arrays.asList(model2));
 	}
 
+	protected IScadGenerationContext getChildContext(IScadGenerationContext context) {
+		return context;
+	}
+	
 	@Override
 	protected SCAD innerToScad(IScadGenerationContext context) {
-		if (model2.isEmpty()) {
-			return model1.toScad(context);
+		SCAD baseModel = model1.toScad(context);
+		if (!baseModel.isIncluded()) {
+			return SCAD.EMPTY;
 		}
 		
-		String attributes;
-		SCAD result = new SCAD("difference()");
-		attributes = "";
-		result = result.append("{").append(model1.toScad(context));
-		for (Abstract3dModel model : model2) {
-			result = result.append(model.toScad(context));
+		if (model2.isEmpty()) {
+			return baseModel;
 		}
-		return result.append(attributes).append("}");
+		
+		SCAD result = new SCAD("difference()");
+		result = result.append("{").append(baseModel);
+		for (Abstract3dModel model : model2) {
+			result = result.append(model.toScad(getChildContext(context)));
+		}
+		return result.append("}");
 	}
 
 	@Override
