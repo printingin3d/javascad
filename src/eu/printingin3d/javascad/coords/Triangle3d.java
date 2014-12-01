@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.coords;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,8 +8,8 @@ import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.AssertValue;
 
 /**
- * An implementation of a 3D triangle. It is used by both the OpenSCAD and POVRay rendering, 
- * but in a completely different way. This class is also used by the Polyhedron class as input.  
+ * An implementation of a 3D triangle. It is used by the OpenSCAD rendering. 
+ * This class is also used by the Polyhedron class as input.  
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
@@ -16,6 +17,42 @@ public class Triangle3d {
 	private final Coords3d point1;
 	private final Coords3d point2;
 	private final Coords3d point3;
+
+	/**
+	 * Creates a list of triangles which covers the polygon defined by the given list of coordinates.
+	 * The given list should contain at least three coordinates.
+	 * @param coords the list of coordinates used to generate the triangles
+	 * @return the triangles
+	 * @throws IllegalValueException if the given coords list is null or the list contains less than three coordinates
+	 */
+	public static List<Triangle3d> getTriangles(List<Coords3d> coords) {
+		AssertValue.isNotNull(coords, "coords should not be null");
+		AssertValue.isTrue(coords.size() >= 3, "There should be at least 3 verticies given, but was only "+coords.size());
+		
+    	List<Triangle3d> triangles = new ArrayList<>();
+    	Coords3d firstVertex = coords.get(0);
+        for (int i = 0; i < coords.size() - 2; i++) {
+        	Triangle3d triangle = new Triangle3d(
+        			firstVertex, 
+        			coords.get(i + 1), 
+        			coords.get(i + 2));
+			triangles.add(triangle);
+        }
+        return triangles;
+	}
+	
+	/**
+	 * Creates a list of triangles which covers the polygon defined by the given list of coordinates.
+	 * The given list should contain at least three coordinates.
+	 * @param coords the list of coordinates used to generate the triangles
+	 * @return the triangles
+	 * @throws IllegalValueException if the given coords list is null or the list contains less than three coordinates
+	 */
+	public static List<Triangle3d> getTriangles(Coords3d... coords) {
+		AssertValue.isNotNull(coords, "coords should not be null");
+		
+		return getTriangles(Arrays.asList(coords));
+	}
 	
 	/**
 	 * Created the triangle by defining the three corner.
