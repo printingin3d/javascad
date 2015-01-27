@@ -120,6 +120,28 @@ public class Abstract3d {
 				DoubleUtils.equalsEps(y, other.y) &&
 				DoubleUtils.equalsEps(z, other.z);
 	}
+	
+	/**
+	 * Checks a much closed equal relation than the equals method does. The difference could be much smaller this way.
+	 * @param value1 
+	 * @param value2
+	 * @return true if and only if the two coordinate is very close to each other
+	 */
+	public static boolean closeEquals(Abstract3d value1, Abstract3d value2) {
+		if (value1 == value2) {
+			return true;
+		}
+		if (value1 == null || value2 == null) {
+			return value2==value1;
+		}
+		if (value1.getClass() != value2.getClass()) {
+			return false;
+		}
+		
+		return  DoubleUtils.isZero(value1.x - value2.x) &&
+				DoubleUtils.isZero(value1.y - value2.y) &&
+				DoubleUtils.isZero(value1.z - value2.z);
+	}
 
 	/**
 	 * @return the X coordinate

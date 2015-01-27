@@ -92,5 +92,37 @@ public class Abstract3dTest {
 		
 		assertEquals(test1.hashCode(), test3.hashCode());
 	}
+	
+	@Test
+	public void closeEqualsShouldReturnTrueIfBothValueAreNull() {
+		assertTrue(Abstract3d.closeEquals(null, null));
+	}
+	
+	@Test
+	public void closeEqualsShouldReturnFalseIfExactlyOneOfTheTwoValuesIsNull() {
+		assertFalse(Abstract3d.closeEquals(Angles3d.ZERO, null));
+		assertFalse(Abstract3d.closeEquals(null, Angles3d.ZERO));
+	}
+	
+	@Test
+	public void closeEqualsShouldReturnFalseIfTheTwoValuesAreDifferentTypes() {
+		assertFalse(Abstract3d.closeEquals(Angles3d.ZERO, Coords3d.ZERO));
+	}
+	
+	@Test
+	public void closeEqualsShouldReturnFalseIfTheValuesAreSlightlyDifferent() {
+		Angles3d one = new Angles3d(10, 10, 10);
+		Angles3d two1 = new Angles3d(10, 10, 10.0001);
+		assertFalse(Abstract3d.closeEquals(one, two1));
+		assertEquals(one, two1);
+		
+		Angles3d two2 = new Angles3d(10, 10.0001, 10);
+		assertFalse(Abstract3d.closeEquals(one, two2));
+		assertEquals(one, two2);
+		
+		Angles3d two3 = new Angles3d(10.0001, 10, 10);
+		assertFalse(Abstract3d.closeEquals(one, two3));
+		assertEquals(one, two3);
+	}
 
 }

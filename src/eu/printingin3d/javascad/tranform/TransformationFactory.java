@@ -17,9 +17,9 @@ public class TransformationFactory {
 	}
 
 	public static ITransformation getRotationMatrix(Angles3d angles) {
-		Coords3d x = Coords3d.xOnly(1).rotate(angles);
-		Coords3d y = Coords3d.yOnly(1).rotate(angles);
-		Coords3d z = Coords3d.zOnly(1).rotate(angles);
+		Coords3d x = Coords3d.X.rotate(angles);
+		Coords3d y = Coords3d.Y.rotate(angles);
+		Coords3d z = Coords3d.Z.rotate(angles);
 		
 		double elemenents[] = {
 	            x.getX(), y.getX(), z.getX(), 0, 

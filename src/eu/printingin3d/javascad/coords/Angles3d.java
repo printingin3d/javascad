@@ -1,5 +1,11 @@
 package eu.printingin3d.javascad.coords;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
 /**
@@ -88,6 +94,58 @@ public class Angles3d extends Abstract3d {
 		return result;
 	}
 	
+	private static class Config {
+		private final Coords3d coord1;
+		private final Coords3d coord2;
+		private final Coords3d coord3;
+		
+		private final Normal3d norm1;
+		private final Normal3d norm2;
+		private final Normal3d norm3;
+		
+		public Config(Coords3d coord1, Coords3d coord2, Coords3d coord3,
+				Normal3d norm1, Normal3d norm2, Normal3d norm3) {
+			this.coord1 = coord1;
+			this.coord2 = coord2;
+			this.coord3 = coord3;
+			this.norm1 = norm1;
+			this.norm2 = norm2;
+			this.norm3 = norm3;
+		}
+
+		@Override
+		public String toString() {
+			return "Config [coord1=" + coord1 + ", coord2=" + coord2
+					+ ", coord3=" + coord3 + ", norm1=" + norm1 + ", norm2="
+					+ norm2 + ", norm3=" + norm3 + "]";
+		}
+	}
+	
+	private static final List<Config> CONFIGS; 
+	
+	static {
+		List<Coords3d> coords = Arrays.asList(Coords3d.X, Coords3d.Y, Coords3d.Z);
+		
+		List<Config> results = new ArrayList<>();
+		for (Coords3d c1 : coords) {
+			for (Coords3d c2 : coords) {
+				for (Coords3d c3 : coords) {
+					for (List<Normal3d> norms : Arrays.asList(
+							Arrays.asList(Normal3d.X, Normal3d.Y, Normal3d.Z),
+							Arrays.asList(Normal3d.X, Normal3d.Z, Normal3d.Y),
+							Arrays.asList(Normal3d.Y, Normal3d.X, Normal3d.Z),
+							Arrays.asList(Normal3d.Y, Normal3d.Z, Normal3d.X),
+							Arrays.asList(Normal3d.Z, Normal3d.X, Normal3d.Y),
+							Arrays.asList(Normal3d.Z, Normal3d.Y, Normal3d.X)
+						)) {
+						results.add(new Config(c1, c2, c3, norms.get(0), norms.get(1), norms.get(2)));
+					}
+				}
+			}
+		}
+		CONFIGS = Collections.unmodifiableList(results);
+	}
+	
 	/**
 	 * Rotates the current value by the given value - this object won't change, but
 	 * a new object will be created.
@@ -95,29 +153,39 @@ public class Angles3d extends Abstract3d {
 	 * @return the new object with the new angles
 	 */
 	public Angles3d rotate(Angles3d delta) {
-		Coords3d temp = Coords3d.xOnly(1.0).rotate(this).rotate(delta);
-		double gamma = simplicity(temp, Normal3d.Y, Normal3d.X);
-		
-		temp = Coords3d.zOnly(1.0).rotate(this).rotate(delta).rotate(zOnly(-gamma));
-		double beta = simplicity(temp, Normal3d.X, Normal3d.Z);
-		
-		temp = Coords3d.yOnly(1.0).rotate(this).rotate(delta).rotate(zOnly(-gamma)).rotate(yOnly(-beta));
-		double alpha = simplicity(temp, Normal3d.Z, Normal3d.Y);
+		for (Config conf : CONFIGS) {
+			Coords3d temp = conf.coord1.rotate(this).rotate(delta);
+			double gamma = simplicity(temp, conf.norm1, conf.norm2);
+			
+			temp = conf.coord2.rotate(this).rotate(delta).rotate(zOnly(-gamma));
+			double beta = simplicity(temp, conf.norm2, conf.norm3);
+			
+			temp = conf.coord3.rotate(this).rotate(delta).rotate(zOnly(-gamma)).rotate(yOnly(-beta));
+			double alpha = simplicity(temp, conf.norm3, conf.norm1);
+			
+			if (Coords3d.xOnly(1.0).rotate(this).rotate(delta)
+					.rotate(zOnly(-gamma)).rotate(yOnly(-beta)).rotate(xOnly(-alpha))
+					.equals(Coords3d.xOnly(-1.0))) {
+				alpha = -(180.0+alpha);
+				beta = -beta;
+				gamma = 180.0+gamma;
+			}
+			if (Coords3d.yOnly(1.0).rotate(this).rotate(delta)
+					.rotate(zOnly(-gamma)).rotate(yOnly(-beta)).rotate(xOnly(-alpha))
+					.equals(Coords3d.yOnly(-1.0))) {
+				alpha = -(180.0+alpha);
+			}
+			
+			Angles3d result = new Angles3d(alpha, beta, gamma);
+			
+			if (Abstract3d.closeEquals(Coords3d.X.rotate(this).rotate(delta), Coords3d.X.rotate(result)) &&
+				Abstract3d.closeEquals(Coords3d.Y.rotate(this).rotate(delta), Coords3d.Y.rotate(result)) &&
+				Abstract3d.closeEquals(Coords3d.Z.rotate(this).rotate(delta), Coords3d.Z.rotate(result))) {
+				return result;
+			}
+		}
 
-		if (Coords3d.xOnly(1.0).rotate(this).rotate(delta)
-				.rotate(zOnly(-gamma)).rotate(yOnly(-beta)).rotate(xOnly(-alpha))
-				.equals(Coords3d.xOnly(-1.0))) {
-			alpha = -(180.0+alpha);
-			beta = -beta;
-			gamma = 180.0+gamma;
-		}
-		if (Coords3d.yOnly(1.0).rotate(this).rotate(delta)
-				.rotate(zOnly(-gamma)).rotate(yOnly(-beta)).rotate(xOnly(-alpha))
-				.equals(Coords3d.yOnly(-1.0))) {
-			alpha = -(180.0+alpha);
-		}
-		
-		return new Angles3d(alpha, beta, gamma);
+		throw new IllegalValueException("No solution found for adding "+this+" to "+delta+". Please send a bug report to the developer.");
 	}
 	
 	protected double getXRad() {
@@ -163,9 +231,9 @@ public class Angles3d extends Abstract3d {
 			return true;
 		}
 		
-		return Coords3d.xOnly(1.0).rotate(this).equals(Coords3d.xOnly(1.0).rotate(other)) &&
-				Coords3d.yOnly(1.0).rotate(this).equals(Coords3d.yOnly(1.0).rotate(other)) &&
-				Coords3d.zOnly(1.0).rotate(this).equals(Coords3d.zOnly(1.0).rotate(other));
+		return Coords3d.X.rotate(this).equals(Coords3d.X.rotate(other)) &&
+				Coords3d.Y.rotate(this).equals(Coords3d.Y.rotate(other)) &&
+				Coords3d.Z.rotate(this).equals(Coords3d.Z.rotate(other));
 	}
 	
 	@Override

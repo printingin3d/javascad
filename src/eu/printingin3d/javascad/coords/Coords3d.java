@@ -7,6 +7,19 @@ package eu.printingin3d.javascad.coords;
  */
 public class Coords3d extends Abstract3d {
 	/**
+	 * Represents the (1,0,0) coordinate.
+	 */
+	public static final Coords3d X = xOnly(1.0);
+	/**
+	 * Represents the (0,1,0) coordinate.
+	 */
+	public static final Coords3d Y = yOnly(1.0);
+	/**
+	 * Represents the (0,0,1) coordinate.
+	 */
+	public static final Coords3d Z = zOnly(1.0);
+	
+	/**
 	 * Represents the (0,0,0) coordinate.
 	 */
 	public static final Coords3d ZERO = new Coords3d(0.0, 0.0, 0.0);
