@@ -5,6 +5,7 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import java.util.Arrays;
 import java.util.Collections;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -174,5 +175,27 @@ public class Abstract3dModelTest {
 		// moves front with half of the cube -> -30/2=-15 - 15, because the testSubject's back is at that point
 		assertEqualsWithoutWhiteSpaces("translate([0, -30, 0]) (empty)", 
 				testSubject.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void addModelShouldResultUnion() {
+		assertEqualsWithoutWhiteSpaces("union() {(empty) (added)}",
+				testSubject.addModel(new Test3dModel("(added)")).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void addModelShouldReturnNewObject() {
+		Assert.assertNotSame(testSubject, testSubject.addModel(new Test3dModel("(added)")));
+	}
+	
+	@Test
+	public void subtractModelShouldResultDifference() {
+		assertEqualsWithoutWhiteSpaces("difference() {(empty) (added)}",
+				testSubject.subtractModel(new Test3dModel("(added)")).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void subtrackModelShouldReturnNewObject() {
+		Assert.assertNotSame(testSubject, testSubject.subtractModel(new Test3dModel("(added)")));
 	}
 }

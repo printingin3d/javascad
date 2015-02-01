@@ -16,8 +16,10 @@ import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.tranform.TransformationFactory;
 import eu.printingin3d.javascad.tranzitions.Colorize;
+import eu.printingin3d.javascad.tranzitions.Difference;
 import eu.printingin3d.javascad.tranzitions.Rotate;
 import eu.printingin3d.javascad.tranzitions.Translate;
+import eu.printingin3d.javascad.tranzitions.Union;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.Moves;
 import eu.printingin3d.javascad.utils.RoundProperties;
@@ -338,8 +340,32 @@ public abstract class Abstract3dModel implements IModel {
 		return toCSG(FacetGenerationContext.DEFAULT);
 	}
 
+	/**
+	 * Tag the model with the given value. This value can be used to color objects 
+	 * and include / exclude them from the export.
+	 * @param tag the value to be used
+	 * @return this object to make it possible to chain more method call 
+	 */
 	public Abstract3dModel withTag(int tag) {
 		this.tag = tag;
 		return this;
+	}
+
+	/**
+	 * Convenient method to create a Union.
+	 * @param model the model to be added to this object
+	 * @return a new model which contains the union of this object and the given object
+	 */
+	public Abstract3dModel addModel(Abstract3dModel model) {
+		return new Union(this, model);
+	}
+	
+	/**
+	 * Convenient method to create a Difference.
+	 * @param model the model to be subtracted to this object
+	 * @return a new model which contains the difference of this object and the given object
+	 */
+	public Abstract3dModel subtractModel(Abstract3dModel model) {
+		return new Difference(this, model);
 	}
 }

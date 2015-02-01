@@ -141,4 +141,14 @@ public class DifferenceTest {
 							.align(Side.TOP, base, false));
 		result.getBoundaries();
 	}
+	
+	@Test
+	public void subtractModelShouldReturnWithMoreRemovedObject() {
+		Abstract3dModel difference = new Difference(
+				new Test3dModel("(model1)"), 
+				new Test3dModel("(model2)"))
+			.subtractModel(new Test3dModel("(model3)"));
+		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2) (model3)}", 
+				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
 }

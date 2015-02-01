@@ -87,4 +87,11 @@ public class UnionTest {
 		assertDoubleEquals(10.2, boundaries.getZ().getMin());
 		assertDoubleEquals(51.1, boundaries.getZ().getMax());
 	}
+	
+	@Test
+	public void addModelShouldReturnWithMoreUnion() {
+		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2) (model3)}", 
+				new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)")).addModel(new Test3dModel("(model3)"))
+						.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
 }

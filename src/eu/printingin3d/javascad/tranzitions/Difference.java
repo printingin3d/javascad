@@ -127,4 +127,11 @@ public class Difference extends Complex3dModel {
 		
 		return csg;
 	}
+	
+	@Override
+	public Abstract3dModel subtractModel(Abstract3dModel model) {
+		List<Abstract3dModel> newModel2 = new ArrayList<>(model2);
+		newModel2.add(model);
+		return new Difference(model1, newModel2);
+	}
 }

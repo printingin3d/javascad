@@ -2,6 +2,12 @@ package eu.printingin3d.javascad.context;
 
 import java.awt.Color;
 
+/**
+ * Base class for all classes which implement IColorGenerationContext interface.
+ * Implements the logic of the getColor() method. 
+ * @author Ivan
+ *
+ */
 public abstract class AbstractColorHandlingContext implements IColorGenerationContext {
 	protected final TagColors tagColors;
 	protected final IColorGenerationContext parent;

@@ -93,4 +93,12 @@ public class Union extends Complex3dModel {
 		}
 		return csg;
 	}
+	
+	@Override
+	public Abstract3dModel addModel(Abstract3dModel model) {
+		List<Abstract3dModel> newModels = new ArrayList<>(models);
+		newModels.add(model);
+		return new Union(newModels);
+	}
+	
 }
