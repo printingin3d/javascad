@@ -47,12 +47,23 @@ public abstract class Abstract3dModel implements IModel {
 	private final Map<Plane, RoundProperties> roundingPlane = new HashMap<>();
 	
 	/**
+	 * To copy the moves and rotate values from an another Abstract3dModel. It is used internally until the Abstract3dModel is
+	 * fully immutable. When the immutability takes place everywhere this method should be removed.
+	 * @param toCopy the object to copy the values from
+	 */
+	protected Abstract3dModel copyMovesAndRotate(Abstract3dModel toCopy) {
+		this.moves = toCopy.moves;
+		this.rotate = toCopy.rotate;
+		return this;
+	}
+	
+	/**
 	 * Moves this object by the given coordinates.
 	 * @param delta the coordinates used by the move
 	 * @return return this object to make it possible to chain more method call
 	 */
 	public Abstract3dModel move(Coords3d delta) {
-		moves.move(delta);
+		moves = moves.move(delta);
 		return this;
 	}
 
@@ -66,7 +77,7 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	public Abstract3dModel moves(Collection<Coords3d> delta) {
 		if (!delta.isEmpty()) {
-			moves.moves(delta);
+			moves = moves.moves(delta);
 		}
 		return this;
 	}
@@ -78,7 +89,7 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	public Abstract3dModel rotate(Angles3d delta) {
 		this.rotate = this.rotate.rotate(delta);
-		this.moves.rotate(delta);
+		this.moves = this.moves.rotate(delta);
 		return this;
 	}
 	
@@ -121,7 +132,7 @@ public abstract class Abstract3dModel implements IModel {
 		Abstract3dModel model = innerCloneModel();
 		
 		model.tag = tag;
-		model.moves = moves.cloneMoves();
+		model.moves = moves;
 		model.rotate = rotate;
 		model.debug = debug;
 		model.background = background;

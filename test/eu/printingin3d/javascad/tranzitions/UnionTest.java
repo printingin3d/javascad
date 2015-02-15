@@ -10,8 +10,10 @@ import java.util.List;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
+import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
@@ -93,5 +95,23 @@ public class UnionTest {
 		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2) (model3)}", 
 				new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)")).addModel(new Test3dModel("(model3)"))
 						.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void addModelShouldKeepMoves() {
+		assertEqualsWithoutWhiteSpaces("translate([10,20,30]) union() {(model1) (model2) (model3)}", 
+				new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)"))
+						.move(new Coords3d(10, 20, 30))
+						.addModel(new Test3dModel("(model3)"))
+				.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void addModelShouldKeepRotate() {
+		assertEqualsWithoutWhiteSpaces("rotate([10,20,30]) union() {(model1) (model2) (model3)}", 
+				new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)"))
+						.rotate(new Angles3d(10, 20, 30))
+						.addModel(new Test3dModel("(model3)"))
+				.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 }

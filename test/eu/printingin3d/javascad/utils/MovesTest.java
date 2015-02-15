@@ -2,7 +2,6 @@ package eu.printingin3d.javascad.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -42,35 +41,35 @@ public class MovesTest {
 	
 	@Test
 	public void isMultiShouldBeTrueAfterMovesCall() {
-		Moves moves = new Moves();
-		moves.moves(Arrays.asList(new Coords3d(1,1,1), new Coords3d(2, 3, 4)));
+		Moves moves = new Moves()
+					.moves(Arrays.asList(new Coords3d(1,1,1), new Coords3d(2, 3, 4)));
 		
 		assertTrue(moves.isMulti());
 	}
 
 	@Test
 	public void moveShouldAddDeltaToMoves() {
-		Moves moves = new Moves();
-		moves.move(new Coords3d(1, 2, 3));
-		moves.move(new Coords3d(2, 1, 3));
+		Moves moves = new Moves()
+			.move(new Coords3d(1, 2, 3))
+			.move(new Coords3d(2, 1, 3));
 		
 		assertEquals(new Coords3d(3, 3, 6), retrieveCoordsList(moves).get(0));
 	}
 	
 	@Test
 	public void movesShouldAddDeltaToMovesAndMakeTheListLonger() {
-		Moves moves = new Moves();
-		moves.moves(Arrays.asList(new Coords3d(1,1,1), new Coords3d(2, 3, 4)));
+		Moves moves = new Moves()
+			.moves(Arrays.asList(new Coords3d(1,1,1), new Coords3d(2, 3, 4)));
 		
 		assertEquals(2, retrieveCoordsList(moves).size());
 		
-		moves.move(new Coords3d(1, 2, 3));
-		moves.move(new Coords3d(2, 1, 3));
+		moves = moves.move(new Coords3d(1, 2, 3))
+			.move(new Coords3d(2, 1, 3));
 		
 		assertEquals(new Coords3d(4, 4, 7), retrieveCoordsList(moves).get(0));
 		assertEquals(new Coords3d(5, 6, 10), retrieveCoordsList(moves).get(1));
 		
-		moves.moves(Arrays.asList(new Coords3d(-3,5.5,2), new Coords3d(3, 4, 5), Coords3d.ZERO));
+		moves = moves.moves(Arrays.asList(new Coords3d(-3,5.5,2), new Coords3d(3, 4, 5), Coords3d.ZERO));
 		
 		assertEquals(6, retrieveCoordsList(moves).size());
 	}
@@ -84,14 +83,4 @@ public class MovesTest {
 		assertEquals(1, movesList.size());
 		assertTrue(movesList.get(0).isZero());
 	}
-	
-	@Test
-	public void cloneMovesShouldReturnWithANewObjectWithTheSameValues() {
-		Moves moves = new Moves();
-		moves.moves(Arrays.asList(new Coords3d(1,1,1), new Coords3d(2, 3, 4)));
-		
-		Moves clone = moves.cloneMoves();
-		assertNotSame(moves, clone);
-		assertEquals(retrieveCoordsList(moves), retrieveCoordsList(clone));
-	}	
 }

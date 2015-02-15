@@ -2,6 +2,7 @@ package eu.printingin3d.javascad.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,14 +15,17 @@ import eu.printingin3d.javascad.coords.Coords3d;
  * @author ivivan <ivivan@printingin3d.eu>
  */
 public class Moves implements Iterable<Coords3d> {
-	private List<Coords3d> moves;
+	private final List<Coords3d> moves;
+	
+	private Moves(List<Coords3d> moves) {
+		this.moves = Collections.unmodifiableList(moves);
+	}
 	
 	/**
 	 * Created the object with only a zero move - this is the starting position.
 	 */
 	public Moves() {
-		moves = new ArrayList<>();
-		moves.add(Coords3d.ZERO);
+		this(Collections.singletonList(Coords3d.ZERO));
 	}
 	
 	private List<Coords3d> innerMove(Coords3d delta) {
@@ -36,8 +40,8 @@ public class Moves implements Iterable<Coords3d> {
 	 * Adds the delta value to all of the moves.
 	 * @param delta the coordinates used by the move
 	 */
-	public void move(Coords3d delta) {
-		moves = innerMove(delta);
+	public Moves move(Coords3d delta) {
+		return new Moves(innerMove(delta));
 	}
 	
 	/**
@@ -46,24 +50,27 @@ public class Moves implements Iterable<Coords3d> {
 	 * coordinates in the delta parameter.
 	 * @param delta the collection of coordinates used by the move operation
 	 */
-	public void moves(Collection<Coords3d> delta) {
+	public Moves moves(Collection<Coords3d> delta) {
 		if (!delta.isEmpty()) {
 			List<Coords3d> temp = new ArrayList<>();
 			for (Coords3d d : delta) {
 				temp.addAll(innerMove(d));
 			}
-			moves = temp;
+			return new Moves(temp);
 		}
+		return this;
 	}
 	
 	/**
 	 * Rotates all of the moves represented by this object.
 	 * @param delta the angle it will be rotated
 	 */
-	public void rotate(Angles3d delta) {
-		for (int i=0;i<moves.size();i++) {
-			moves.set(i, moves.get(i).rotate(delta));
+	public Moves rotate(Angles3d delta) {
+		List<Coords3d> temp = new ArrayList<>(moves.size());
+		for (Coords3d c : moves) {
+			temp.add(c.rotate(delta));
 		}
+		return new Moves(temp);
 	}
 	
 	/**
@@ -72,16 +79,6 @@ public class Moves implements Iterable<Coords3d> {
 	 */
 	public boolean isMulti() {
 		return moves.size()>1;
-	}
-	
-	/**
-	 * Creates a clone of this object which contains the same values, but independent from this object.
-	 * @return the clone of this object
-	 */
-	public Moves cloneMoves() {
-		Moves clone = new Moves();
-		clone.moves = new ArrayList<>(moves);
-		return clone;
 	}
 
 	@Override

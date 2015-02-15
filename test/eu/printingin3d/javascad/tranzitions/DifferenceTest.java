@@ -151,4 +151,26 @@ public class DifferenceTest {
 		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2) (model3)}", 
 				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
+	
+	@Test
+	public void subtractModelShouldKeepMoves() {
+		Abstract3dModel difference = new Difference(
+				new Test3dModel("(model1)"), 
+				new Test3dModel("(model2)"))
+		.move(new Coords3d(10, 20, 30))
+		.subtractModel(new Test3dModel("(model3)"));
+		assertEqualsWithoutWhiteSpaces("translate([10,20,30]) difference() {(model1) (model2) (model3)}", 
+				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void subtractModelShouldKeepRotate() {
+		Abstract3dModel difference = new Difference(
+				new Test3dModel("(model1)"), 
+				new Test3dModel("(model2)"))
+		.rotate(new Angles3d(10, 20, 30))
+		.subtractModel(new Test3dModel("(model3)"));
+		assertEqualsWithoutWhiteSpaces("rotate([10,20,30]) difference() {(model1) (model2) (model3)}", 
+				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
 }

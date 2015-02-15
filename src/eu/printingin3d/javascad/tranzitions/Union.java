@@ -98,7 +98,8 @@ public class Union extends Complex3dModel {
 	public Abstract3dModel addModel(Abstract3dModel model) {
 		List<Abstract3dModel> newModels = new ArrayList<>(models);
 		newModels.add(model);
-		return new Union(newModels);
+		return new Union(newModels)
+				.copyMovesAndRotate(this);
 	}
 	
 }
