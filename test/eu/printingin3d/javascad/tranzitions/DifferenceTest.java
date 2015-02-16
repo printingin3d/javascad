@@ -159,7 +159,7 @@ public class DifferenceTest {
 				new Test3dModel("(model2)"))
 		.move(new Coords3d(10, 20, 30))
 		.subtractModel(new Test3dModel("(model3)"));
-		assertEqualsWithoutWhiteSpaces("translate([10,20,30]) difference() {(model1) (model2) (model3)}", 
+		assertEqualsWithoutWhiteSpaces("difference() {translate([10,20,30]) difference() {(model1) (model2)} (model3)}", 
 				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 	
@@ -170,7 +170,7 @@ public class DifferenceTest {
 				new Test3dModel("(model2)"))
 		.rotate(new Angles3d(10, 20, 30))
 		.subtractModel(new Test3dModel("(model3)"));
-		assertEqualsWithoutWhiteSpaces("rotate([10,20,30]) difference() {(model1) (model2) (model3)}", 
+		assertEqualsWithoutWhiteSpaces("difference() {rotate([10,20,30]) difference() {(model1) (model2)} (model3)}", 
 				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
 }

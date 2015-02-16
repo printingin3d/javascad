@@ -47,17 +47,6 @@ public abstract class Abstract3dModel implements IModel {
 	private final Map<Plane, RoundProperties> roundingPlane = new HashMap<>();
 	
 	/**
-	 * To copy the moves and rotate values from an another Abstract3dModel. It is used internally until the Abstract3dModel is
-	 * fully immutable. When the immutability takes place everywhere this method should be removed.
-	 * @param toCopy the object to copy the values from
-	 */
-	protected Abstract3dModel copyMovesAndRotate(Abstract3dModel toCopy) {
-		this.moves = toCopy.moves;
-		this.rotate = toCopy.rotate;
-		return this;
-	}
-	
-	/**
 	 * Moves this object by the given coordinates.
 	 * @param delta the coordinates used by the move
 	 * @return return this object to make it possible to chain more method call
@@ -268,6 +257,14 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	public boolean isRotated() {
 		return !rotate.isZero();
+	}
+	
+	/**
+	 * Returns true if this object is moved false otherwise.
+	 * @return true if this object is moved false otherwise
+	 */
+	public boolean isMoved() {
+		return moves.isMoved();
 	}
 	
 	/**

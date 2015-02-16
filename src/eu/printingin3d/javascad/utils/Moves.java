@@ -80,6 +80,19 @@ public class Moves implements Iterable<Coords3d> {
 	public boolean isMulti() {
 		return moves.size()>1;
 	}
+	
+	/**
+	 * Returns true if and only if this object represents a move.
+	 * @return true if and only if this object represents a move.
+	 */
+	public boolean isMoved() {
+		for (Coords3d c : moves) {
+			if (!c.isZero()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public Iterator<Coords3d> iterator() {

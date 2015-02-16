@@ -99,7 +99,7 @@ public class UnionTest {
 	
 	@Test
 	public void addModelShouldKeepMoves() {
-		assertEqualsWithoutWhiteSpaces("translate([10,20,30]) union() {(model1) (model2) (model3)}", 
+		assertEqualsWithoutWhiteSpaces("union() {translate([10,20,30]) union() {(model1) (model2)} (model3)}", 
 				new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)"))
 						.move(new Coords3d(10, 20, 30))
 						.addModel(new Test3dModel("(model3)"))
@@ -108,7 +108,7 @@ public class UnionTest {
 	
 	@Test
 	public void addModelShouldKeepRotate() {
-		assertEqualsWithoutWhiteSpaces("rotate([10,20,30]) union() {(model1) (model2) (model3)}", 
+		assertEqualsWithoutWhiteSpaces("union() {rotate([10,20,30]) union() {(model1) (model2)} (model3)}", 
 				new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)"))
 						.rotate(new Angles3d(10, 20, 30))
 						.addModel(new Test3dModel("(model3)"))

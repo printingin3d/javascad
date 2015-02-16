@@ -96,10 +96,13 @@ public class Union extends Complex3dModel {
 	
 	@Override
 	public Abstract3dModel addModel(Abstract3dModel model) {
+		if (isMoved() || isRotated()) {
+			return super.addModel(model);
+		}
+		
 		List<Abstract3dModel> newModels = new ArrayList<>(models);
 		newModels.add(model);
-		return new Union(newModels)
-				.copyMovesAndRotate(this);
+		return new Union(newModels);
 	}
 	
 }
