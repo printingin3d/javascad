@@ -11,7 +11,7 @@ import eu.printingin3d.javascad.enums.OutputFormat;
 
 public class Abstract3dTest {
 	
-	private static class TestAbstract3d extends Abstract3d {
+	public static class TestAbstract3d extends Abstract3d {
 		public TestAbstract3d(double x, double y, double z) {
 			super(x, y, z);
 		}
@@ -71,26 +71,6 @@ public class Abstract3dTest {
 	public void testFormatRounding() {
 		TestAbstract3d testSubject = new TestAbstract3d(10.7, Math.E, Math.PI);
 		assertEqualsWithoutWhiteSpaces("10.7 2.7183 3.1416", testSubject.format(OutputFormat.STL));
-	}
-	
-	@Test
-	public void testEqualsAndHashCode() {
-		TestAbstract3d test1 = new TestAbstract3d(0.1, 20.0, 30.0);
-		TestAbstract3d test21 = new TestAbstract3d(5.0, 20.0, 30.0);
-		TestAbstract3d test22 = new TestAbstract3d(0.1, -20.0, 30.0);
-		TestAbstract3d test23 = new TestAbstract3d(0.1, 20.0, 30.1);
-		TestAbstract3d test3 = new TestAbstract3d(1.0/10.0, 20.0, 30.0);
-	
-		assertFalse(test1.equals(null));
-		assertFalse(test1.equals("alma"));
-		assertFalse(test1.equals(test21));
-		assertFalse(test1.equals(test22));
-		assertFalse(test1.equals(test23));
-		
-		assertEquals(test1, test1);
-		assertEquals(test1, test3);
-		
-		assertEquals(test1.hashCode(), test3.hashCode());
 	}
 	
 	@Test

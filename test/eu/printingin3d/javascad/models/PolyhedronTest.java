@@ -98,14 +98,15 @@ public class PolyhedronTest {
 		
 		Collections.sort(posList);
 		
-		assertTrue(scad.contains(replacePositions("[[%0,%1,%4], [%1,%2,%4], [%2,%3,%4], [%3,%0,%4], [%1,%0,%3], [%2,%1,%3]]", posList)));
+		assertTrue(scad+" should contain "+replacePositions("[[%0,%1,%4], [%1,%2,%4], [%2,%3,%4], [%3,%0,%4], [%1,%0,%3], [%2,%1,%3]]", posList), 
+				scad.contains(replacePositions("[[%0,%1,%4], [%1,%2,%4], [%2,%3,%4], [%3,%0,%4], [%1,%0,%3], [%2,%1,%3]]", posList)));
 	}
 	
 	private static String replacePositions(String origPos, List<PositionAndIndex> posList) {
 		String result = origPos;
 		int i = 0;
 		for (PositionAndIndex pos : posList) {
-			result = result.replace("%"+i, String.valueOf(pos.getIndex()));
+			result = result.replace("%"+pos.getIndex(), String.valueOf(i));
 			i++;
 		}
 		return result;

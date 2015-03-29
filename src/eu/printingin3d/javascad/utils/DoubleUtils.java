@@ -24,6 +24,10 @@ public final class DoubleUtils {
 		return Math.abs(a-b)<EPSILON;
 	}
 	
+	public static int hashCodeEps(double value) {
+		return Long.valueOf(Math.round(value/EPSILON)).hashCode();
+	}
+	
 	public static boolean isZero(double a) {
 		return Math.abs(a)<ZERO_EPSILON;
 	}

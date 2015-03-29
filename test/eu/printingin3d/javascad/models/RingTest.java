@@ -15,7 +15,7 @@ public class RingTest {
 
 	@Test
 	public void testNormalRing() {
-		Abstract3dModel testSubject = new Ring(5, new Test2dModel("(model)"));
+		Abstract3dModel testSubject = new Ring(5, new Test2dModel("(model)", null));
 		AssertEx.assertEqualsWithoutWhiteSpaces("rotate_extrude() translate([5, 0, 0]) (model);", 
 				testSubject.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}

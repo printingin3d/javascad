@@ -1,17 +1,14 @@
 package eu.printingin3d.javascad.coords2d;
 
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.coords2d.Abstract2d;
-
 public class Abstract2dTest {
 	
-	private static class TestAbstract2d extends Abstract2d {
+	public static class TestAbstract2d extends Abstract2d {
 		public TestAbstract2d(double x, double y) {
 			super(x, y);
 		}
@@ -52,23 +49,4 @@ public class Abstract2dTest {
 		TestAbstract2d testSubject = new TestAbstract2d(10.7, Math.E);
 		assertEqualsWithoutWhiteSpaces("[10.7,2.7183]", testSubject.toString());
 	}
-	
-	@Test
-	public void testEqualsAndHashCode() {
-		TestAbstract2d test1 = new TestAbstract2d(0.1, 20.0);
-		TestAbstract2d test21 = new TestAbstract2d(5.0, 20.0);
-		TestAbstract2d test22 = new TestAbstract2d(0.1, -20.0);
-		TestAbstract2d test3 = new TestAbstract2d(1.0/10.0, 20.0);
-	
-		assertFalse(test1.equals(null));
-		assertFalse(test1.equals("alma"));
-		assertFalse(test1.equals(test21));
-		assertFalse(test1.equals(test22));
-		
-		assertEquals(test1, test1);
-		assertEquals(test1, test3);
-		
-		assertEquals(test1.hashCode(), test3.hashCode());
-	}
-
 }

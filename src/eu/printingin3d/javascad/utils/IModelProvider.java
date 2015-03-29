@@ -18,12 +18,6 @@ public interface IModelProvider {
 	Abstract3dModel getAssembledModel();
 	
 	/**
-	 * The parts of the object.
-	 * @return the parts of the object
-	 */
-	List<Abstract3dModel> getParts();
-	
-	/**
 	 * The parts of the object with the path for them.
 	 * @return the models and paths
 	 */

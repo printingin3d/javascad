@@ -3,6 +3,9 @@ package eu.printingin3d.javascad.testutils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.hamcrest.CustomTypeSafeMatcher;
 
 public class AssertEx {
@@ -24,6 +27,26 @@ public class AssertEx {
 			@Override
 			protected boolean matchesSafely(String item) {
 				return item.replaceAll("\\s", "").matches(regex.replaceAll("\\s", ""));
+			}
+		});
+	}
+	
+	public static void assertMatchCount(String regex, String actual, int number) {
+		Matcher matcher = Pattern.compile(regex).matcher(actual);
+		int c = 0;
+		while (matcher.find()) {
+			c++;
+		}
+
+		assertEquals(number, c);
+	}
+	
+	public static void assertContainsWithoutWhiteSpaces(final String subString, String actual) {
+		assertThat(actual, new CustomTypeSafeMatcher<String>(subString) {
+			
+			@Override
+			protected boolean matchesSafely(String item) {
+				return item.replaceAll("\\s", "").contains(subString.replaceAll("\\s", ""));
 			}
 		});
 	}

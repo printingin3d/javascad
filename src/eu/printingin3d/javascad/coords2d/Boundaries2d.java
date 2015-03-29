@@ -38,4 +38,13 @@ public class Boundaries2d {
 	public Boundary getY() {
 		return y;
 	}
+	
+	/**
+	 * Moves the interval with the given delta.
+	 * @param delta the value used by the move
+	 * @return a new object with the calculated new boundaries
+	 */
+	public Boundaries2d move(Coords2d delta) {
+		return new Boundaries2d(x.add(delta.getX()), y.add(delta.getY()));
+	}
 }
