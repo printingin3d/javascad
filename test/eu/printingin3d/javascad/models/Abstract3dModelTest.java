@@ -12,7 +12,6 @@ import org.junit.Test;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
-import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.testutils.Test3dModel;
@@ -20,16 +19,15 @@ import eu.printingin3d.javascad.testutils.Test3dModel;
 public class Abstract3dModelTest {
 	private static final double MAX_BOUND = 15.0;
 	private static final double MIN_BOUND = -10.0;
+	private static final Boundaries3d BOUNDARIES = new Boundaries3d(
+			new Coords3d(MIN_BOUND, MIN_BOUND, MIN_BOUND), 
+			new Coords3d(MAX_BOUND, MAX_BOUND, MAX_BOUND));
 	
 	private Abstract3dModel testSubject;
 	
 	@Before
 	public void init() {
-		testSubject = new Test3dModel("(empty)",
-			new Boundaries3d(
-					new Boundary(MIN_BOUND, MAX_BOUND), 
-					new Boundary(MIN_BOUND, MAX_BOUND),
-					new Boundary(MIN_BOUND, MAX_BOUND)));
+		testSubject = new Test3dModel("(empty)", BOUNDARIES);
 	}
 	
 	@Test
@@ -186,6 +184,21 @@ public class Abstract3dModelTest {
 	@Test
 	public void addModelShouldReturnNewObject() {
 		Assert.assertNotSame(testSubject, testSubject.addModel(new Test3dModel("(added)")));
+	}
+	
+	@Test
+	public void addModelToShouldResultUnion() {
+		assertEqualsWithoutWhiteSpaces("union() {(empty) translate("+Coords3d.zOnly(MAX_BOUND-MIN_BOUND)+")(added)}",
+				testSubject.addModelTo(Side.TOP, 
+						new Test3dModel("(added)", BOUNDARIES))
+					.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void addModelToShouldReturnNewObject() {
+		Abstract3dModel newUnion = testSubject.addModelTo(Side.TOP, new Test3dModel("(added)", 
+				new Boundaries3d(new Coords3d(-5, -10, -20), new Coords3d(5, 10, 20))));
+		Assert.assertNotSame(testSubject, newUnion);
 	}
 	
 	@Test

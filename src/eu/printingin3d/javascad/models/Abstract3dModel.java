@@ -369,6 +369,18 @@ public abstract class Abstract3dModel implements IModel {
 	}
 	
 	/**
+	 * Convenient method to create a Union. Adding the given model to the side of this model. Calling
+	 * <code>model1.addModelTo(side, model2)</code> is always equivalent to 
+	 * <code>model1.addModel(model2.align(side, model1, false))</code>.
+	 * @see Abstract3dModel#addModel(Abstract3dModel)
+	 * @param model the model to be added to this object
+	 * @return a new model which contains the union of this object and the given object
+	 */
+	public Abstract3dModel addModelTo(Side side, Abstract3dModel model) {
+		return addModel(model.align(side, this, false));
+	}
+	
+	/**
 	 * Convenient method to create a Difference.
 	 * @param model the model to be subtracted to this object
 	 * @return a new model which contains the difference of this object and the given object
