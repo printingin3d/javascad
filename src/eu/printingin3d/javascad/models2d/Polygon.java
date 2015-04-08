@@ -62,30 +62,17 @@ public class Polygon extends Abstract2dModel {
 
 	@Override
 	protected Boundaries2d getModelBoundaries() {
-		double minX = 0.0;
-		double maxX = 0.0;
-		double minY = 0.0;
-		double maxY = 0.0;
-		
-		boolean first = true;
-		
+		double[] x = new double[coords.size()];
+		double[] y = new double[coords.size()];
+
+		int i = 0;
 		for (Coords2d c : coords) {
-			if (first) {
-				maxX = minX = c.getX();
-				maxY = minY = c.getY();
-				first = false;
-			} else if (minX>c.getX()) {
-				minX = c.getX();
-			} else if (maxX<c.getX()) {
-				maxX = c.getX();
-			} else if (minY>c.getY()) {
-				minY = c.getY();
-			} else if (minY<c.getX()) {
-				minY = c.getY();
-			}
-			
+			x[i] = c.getX();
+			y[i] = c.getY();
+			i++;
 		}
-		return new Boundaries2d(new Boundary(minX, maxX), new Boundary(minY, maxY));
+		
+		return new Boundaries2d(new Boundary(x), new Boundary(y));
 	}
 
 	@Override
