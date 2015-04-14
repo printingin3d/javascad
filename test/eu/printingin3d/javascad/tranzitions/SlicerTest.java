@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.tranzitions;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
@@ -17,7 +18,8 @@ import eu.printingin3d.javascad.testutils.Test3dModel;
 public class SlicerTest {
 	private static final double EPSILON = 0.001;
 	private static final Abstract3dModel TEST_MODEL = new Test3dModel("(model)",
-			new Boundaries3d(new Boundary(0.0, 24.0), new Boundary(-12.0, 36.0), new Boundary(6.0, 18.0)));
+			new Boundaries3d(new Boundary(0.0, 24.0), new Boundary(-12.0, 36.0), new Boundary(6.0, 18.0)))
+		.withTag(11);
 
 	@Test(expected = IllegalValueException.class)
 	public void constructorShouldThrowExceptionIfIndexIsNegative() {
@@ -238,5 +240,35 @@ public class SlicerTest {
 		BoundaryTest.assertBoundaryEquals(originalBoundaries.getX(), boundaries.getX());
 		BoundaryTest.assertBoundaryEquals(originalBoundaries.getY(), boundaries.getY());
 		assertEquals(originalBoundaries.getZ().getSize()*0.1, boundaries.getZ().getSize(), EPSILON);
+	}
+
+	@Test
+	public void subModelIncludeTest() {
+		Abstract3dModel testSubject = new Slicer(TEST_MODEL, Direction.X, 3, 0)
+			.withTag(12);
+		assertEqualsWithoutWhiteSpaces("difference() {(model) translate([16.5,12,12]) cube([17,49,13],center=true);}", 
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void subModelIncludeTest2() {
+		Abstract3dModel testSubject = new Slicer(TEST_MODEL, Direction.X, 3, 0)
+		.withTag(12);
+		assertEqualsWithoutWhiteSpaces("difference() {(model) translate([16.5,12,12]) cube([17,49,13],center=true);}", 
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+
+	@Test
+	public void subModelExcludeTest() {
+		Abstract3dModel testSubject = new Slicer(TEST_MODEL, Direction.X, 3, 0)
+			.withTag(12);
+		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
+	}
+	
+	@Test
+	public void subModelExcludeTest2() {
+		Abstract3dModel testSubject = new Slicer(TEST_MODEL, Direction.X, 3, 0)
+		.withTag(12);
+		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()));
 	}
 }

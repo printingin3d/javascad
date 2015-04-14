@@ -10,7 +10,7 @@ import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
-public class LinearExtrude extends Complex3dModel {
+public class LinearExtrude extends Atomic3dModel {
 	private final Abstract2dModel model;
 	private final double height;
 	private final double twist;

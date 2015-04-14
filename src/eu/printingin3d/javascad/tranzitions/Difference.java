@@ -138,4 +138,17 @@ public class Difference extends Complex3dModel {
 		newModel2.add(model);
 		return new Difference(model1, newModel2);
 	}
+
+	@Override
+	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
+		Abstract3dModel subModel = model1.subModel(context);
+		if (subModel==null) {
+			return null;
+		}
+		List<Abstract3dModel> subModels = new ArrayList<>();
+		for (Abstract3dModel model : model2) {
+			subModels.add(model.subModel(context));
+		}
+		return new Difference(subModel, subModels);
+	}
 }

@@ -3,12 +3,14 @@ package eu.printingin3d.javascad.tranzitions;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class MirrorTest {
@@ -83,5 +85,43 @@ public class MirrorTest {
 		assertEquals(MAX, boundaries.getY().getMax(), EPSILON);
 		assertEquals(-MAX, boundaries.getZ().getMin(), EPSILON);
 		assertEquals(-MIN, boundaries.getZ().getMax(), EPSILON);
+	}
+	
+	@Test
+	public void subModuleShouldInclude() {
+		Abstract3dModel testSubject = Mirror.mirrorX(
+				new Test3dModel("(model11)").withTag(11)
+				).withTag(12);
+		
+		assertEqualsWithoutWhiteSpaces("mirror([1,0,0]) (model11)",  
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void subModuleShouldInclude2() {
+		Abstract3dModel testSubject = Mirror.mirrorY(
+				new Test3dModel("(model11)").withTag(11)
+				).withTag(12);
+		
+		assertEqualsWithoutWhiteSpaces("mirror([0,1,0]) (model11)",  
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void subModuleShouldExclude() {
+		Abstract3dModel testSubject = Mirror.mirrorZ(
+				new Test3dModel("(model11)").withTag(11)
+				).withTag(12);
+		
+		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
+	}
+	
+	@Test
+	public void subModuleShouldExclude2() {
+		Abstract3dModel testSubject = Mirror.mirrorY(
+				new Test3dModel("(model11)").withTag(11)
+				).withTag(12);
+		
+		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()));
 	}
 }

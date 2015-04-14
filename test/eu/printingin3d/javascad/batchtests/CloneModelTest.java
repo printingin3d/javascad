@@ -2,6 +2,7 @@ package eu.printingin3d.javascad.batchtests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -21,12 +22,14 @@ import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
+import eu.printingin3d.javascad.models.Abstract3dModelReader;
 import eu.printingin3d.javascad.models.BoundedModel;
 import eu.printingin3d.javascad.models.Cube;
 import eu.printingin3d.javascad.models.Cylinder;
 import eu.printingin3d.javascad.models.Polyhedron;
 import eu.printingin3d.javascad.models.Prism;
 import eu.printingin3d.javascad.models.Ring;
+import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.models.Sphere;
 import eu.printingin3d.javascad.models2d.Square;
 import eu.printingin3d.javascad.testutils.RandomUtils;
@@ -68,6 +71,7 @@ public class CloneModelTest {
 				new TestCase(cylinder.cloneModel()),
 				new TestCase(new Prism(78.2, 10.1, 32.2, 5)),
 				new TestCase(new Prism(78.2, 10.1, 5)),
+				new TestCase(new Intersection()),
 				new TestCase(new Intersection(cube.cloneModel())),
 				new TestCase(new Intersection(cube.cloneModel(), cylinder.cloneModel())),
 				new TestCase(new Difference(cube.cloneModel(), cylinder.cloneModel())),
@@ -76,10 +80,11 @@ public class CloneModelTest {
 				new TestCase(new Rotate(cylinder, new Angles3d(-21, 32.1, 331.4))),
 				new TestCase(new Scale(cylinder, new Coords3d(4.10, 1.0, 3.21))),
 				new TestCase(new Slicer(cube, Direction.X, 3, 0)),
-				new TestCase(new Colorize(Color.black, cube)),
+				new TestCase(new Colorize(Color.BLACK, cube)),
 				new TestCase(new Sphere(3.1)),
 				new TestCase(new Translate(cube, new Coords3d(-23, 33.2, 7.3))),
 				new TestCase(new BoundedModel(cube, RandomUtils.getRandomBoundaries())),
+				new TestCase(new Union()),
 				new TestCase(new Union(cube, cylinder)),
 				new TestCase(cube.cloneModel().background()),
 				new TestCase(cube.cloneModel().debug()),
@@ -103,6 +108,12 @@ public class CloneModelTest {
 	}
 	
 	@Test
+	public void subModelWithDefaultContextShouldClone() {
+		assertEquals(original.toScad(ScadGenerationContextFactory.DEFAULT), 
+				original.subModel(ScadGenerationContextFactory.DEFAULT).toScad(ScadGenerationContextFactory.DEFAULT));
+	}
+	
+	@Test
 	public void shouldRepresentsTheSameOpenScadObject() {
 		assertEquals(original.toScad(ScadGenerationContextFactory.DEFAULT), original.cloneModel().toScad(ScadGenerationContextFactory.DEFAULT));
 	}
@@ -110,8 +121,31 @@ public class CloneModelTest {
 	@Test
 	public void shouldBeIndependent() {
 		Abstract3dModel clone = original.cloneModel();
-		original.move(RandomUtils.getRandomCoords());
-		assertFalse(clone.toScad(ScadGenerationContextFactory.DEFAULT).equals(original.toScad(ScadGenerationContextFactory.DEFAULT)));
+		SCAD scad = clone.toScad(ScadGenerationContextFactory.DEFAULT);
+		if (!scad.isEmpty()) {
+			original.move(RandomUtils.getRandomCoords());
+			assertFalse(scad.equals(original.toScad(ScadGenerationContextFactory.DEFAULT)));
+		}
+	}
+	
+	@Test
+	public void cloneModelShouldCopyFields() {
+		assertEquals(111, Abstract3dModelReader.getTag(original.cloneModel()
+				.withTag(111).cloneModel()));
+		assertTrue(Abstract3dModelReader.isDebug(original.cloneModel()
+				.debug().cloneModel()));
+		assertTrue(Abstract3dModelReader.isBackground(original.cloneModel()
+				.background().cloneModel()));
+	}
+	
+	@Test
+	public void subModelShouldCopyFields() {
+		assertEquals(111, Abstract3dModelReader.getTag(original.cloneModel()
+				.withTag(111).subModel(ScadGenerationContextFactory.DEFAULT)));
+		assertTrue(Abstract3dModelReader.isDebug(original.cloneModel()
+				.debug().subModel(ScadGenerationContextFactory.DEFAULT)));
+		assertTrue(Abstract3dModelReader.isBackground(original.cloneModel()
+					.background().subModel(ScadGenerationContextFactory.DEFAULT)));
 	}
 	
 	@Test

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
@@ -34,11 +35,6 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  * @author ivivan <ivivan@printingin3d.eu>
  */
 public abstract class Abstract3dModel implements IModel {
-	/**
-	 * The placeholder of the attributes for the POVRay rendering.
-	 */
-	public static final String ATTRIBUTES_PLACEHOLDER = "#attributes";
-	
 	private int tag = 0;
 	private Moves moves = new Moves();
 	private Angles3d rotate = Angles3d.ZERO;
@@ -387,5 +383,53 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	public Abstract3dModel subtractModel(Abstract3dModel model) {
 		return new Difference(this, model);
+	}
+
+	protected abstract Abstract3dModel innerSubModel(IScadGenerationContext context);
+
+	/**
+	 * <p>Copies parts of the model to a new model based on the given context. It is very useful if we want to use a tagged
+	 * part of the model as a separate model. Lots of things can be done to the new model: we can render it or we can use it
+	 * to align to it.</p>
+	 * <p>If the given context is the {@link ScadGenerationContextFactory#DEFAULT} then this method call is logically 
+	 * equivalent to a {@link #cloneModel()} method call.</p>
+	 * @param context the context to be used as a filter during the copy process.
+	 * @return a copy of the selected parts of this model
+	 */
+	public Abstract3dModel subModel(IScadGenerationContext context) {
+		IScadGenerationContext currentContext = context.applyTag(tag);
+
+		Abstract3dModel model = innerSubModel(currentContext);
+		if (model!=null) {
+			model.tag = tag;
+			model.debug = debug;
+			model.background = background;
+		}
+		
+		return model;
+	}
+
+	/**
+	 * For testing purposes only.
+	 * @return the tag of the model
+	 */
+	protected int getTag() {
+		return tag;
+	}
+
+	/**
+	 * For testing purposes only.
+	 * @return the debug flag of the model
+	 */
+	protected boolean isDebug() {
+		return debug;
+	}
+
+	/**
+	 * For testing purposes only.
+	 * @return the background flag of the model
+	 */
+	protected boolean isBackground() {
+		return background;
 	}
 }

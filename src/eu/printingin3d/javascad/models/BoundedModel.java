@@ -2,6 +2,7 @@ package eu.printingin3d.javascad.models;
 
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
+import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
@@ -20,8 +21,12 @@ public class BoundedModel extends Complex3dModel {
 	 * Creates the object.
 	 * @param baseModel the object used to generate the output
 	 * @param boundaries3d the boundary used by the alignment methods
+	 * @throws eu.printingin3d.javascad.exceptions.IllegalValueException if either of the parameters are null
 	 */
 	public BoundedModel(Abstract3dModel baseModel, Boundaries3d boundaries3d) {
+		AssertValue.isNotNull(baseModel, "The baseModel parameter must not be null!");
+		AssertValue.isNotNull(boundaries3d, "The boundaries3d parameter must not be null!");
+		
 		this.baseModel = baseModel;
 		this.boundaries3d = boundaries3d;
 	}
@@ -33,7 +38,7 @@ public class BoundedModel extends Complex3dModel {
 
 	@Override
 	protected SCAD innerToScad(IScadGenerationContext context) {
-		return baseModel==null ? SCAD.EMPTY : baseModel.toScad(context);
+		return baseModel.toScad(context);
 	}
 
 	@Override
@@ -45,5 +50,11 @@ public class BoundedModel extends Complex3dModel {
 	protected CSG toInnerCSG(FacetGenerationContext context) {
 		return baseModel.toCSG(context);
 	}
-	
+
+	@Override
+	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
+		Abstract3dModel subModel = baseModel.subModel(context);
+		return subModel==null ? null : new BoundedModel(subModel, boundaries3d);
+	}
+
 }

@@ -83,4 +83,10 @@ public final class Mirror extends Complex3dModel {
 		ITransformation tr = TransformationFactory.getMirrorMatrix(direction);
 		return model.toCSG(context).transformed(tr);
 	}
+
+	@Override
+	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
+		Abstract3dModel subModel = model.subModel(context);
+		return subModel==null ? null : new Mirror(subModel, direction);
+	}
 }

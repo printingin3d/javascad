@@ -35,7 +35,7 @@ public class Test3dModel extends Atomic3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return this;
+		return new Test3dModel(model, boundaries);
 	}
 
 	@Override

@@ -55,4 +55,44 @@ public class IntersectionTest {
 		assertDoubleEquals(20.9, boundaries.getZ().getMin());
 		assertDoubleEquals(50.8, boundaries.getZ().getMax());
 	}
+	
+	@Test
+	public void subModuleShouldInclude() {
+		Abstract3dModel testSubject = new Intersection(
+				new Test3dModel("(model11)").withTag(11),
+				new Test3dModel("(model12)").withTag(12)
+				);
+		
+		assertEqualsWithoutWhiteSpaces("(model12)", 
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void subModuleShouldExclude() {
+		Abstract3dModel testSubject = new Intersection(
+				new Test3dModel("(model11)").withTag(11),
+				new Test3dModel("(model12)").withTag(12)
+				);
+		
+		assertEqualsWithoutWhiteSpaces("(model12)", 
+				testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+
+	@Test
+	public void subModuleIncludeExclude() {
+		Abstract3dModel testSubject = 
+			new Intersection(
+				new Intersection(
+					new Test3dModel("(model11)").withTag(11),
+					new Test3dModel("(model12)").withTag(12)
+				).withTag(1),
+				new Test3dModel("(model2)").withTag(2)
+			);
+		
+		assertEqualsWithoutWhiteSpaces("(model11)", 
+				testSubject.subModel(new ScadGenerationContextFactory()
+						.include(1)
+						.exclude(12)
+						.create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
 }

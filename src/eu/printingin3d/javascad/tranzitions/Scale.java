@@ -64,4 +64,10 @@ public class Scale extends Complex3dModel {
 		return model.toCSG(context).transformed(TransformationFactory.getScaleMatrix(scale));
 	}
 
+	@Override
+	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
+		Abstract3dModel subModel = model.subModel(context);
+		return subModel==null ? null : new Scale(subModel, scale);
+	}
+
 }

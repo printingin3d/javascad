@@ -9,6 +9,7 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Complex3dModel;
 import eu.printingin3d.javascad.models.SCAD;
+import eu.printingin3d.javascad.utils.ListUtils;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
@@ -71,7 +72,7 @@ public class Intersection extends Complex3dModel {
 		for (Abstract3dModel model : models) {
 			boundaries.add(model.getBoundaries());
 		}
-		return Boundaries3d.intersect(boundaries);
+		return boundaries.isEmpty() ? Boundaries3d.EMPTY : Boundaries3d.intersect(boundaries);
 	}
 
 	@Override
@@ -86,5 +87,14 @@ public class Intersection extends Complex3dModel {
 			}
 		}
 		return csg;
+	}
+
+	@Override
+	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
+		List<Abstract3dModel> subModels = new ArrayList<>();
+		for (Abstract3dModel model : models) {
+			subModels.add(model.subModel(context));
+		}
+		return new Intersection(ListUtils.removeNulls(subModels));
 	}
 }

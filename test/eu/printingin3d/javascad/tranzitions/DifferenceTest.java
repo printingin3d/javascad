@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
@@ -173,4 +174,82 @@ public class DifferenceTest {
 		assertEqualsWithoutWhiteSpaces("difference() {rotate([10,20,30]) difference() {(model1) (model2)} (model3)}", 
 				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
 	}
+	
+	@Test
+	public void subModuleShouldInclude() {
+		Abstract3dModel testSubject = new Difference(
+				new Test3dModel("(model11)").withTag(11),
+				new Test3dModel("(model12)").withTag(12)
+				);
+		
+		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().include(12).create()));
+	}
+	
+	@Test
+	public void subModuleShouldInclude2() {
+		Abstract3dModel testSubject = new Difference(
+				new Test3dModel("(model11)").withTag(11),
+				new Test3dModel("(model12)").withTag(12)
+				);
+		
+		assertEqualsWithoutWhiteSpaces("(model11)", 
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void subModuleShouldExclude() {
+		Abstract3dModel testSubject = new Difference(
+				new Test3dModel("(model11)").withTag(11),
+				new Test3dModel("(model12)").withTag(12)
+				);
+		
+		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
+	}
+	
+	@Test
+	public void subModuleShouldExclude2() {
+		Abstract3dModel testSubject = new Difference(
+				new Test3dModel("(model11)").withTag(11),
+				new Test3dModel("(model12)").withTag(12)
+				);
+		
+		assertEqualsWithoutWhiteSpaces("(model11)", 
+				testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+
+	@Test
+	public void subModuleIncludeExclude() {
+		Abstract3dModel testSubject = 
+			new Difference(
+				new Difference(
+					new Test3dModel("(model11)").withTag(11),
+					new Test3dModel("(model12)").withTag(12)
+				).withTag(1),
+				new Test3dModel("(model2)").withTag(2)
+			);
+		
+		assertEqualsWithoutWhiteSpaces("(model11)", 
+				testSubject.subModel(new ScadGenerationContextFactory()
+						.include(1)
+						.exclude(12)
+						.create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void subModuleExclude3() {
+		Abstract3dModel testSubject = 
+			new Difference(
+				new Difference(
+					new Test3dModel("(model11)").withTag(11),
+					new Test3dModel("(model12)").withTag(12)
+				).withTag(1),
+				new Test3dModel("(model2)").withTag(2)
+			);
+	
+		assertEqualsWithoutWhiteSpaces("difference() {(model11) (model2)}", 
+				testSubject.subModel(new ScadGenerationContextFactory()
+				.exclude(12)
+				.create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
 }

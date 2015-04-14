@@ -13,6 +13,11 @@ import eu.printingin3d.javascad.utils.AssertValue;
  * @author ivivan <ivivan@printingin3d.eu>
  */
 public class Boundary {
+	/**
+	 * Represents an empty 1D boundary object.
+	 */
+	public static final Boundary EMPTY = new Boundary(0);
+	
 	private final double min;
 	private final double max;
 
@@ -37,7 +42,8 @@ public class Boundary {
 	 * from the given collection.
 	 * @param boundaries the collections which should be considered
 	 * @return the Boundary object which will represent the collection
-	 * @throws IllegalValueException if the given boundaries does not have a common interval
+	 * @throws IllegalValueException if the given boundaries does not have a common interval or if
+	 * 	the given list is empty
 	 */
 	public static Boundary intersect(Collection<Boundary> boundaries) throws IllegalValueException {
 		AssertValue.isNotEmpty(boundaries, "The parameter should not be null or empty");

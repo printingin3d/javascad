@@ -4,6 +4,7 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 
 import java.awt.Color;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -129,5 +130,14 @@ public class Abstract3dModelTagTest {
 		assertEqualsWithoutWhiteSpaces("union() { union() {color([0,1,0]) {(model11)} color([1,0,0]) {(model12)}} (model2)}", 
 				testSubject.toScad(new ScadGenerationContextFactory(tagColors)
 				.create()).getScad());
+	}
+	
+	@Test
+	public void subModuleShouldReturnWithTheCloneOfTheModelIfTheItemIsIncluded() {
+		Abstract3dModel testSubject2 = new Test3dModel("(model)").withTag(11);
+		Abstract3dModel subModel = testSubject2
+				.subModel(new ScadGenerationContextFactory().include(11).create());
+		assertEqualsWithoutWhiteSpaces("(model)", subModel.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		Assert.assertNotSame(testSubject2, subModel);
 	}
 }

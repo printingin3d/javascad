@@ -67,4 +67,10 @@ public class Translate extends Complex3dModel {
 	protected CSG toInnerCSG(FacetGenerationContext context) {
 		return model.toCSG(context).transformed(TransformationFactory.getTranlationMatrix(move));
 	}
+
+	@Override
+	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
+		Abstract3dModel subModel = model.subModel(context);
+		return subModel==null ? null : new Translate(subModel, move);
+	}
 }

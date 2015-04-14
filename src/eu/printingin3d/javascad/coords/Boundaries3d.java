@@ -14,6 +14,11 @@ import eu.printingin3d.javascad.exceptions.IllegalValueException;
  * @author ivivan <ivivan@printingin3d.eu>
  */
 public class Boundaries3d {
+	/**
+	 * Represents an empty 3D boundary object.
+	 */
+	public static final Boundaries3d EMPTY = new Boundaries3d(Boundary.EMPTY, Boundary.EMPTY, Boundary.EMPTY);
+	
 	private final Boundary x;
 	private final Boundary y;
 	private final Boundary z;

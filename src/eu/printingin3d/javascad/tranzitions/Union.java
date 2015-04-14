@@ -104,5 +104,15 @@ public class Union extends Complex3dModel {
 		newModels.add(model);
 		return new Union(newModels);
 	}
+
+	@Override
+	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
+		List<Abstract3dModel> subModels = new ArrayList<>();
+		for (Abstract3dModel m : models) {
+			subModels.add(m.subModel(context));
+		}
+		
+		return new Union(subModels);
+	}
 	
 }

@@ -10,6 +10,7 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
 public class TranslateTest {
@@ -79,5 +80,47 @@ public class TranslateTest {
 	@Test(expected=IllegalValueException.class)
 	public void shouldThrowIllegalValueExceptionIfMoveIsNull() {
 		new Translate(new Test3dModel("(model)"), null);
+	}
+	
+	@Test
+	public void subModuleShouldInclude() {
+		Abstract3dModel testSubject = new Translate(
+				new Test3dModel("(model11)").withTag(11),
+				new Coords3d(10, 20, 30)
+				).withTag(12);
+		
+		assertEqualsWithoutWhiteSpaces("translate([10,20,30]) (model11)",  
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void subModuleShouldInclude2() {
+		Abstract3dModel testSubject = new Translate(
+				new Test3dModel("(model11)").withTag(11),
+				new Coords3d(10, 20, 30)
+				).withTag(12);
+		
+		assertEqualsWithoutWhiteSpaces("translate([10,20,30]) (model11)",  
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void subModuleShouldExclude() {
+		Abstract3dModel testSubject = new Translate(
+				new Test3dModel("(model11)").withTag(11),
+				new Coords3d(10, 20, 30)
+				).withTag(12);
+		
+		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
+	}
+	
+	@Test
+	public void subModuleShouldExclude2() {
+		Abstract3dModel testSubject = new Translate(
+				new Test3dModel("(model11)").withTag(11),
+				new Coords3d(10, 20, 30)
+				).withTag(12);
+		
+		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()));
 	}
 }

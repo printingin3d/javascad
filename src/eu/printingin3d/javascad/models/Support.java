@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
 import eu.printingin3d.javascad.enums.AlignType;
@@ -89,6 +90,12 @@ public class Support extends Extendable3dModel {
 		}
 		
 		this.baseModel = new Difference(base, slices);
+	}
+
+	@Override
+	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

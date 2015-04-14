@@ -23,6 +23,10 @@ public class SCAD {
 		return included && !scad.isEmpty();
 	}
 	
+	public boolean isEmpty() {
+		return scad.isEmpty();
+	}
+	
 	public SCAD prepend(String text) {
 		return new SCAD(text+this.scad, included);
 	}

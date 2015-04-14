@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ScadGenerationContextFactory {
+	/**
+	 * The default generation context. It includes everything - no filtering or exclusion.
+	 */
 	public static final IScadGenerationContext DEFAULT = new FullScadGenerationContext(null, null, 0); 
 	
 	private final Set<Integer> included = new HashSet<>(); 

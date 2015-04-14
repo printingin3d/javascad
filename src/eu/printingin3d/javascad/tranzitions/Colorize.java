@@ -7,6 +7,7 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Complex3dModel;
 import eu.printingin3d.javascad.models.SCAD;
+import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
@@ -26,8 +27,12 @@ public class Colorize extends Complex3dModel {
 	 * Creates a Colorized object of the given object with the given color
 	 * @param color the color which will be used
 	 * @param model the model which will be colored
+	 * @throws eu.printingin3d.javascad.exceptions.IllegalValueException if either the model or the color null
 	 */
 	public Colorize(Color color, Abstract3dModel model) {
+		AssertValue.isNotNull(model, "The model shouldn't be null for colorize");
+		AssertValue.isNotNull(color, "The color shouldn't be null for colorize");
+		
 		this.color = color;
 		this.baseModel = model;
 	}
@@ -39,7 +44,7 @@ public class Colorize extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return new Colorize(color, baseModel);
+		return new Colorize(color, baseModel.cloneModel());
 	}
 
 	@Override
@@ -65,5 +70,11 @@ public class Colorize extends Complex3dModel {
 		sb.append(']');
 		
 		return "color("+sb+")";
+	}
+
+	@Override
+	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
+		Abstract3dModel subModel = baseModel.subModel(context);
+		return subModel==null ? null : new Colorize(color, subModel);
 	}
 }
