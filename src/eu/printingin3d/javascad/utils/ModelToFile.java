@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.IModel;
 
@@ -57,7 +57,7 @@ public class ModelToFile {
 	 * Saves the models to the file.
 	 * @throws IOException if any IO error happens during opening, writing or closing the file
 	 */
-	public void saveToFile(IScadGenerationContext context) throws IOException {
+	public void saveToFile(IColorGenerationContext context) throws IOException {
 		Writer writer = new FileWriter(file);
 		try {
 			for (IModel model : models) {

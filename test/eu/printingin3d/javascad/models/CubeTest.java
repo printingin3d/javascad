@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Dims3d;
 import eu.printingin3d.javascad.testutils.RandomUtils;
@@ -17,21 +17,21 @@ public class CubeTest {
 	public void testToScad1() {
 		Cube cube = new Cube(10.0);
 		assertEqualsWithoutWhiteSpaces("cube([10,10,10],center=true);", 
-				cube.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				cube.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testToScad2() {
 		Cube cube = new Cube(new Dims3d(10.0, 20.0, 30.0));
 		assertEqualsWithoutWhiteSpaces("cube([10,20,30],center=true);", 
-				cube.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				cube.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void toScadShouldBeRounded() {
 		Cube cube = new Cube(new Dims3d(Math.PI, 20.0, 30.0));
 		assertEqualsWithoutWhiteSpaces("cube([3.1416,20,30],center=true);", 
-				cube.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				cube.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test

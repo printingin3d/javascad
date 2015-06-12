@@ -1,6 +1,6 @@
 package eu.printingin3d.javascad.openscad;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.models.IModel;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.vrl.CSG;
@@ -35,7 +35,7 @@ public class Consts implements IModel {
 	}
 
 	@Override
-	public SCAD toScad(IScadGenerationContext context) {
+	public SCAD toScad(IColorGenerationContext context) {
 		return new SCAD("$fs="+fs+";$fa="+fa+";\n");
 	}
 

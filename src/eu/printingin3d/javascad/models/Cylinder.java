@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
@@ -63,7 +63,7 @@ public class Cylinder extends Atomic3dModel {
 	}
 
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
+	protected SCAD innerToScad(IColorGenerationContext context) {
 		if (DoubleUtils.equalsEps(bottomRadius, topRadius)) {
 			return new SCAD("cylinder(h="+DoubleUtils.formatDouble(length)+
 						", r="+DoubleUtils.formatDouble(bottomRadius)+", center=true);\n");

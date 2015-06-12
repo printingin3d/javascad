@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
@@ -47,16 +48,24 @@ public class Union extends Complex3dModel {
 	}
 
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
-		switch (models.size()) {
+	protected SCAD innerToScad(IColorGenerationContext context) {
+		List<SCAD> scads = new ArrayList<>();
+		for (Abstract3dModel model : models) {
+			SCAD scad = model.toScad(context);
+			if (!scad.isEmpty()) {
+				scads.add(scad);
+			}
+		}
+		
+		switch (scads.size()) {
 		case 0:
 			return SCAD.EMPTY;
 		case 1:
-			return models.get(0).toScad(context);
+			return scads.get(0);
 		default:
 			SCAD result = new SCAD("union() {\n");
-			for (Abstract3dModel model : models) {
-				result = result.append(model.toScad(context));
+			for (SCAD scad : scads) {
+				result = result.append(scad);
 			}
 			return result.append("}\n");
 		}

@@ -7,6 +7,7 @@ import java.awt.Color;
 import org.junit.Assert;
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
@@ -28,14 +29,14 @@ public class ColorizeTest {
 	public void testWithoutAlpha() {
 		Color color = new Color(100, 120, 200);
 		AssertEx.assertEqualsWithoutWhiteSpaces("color([0.3922, 0.4706, 0.7843]) (model)", 
-				new Colorize(color, new Test3dModel("(model)")).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				new Colorize(color, new Test3dModel("(model)")).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testWithAlpha() {
 		Color color = new Color(100, 120, 200, 55);
 		AssertEx.assertEqualsWithoutWhiteSpaces("color([0.3922, 0.4706, 0.7843, 0.2157]) (model)", 
-				new Colorize(color, new Test3dModel("(model)")).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				new Colorize(color, new Test3dModel("(model)")).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -46,7 +47,7 @@ public class ColorizeTest {
 				).withTag(11);
 		
 		assertEqualsWithoutWhiteSpaces("color([0,0,0]) (model12)", 
-				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -57,7 +58,7 @@ public class ColorizeTest {
 				).withTag(11);
 		
 		assertEqualsWithoutWhiteSpaces("color([0,0,0]) (model12)", 
-				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test

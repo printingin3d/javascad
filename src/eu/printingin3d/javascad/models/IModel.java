@@ -1,6 +1,6 @@
 package eu.printingin3d.javascad.models;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
@@ -14,7 +14,7 @@ public interface IModel {
 	 * Renders this model and returns with the generated OpenSCAD code.
 	 * @return the generated OpenSCAD code
 	 */
-	SCAD toScad(IScadGenerationContext context);
+	SCAD toScad(IColorGenerationContext context);
 	
 	CSG toCSG(FacetGenerationContext context);
 }

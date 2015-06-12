@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -19,19 +20,19 @@ public class IntersectionTest {
 	public void testToScad() {
 		Intersection intersection = new Intersection(new Test3dModel("(model1)"), new Test3dModel("(model2)"));
 		assertEqualsWithoutWhiteSpaces("intersection() {(model1) (model2)}", 
-				intersection.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				intersection.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testToScadWithOnlyOneModel() {
 		Intersection intersection = new Intersection(new Test3dModel("(model1)"));
-		assertEqualsWithoutWhiteSpaces("(model1)", intersection.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", intersection.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testToScadWithNoModel() {
 		Intersection intersection = new Intersection();
-		assertEqualsWithoutWhiteSpaces("", intersection.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", intersection.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 
 	
@@ -64,7 +65,7 @@ public class IntersectionTest {
 				);
 		
 		assertEqualsWithoutWhiteSpaces("(model12)", 
-				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -75,7 +76,7 @@ public class IntersectionTest {
 				);
 		
 		assertEqualsWithoutWhiteSpaces("(model12)", 
-				testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 
 	@Test
@@ -93,6 +94,6 @@ public class IntersectionTest {
 				testSubject.subModel(new ScadGenerationContextFactory()
 						.include(1)
 						.exclude(12)
-						.create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+						.create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 }

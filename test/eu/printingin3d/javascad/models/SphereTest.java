@@ -5,7 +5,7 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.testutils.RandomUtils;
@@ -16,13 +16,13 @@ public class SphereTest {
 	@Test
 	public void testToScad() {
 		Sphere sphere = new Sphere(10.0);
-		assertEqualsWithoutWhiteSpaces("sphere(r=10);", sphere.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("sphere(r=10);", sphere.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void toScadShouldBeRounded() {
 		Sphere sphere = new Sphere(Math.PI);
-		assertEqualsWithoutWhiteSpaces("sphere(r=3.1416);", sphere.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("sphere(r=3.1416);", sphere.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test(expected = IllegalValueException.class)

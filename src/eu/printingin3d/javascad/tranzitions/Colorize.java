@@ -2,6 +2,7 @@ package eu.printingin3d.javascad.tranzitions;
 
 import java.awt.Color;
 
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
@@ -38,7 +39,7 @@ public class Colorize extends Complex3dModel {
 	}
 
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
+	protected SCAD innerToScad(IColorGenerationContext context) {
 		return baseModel.toScad(context).prepend(getStringRepresentation(color));
 	}
 

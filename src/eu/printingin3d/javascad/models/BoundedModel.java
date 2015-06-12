@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.models;
 
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.utils.AssertValue;
@@ -37,7 +38,7 @@ public class BoundedModel extends Complex3dModel {
 	}
 
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
+	protected SCAD innerToScad(IColorGenerationContext context) {
 		return baseModel.toScad(context);
 	}
 

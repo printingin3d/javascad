@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Angles3d;
@@ -132,7 +133,7 @@ public abstract class Abstract3dModel implements IModel {
 	 * and moves or rotations 
 	 * @return the representation of the model
 	 */
-	protected abstract SCAD innerToScad(IScadGenerationContext context);
+	protected abstract SCAD innerToScad(IColorGenerationContext context);
 	
 	/**
 	 * Returns true if and only if this object represents a primitive, atomic 3D object. This method used internally and must return 
@@ -141,17 +142,13 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	protected abstract boolean isPrimitive();
 	
-	private SCAD getOne(IScadGenerationContext context) {
+	private SCAD getOne(IColorGenerationContext context) {
 		SCAD item = innerToScad(context);
-		
-		if (context.isTagIncluded()) {
-			item = item.include();
-		}
 		
 		if (item==null || !item.isIncluded()) {
 			return SCAD.EMPTY;
 		}
-
+		
 		if (!rotate.isZero()) {
 			item = item.prepend(Rotate.getRotate(rotate));
 		}
@@ -159,17 +156,16 @@ public abstract class Abstract3dModel implements IModel {
 		return item;
 	}
 	
-	private SCAD addMovesScad(IScadGenerationContext context) {
+	private SCAD addMovesScad(IColorGenerationContext context) {
 		SCAD oneItem = getOne(context);
+		SCAD result = SCAD.EMPTY;
 		if (oneItem.isIncluded()) {
-			SCAD result = SCAD.EMPTY;
 			for (Coords3d coord : moves) {
 				result = result.append(Translate.getTranslate(coord))
 				      .append(oneItem);
 			}
-			return result;
 		}
-		return SCAD.EMPTY;
+		return result;
 	}
 	
 	private String getPrefix() {
@@ -184,8 +180,8 @@ public abstract class Abstract3dModel implements IModel {
 	}
 	
 	@Override
-	public final SCAD toScad(IScadGenerationContext context) {
-		IScadGenerationContext currentContext = context.applyTag(tag);
+	public final SCAD toScad(IColorGenerationContext context) {
+		IColorGenerationContext currentContext = context.applyTag(tag);
 		
 		ScadSurroundings surroundings = ScadSurroundings.EMPTY.appendPrefix(getPrefix())
 				.include(getScadColor(currentContext))
@@ -202,7 +198,7 @@ public abstract class Abstract3dModel implements IModel {
 		return SCAD.EMPTY;
 	}
 	
-	private ScadSurroundings getScadColor(IScadGenerationContext currentContext) {
+	private ScadSurroundings getScadColor(IColorGenerationContext currentContext) {
 		ScadSurroundings surroundings = ScadSurroundings.EMPTY;
 		
 		if (isPrimitive()) {
@@ -404,6 +400,9 @@ public abstract class Abstract3dModel implements IModel {
 			model.tag = tag;
 			model.debug = debug;
 			model.background = background;
+			
+			model.moves = moves;
+			model.rotate = rotate;
 		}
 		
 		return model;

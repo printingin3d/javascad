@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
@@ -76,6 +77,7 @@ public class CloneModelTest {
 				new TestCase(new Intersection(cube.cloneModel(), cylinder.cloneModel())),
 				new TestCase(new Difference(cube.cloneModel(), cylinder.cloneModel())),
 				new TestCase(new Difference(cube.cloneModel())),
+				new TestCase(new Difference(cube.cloneModel()).move(new Coords3d(10, 20, 30))),
 				new TestCase(Mirror.mirrorX(cube.cloneModel())),
 				new TestCase(new Rotate(cylinder, new Angles3d(-21, 32.1, 331.4))),
 				new TestCase(new Scale(cylinder, new Coords3d(4.10, 1.0, 3.21))),
@@ -85,7 +87,7 @@ public class CloneModelTest {
 				new TestCase(new Translate(cube, new Coords3d(-23, 33.2, 7.3))),
 				new TestCase(new BoundedModel(cube, RandomUtils.getRandomBoundaries())),
 				new TestCase(new Union()),
-				new TestCase(new Union(cube, cylinder)),
+				new TestCase(new Union(cube, cylinder).rotate(new Angles3d(40, 42, -55))),
 				new TestCase(cube.cloneModel().background()),
 				new TestCase(cube.cloneModel().debug()),
 				new TestCase(new Polyhedron(Arrays.asList(RandomUtils.getRandomTriangle(), RandomUtils.getRandomTriangle()))),
@@ -109,22 +111,22 @@ public class CloneModelTest {
 	
 	@Test
 	public void subModelWithDefaultContextShouldClone() {
-		assertEquals(original.toScad(ScadGenerationContextFactory.DEFAULT), 
-				original.subModel(ScadGenerationContextFactory.DEFAULT).toScad(ScadGenerationContextFactory.DEFAULT));
+		assertEquals(original.toScad(ColorHandlingContext.DEFAULT), 
+				original.subModel(ScadGenerationContextFactory.DEFAULT).toScad(ColorHandlingContext.DEFAULT));
 	}
 	
 	@Test
 	public void shouldRepresentsTheSameOpenScadObject() {
-		assertEquals(original.toScad(ScadGenerationContextFactory.DEFAULT), original.cloneModel().toScad(ScadGenerationContextFactory.DEFAULT));
+		assertEquals(original.toScad(ColorHandlingContext.DEFAULT), original.cloneModel().toScad(ColorHandlingContext.DEFAULT));
 	}
 	
 	@Test
 	public void shouldBeIndependent() {
 		Abstract3dModel clone = original.cloneModel();
-		SCAD scad = clone.toScad(ScadGenerationContextFactory.DEFAULT);
+		SCAD scad = clone.toScad(ColorHandlingContext.DEFAULT);
 		if (!scad.isEmpty()) {
 			original.move(RandomUtils.getRandomCoords());
-			assertFalse(scad.equals(original.toScad(ScadGenerationContextFactory.DEFAULT)));
+			assertFalse(scad.equals(original.toScad(ColorHandlingContext.DEFAULT)));
 		}
 	}
 	

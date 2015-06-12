@@ -5,7 +5,7 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
@@ -16,7 +16,7 @@ public class PolygonTest {
 	@Test
 	public void testScad() {
 		SCAD scad = new Polygon(Arrays.asList(new Coords2d(5, 10), new Coords2d(Math.PI, 50), new Coords2d(-5, -10.2)))
-				.toScad(ScadGenerationContextFactory.DEFAULT);
+				.toScad(ColorHandlingContext.DEFAULT);
 		AssertEx.assertEqualsWithoutWhiteSpaces("polygon([[5,10],[3.1416,50],[-5,-10.2]]);", scad.getScad());
 	}
 	

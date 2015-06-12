@@ -17,4 +17,13 @@ public class IllegalValueException extends RuntimeException {
 	public IllegalValueException(String message) {
 		super(message);
 	}
+	
+	/**
+	 * Constructs the exception with the given message and cause.
+	 * @param message the message of the new exception
+	 * @param cause the exception caused this exception
+	 */
+	public IllegalValueException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

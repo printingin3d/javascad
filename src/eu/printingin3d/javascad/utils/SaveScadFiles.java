@@ -7,15 +7,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import eu.printingin3d.javascad.context.ColorHandlingContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.context.ITagColors;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.IModel;
 import eu.printingin3d.javascad.openscad.Consts;
-
-/**
- * A helper class which helps you to save SCAD files and models.
- * 
+/* 
  * @author ivivan <ivivan@printingin3d.eu> 
  */
 public class SaveScadFiles {
@@ -61,8 +61,7 @@ public class SaveScadFiles {
 	 * @return return this object to make it possible to chain more method call
 	 */
 	public SaveScadFiles addModels(String fileName, Collection<IModel> models) {
-		addModels(fileName, models, ScadGenerationContextFactory.DEFAULT);
-		return this;
+		return addModels(fileName, models, ColorHandlingContext.DEFAULT);
 	}
 	
 	/**
@@ -73,7 +72,7 @@ public class SaveScadFiles {
 	 * @return return this object to make it possible to chain more method call
 	 */
 	public SaveScadFiles addModels(final String fileName, final Collection<IModel> models,
-			final IScadGenerationContext context) {
+			final IColorGenerationContext context) {
 		addScadFile(new IScadFile() {
 			@Override
 			public File getFile(File root) {
@@ -86,7 +85,7 @@ public class SaveScadFiles {
 			}
 
 			@Override
-			public IScadGenerationContext getContext() {
+			public IColorGenerationContext getContext() {
 				return context;
 			}
 		});
@@ -101,7 +100,7 @@ public class SaveScadFiles {
 	 * @return return this object to make it possible to chain more method call
 	 */
 	public SaveScadFiles addModel(String fileName, IModel model) {
-		return addModel(fileName, model, ScadGenerationContextFactory.DEFAULT);
+		return addModel(fileName, model, ColorHandlingContext.DEFAULT);
 	}
 	
 	/**
@@ -109,11 +108,37 @@ public class SaveScadFiles {
 	 * A default {@link Consts} is added before the model.
 	 * @param fileName the name of the file where the model will be saved
 	 * @param model the model to be saved
-	 * @param context the context used for the scad file generation
+	 * @param tagColors the colors used for the scad file generation
 	 * @return return this object to make it possible to chain more method call
 	 */
-	public SaveScadFiles addModel(String fileName, IModel model, IScadGenerationContext context) {
+	public SaveScadFiles addModel(String fileName, IModel model, ITagColors tagColors) {
+		return addModel(fileName, model, new ColorHandlingContext(tagColors));
+	}
+	
+	/**
+	 * Adds a SCAD file with the given file name and the given model. 
+	 * A default {@link Consts} is added before the model.
+	 * @param fileName the name of the file where the model will be saved
+	 * @param model the model to be saved
+	 * @param context the color context used for the scad file generation
+	 * @return return this object to make it possible to chain more method call
+	 */
+	public SaveScadFiles addModel(String fileName, IModel model, IColorGenerationContext context) {
 		return addModels(fileName, Arrays.asList(new Consts(), model), context);
+	}
+	
+	/**
+	 * <p>Adds a SCAD file with the given file name and the given model. 
+	 * A default {@link Consts} is added before the model.</p>
+	 * <p>A method for backward compatibility only - use <code>addModel(fileName, model.subModel(context))</code> instead.</p>
+	 * @param fileName the name of the file where the model will be saved
+	 * @param model the model to be saved
+	 * @param scadContext the context used for the scad file generation
+	 * @return return this object to make it possible to chain more method call
+	 */
+	@Deprecated
+	public SaveScadFiles addModel(String fileName, Abstract3dModel model, IScadGenerationContext scadContext) {
+		return addModel(fileName, model.subModel(scadContext));
 	}
 	
 	/**
@@ -123,17 +148,28 @@ public class SaveScadFiles {
 	 * @return return this object to make it possible to chain more method call
 	 */
 	public SaveScadFiles addModelProvider(IModelProvider provider) {
-		return addModelProvider(provider, ScadGenerationContextFactory.DEFAULT);
+		return addModelProvider(provider, ColorHandlingContext.DEFAULT);
 	}
 	
 	/**
-	 * Adds a model provider with the given generation context.
+	 * Adds a model provider with the given tag colors.
 	 * A default {@link Consts} is added before the model.
 	 * @param provider the provider to be added
 	 * @param context the context used for the scad file generation
 	 * @return return this object to make it possible to chain more method call
 	 */
-	public SaveScadFiles addModelProvider(IModelProvider provider, IScadGenerationContext context) {
+	public SaveScadFiles addModelProvider(IModelProvider provider, ITagColors tagColors) {
+		return addModelProvider(provider, new ColorHandlingContext(tagColors));
+	}
+	
+	/**
+	 * Adds a model provider with the given color context.
+	 * A default {@link Consts} is added before the model.
+	 * @param provider the provider to be added
+	 * @param context the context used for the scad file generation
+	 * @return return this object to make it possible to chain more method call
+	 */
+	public SaveScadFiles addModelProvider(IModelProvider provider, IColorGenerationContext context) {
 		for (ModelWithPath mp : provider.getModelsAndPaths()) {
 			addModel(mp.getRelPath(), mp.getModel(), context);
 		}

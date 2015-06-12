@@ -2,7 +2,7 @@ package eu.printingin3d.javascad.models;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.BoundaryTest;
@@ -17,7 +17,7 @@ public class RingTest {
 	public void testNormalRing() {
 		Abstract3dModel testSubject = new Ring(5, new Test2dModel("(model)", null));
 		AssertEx.assertEqualsWithoutWhiteSpaces("rotate_extrude() translate([5, 0, 0]) (model);", 
-				testSubject.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test

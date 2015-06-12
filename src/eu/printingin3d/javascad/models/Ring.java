@@ -1,6 +1,6 @@
 package eu.printingin3d.javascad.models;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
@@ -26,7 +26,7 @@ public class Ring extends Atomic3dModel {
 	}
 
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
+	protected SCAD innerToScad(IColorGenerationContext context) {
 		return new SCAD("rotate_extrude() "+Translate.getTranslate(Coords3d.xOnly(radius))).append(model.toScad(context)).append(";");
 	}
 

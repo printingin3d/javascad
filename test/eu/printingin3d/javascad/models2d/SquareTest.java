@@ -6,7 +6,7 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 
@@ -16,13 +16,13 @@ public class SquareTest {
 	@Test
 	public void testToScad() {
 		Square square = new Square(new Dims2d(10.0, 20.0));
-		assertEqualsWithoutWhiteSpaces("square([10,20],center=true);", square.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("square([10,20],center=true);", square.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void toScadShouldBeRounded() {
 		Square square = new Square(new Dims2d(Math.PI, 20.0));
-		assertEqualsWithoutWhiteSpaces("square([3.1416,20],center=true);", square.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("square([3.1416,20],center=true);", square.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test

@@ -3,7 +3,7 @@ package eu.printingin3d.javascad.utils;
 import java.io.File;
 import java.util.Collection;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.models.IModel;
 
 /**
@@ -27,5 +27,5 @@ public interface IScadFile {
 	 * The context which will be used during the generation process.
 	 * @return the context
 	 */
-	IScadGenerationContext getContext();
+	IColorGenerationContext getContext();
 }

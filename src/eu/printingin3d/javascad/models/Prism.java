@@ -1,6 +1,6 @@
 package eu.printingin3d.javascad.models;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.DoubleUtils;
@@ -47,7 +47,7 @@ public class Prism extends Cylinder {
 	}
 	
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
+	protected SCAD innerToScad(IColorGenerationContext context) {
 		if (DoubleUtils.equalsEps(bottomRadius, topRadius)) {
 			return new SCAD("cylinder(h="+DoubleUtils.formatDouble(length)+
 					", r="+DoubleUtils.formatDouble(bottomRadius)+

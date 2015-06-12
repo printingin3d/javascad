@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
@@ -44,13 +45,13 @@ public class DifferenceTest {
 	public void testToScad() {
 		Difference difference = new Difference(new Test3dModel("(model1)"), new Test3dModel("(model2)"));
 		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2)}", 
-				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				difference.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testToScadWithOneModel() {
 		Difference difference = new Difference(new Test3dModel("(model1)"));
-		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -60,28 +61,28 @@ public class DifferenceTest {
 				new Test3dModel("(model2)"),
 				new Test3dModel("(model3)"));
 		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2) (model3)}", 
-				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				difference.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testToScadAbsenceOfSecondModel1() {
 		Abstract3dModel model2 = null;
 		Difference difference = new Difference(new Test3dModel("(model1)"), model2);
-		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testToScadAbsenceOfSecondModel2() {
 		List<Abstract3dModel> model2 = null;
 		Difference difference = new Difference(new Test3dModel("(model1)"), model2);
-		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testToScadWithEmptyList() {
 		Difference difference = new Difference(new Test3dModel("(model1)"), 
 				Collections.<Abstract3dModel>emptyList());
-		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", difference.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 
 	@Test
@@ -150,7 +151,7 @@ public class DifferenceTest {
 				new Test3dModel("(model2)"))
 			.subtractModel(new Test3dModel("(model3)"));
 		assertEqualsWithoutWhiteSpaces("difference() {(model1) (model2) (model3)}", 
-				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				difference.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -161,7 +162,7 @@ public class DifferenceTest {
 		.move(new Coords3d(10, 20, 30))
 		.subtractModel(new Test3dModel("(model3)"));
 		assertEqualsWithoutWhiteSpaces("difference() {translate([10,20,30]) difference() {(model1) (model2)} (model3)}", 
-				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				difference.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -172,7 +173,7 @@ public class DifferenceTest {
 		.rotate(new Angles3d(10, 20, 30))
 		.subtractModel(new Test3dModel("(model3)"));
 		assertEqualsWithoutWhiteSpaces("difference() {rotate([10,20,30]) difference() {(model1) (model2)} (model3)}", 
-				difference.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				difference.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -193,7 +194,7 @@ public class DifferenceTest {
 				);
 		
 		assertEqualsWithoutWhiteSpaces("(model11)", 
-				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -214,7 +215,7 @@ public class DifferenceTest {
 				);
 		
 		assertEqualsWithoutWhiteSpaces("(model11)", 
-				testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 
 	@Test
@@ -232,7 +233,7 @@ public class DifferenceTest {
 				testSubject.subModel(new ScadGenerationContextFactory()
 						.include(1)
 						.exclude(12)
-						.create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+						.create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -249,7 +250,7 @@ public class DifferenceTest {
 		assertEqualsWithoutWhiteSpaces("difference() {(model11) (model2)}", 
 				testSubject.subModel(new ScadGenerationContextFactory()
 				.exclude(12)
-				.create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				.create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 }

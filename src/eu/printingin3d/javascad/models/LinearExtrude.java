@@ -1,6 +1,6 @@
 package eu.printingin3d.javascad.models;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
@@ -33,7 +33,7 @@ public class LinearExtrude extends Atomic3dModel {
 	}
 
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
+	protected SCAD innerToScad(IColorGenerationContext context) {
 		return new SCAD("linear_extrude(height="+DoubleUtils.formatDouble(height)+", center=true, convexity=10, "
 					+ "twist="+DoubleUtils.formatDouble(twist)+",scale="+DoubleUtils.formatDouble(scale)+")")
 				.append(model.toScad(context));

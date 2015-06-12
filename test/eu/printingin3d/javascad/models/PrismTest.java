@@ -4,7 +4,7 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 
 public class PrismTest {
@@ -13,21 +13,21 @@ public class PrismTest {
 	public void testWhenOnlyOneRadiusIsGiven() {
 		Prism prism = new Prism(10.0, 5.0, 8);
 		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=5, $fn=8, center=true);", 
-				prism.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				prism.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testWhenTwoDifferentRadiusAreGiven() {
 		Prism prism = new Prism(10.0, 5.0, 8.5, 8);
 		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r1=5, r2=8.5, $fn=8, center=true);", 
-				prism.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				prism.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testWhenTwoEqualRadiusAreGiven() {
 		Prism prism = new Prism(10.0, 8.5, 8.5, 8);
 		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=8.5, $fn=8, center=true);", 
-				prism.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				prism.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 
 	@Test(expected = IllegalValueException.class)

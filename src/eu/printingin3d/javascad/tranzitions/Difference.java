@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -57,13 +58,9 @@ public class Difference extends Complex3dModel {
 	public Difference(Abstract3dModel model1, Abstract3dModel... model2) throws IllegalValueException {
 		this(model1, Arrays.asList(model2));
 	}
-
-	protected IScadGenerationContext getChildContext(IScadGenerationContext context) {
-		return context;
-	}
 	
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
+	protected SCAD innerToScad(IColorGenerationContext context) {
 		SCAD baseModel = model1.toScad(context);
 		if (!baseModel.isIncluded()) {
 			return SCAD.EMPTY;
@@ -76,7 +73,7 @@ public class Difference extends Complex3dModel {
 		SCAD result = new SCAD("difference()");
 		result = result.append("{").append(baseModel);
 		for (Abstract3dModel model : model2) {
-			result = result.append(model.toScad(getChildContext(context)));
+			result = result.append(model.toScad(context));
 		}
 		return result.append("}");
 	}

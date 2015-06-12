@@ -1,7 +1,7 @@
 package eu.printingin3d.javascad.tranzitions;
 
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.models.Abstract3dModel;
@@ -86,13 +86,8 @@ public class Slicer extends Complex3dModel {
 	}
 
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
-		return new Difference(model, sliceModel()){
-			@Override
-			protected IScadGenerationContext getChildContext(IScadGenerationContext context) {
-				return ScadGenerationContextFactory.DEFAULT;
-			}
-		}.toScad(context);
+	protected SCAD innerToScad(IColorGenerationContext context) {
+		return new Difference(model, sliceModel()).toScad(context);
 	}
 
 	@Override

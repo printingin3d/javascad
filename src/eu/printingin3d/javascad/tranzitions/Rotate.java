@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.tranzitions;
 
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
@@ -46,7 +47,7 @@ public class Rotate extends Complex3dModel {
 	}
 	
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
+	protected SCAD innerToScad(IColorGenerationContext context) {
 		return new SCAD(getRotate(angles)).append(model.toScad(context));
 	}
 

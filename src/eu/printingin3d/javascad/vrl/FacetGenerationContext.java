@@ -2,14 +2,14 @@ package eu.printingin3d.javascad.vrl;
 
 import java.awt.Color;
 
-import eu.printingin3d.javascad.context.AbstractColorHandlingContext;
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.IColorGenerationContext;
-import eu.printingin3d.javascad.context.TagColors;
+import eu.printingin3d.javascad.context.ITagColors;
 
-public class FacetGenerationContext extends AbstractColorHandlingContext {
+public class FacetGenerationContext extends ColorHandlingContext {
 	public final static FacetGenerationContext DEFAULT = new FacetGenerationContext(null, null, 0);
 	
-	public FacetGenerationContext(TagColors tagColors, IColorGenerationContext parent, int tag) {
+	public FacetGenerationContext(ITagColors tagColors, IColorGenerationContext parent, int tag) {
 		super(tagColors, parent, tag);
 	}
 

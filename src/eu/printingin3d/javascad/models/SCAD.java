@@ -1,26 +1,20 @@
 package eu.printingin3d.javascad.models;
 
 public class SCAD {
-	public static final SCAD EMPTY = new SCAD("", false);
+	public static final SCAD EMPTY = new SCAD("");
 	
 	private final String scad;
-	private final boolean included;
-	private SCAD(String scad, boolean included) {
-		this.scad = scad;
-		this.included = included;
-	}
-	
-	public SCAD(String scad) {
-		this(scad, false);
-	}
-	
 
-	public String getScad() {
-		return scad;
+	public SCAD(String scad) {
+		this.scad = scad;
 	}
 	
 	public boolean isIncluded() {
-		return included && !scad.isEmpty();
+		return !scad.isEmpty();
+	}
+	
+	public String getScad() {
+		return scad;
 	}
 	
 	public boolean isEmpty() {
@@ -28,26 +22,21 @@ public class SCAD {
 	}
 	
 	public SCAD prepend(String text) {
-		return new SCAD(text+this.scad, included);
+		return new SCAD(text+this.scad);
 	}
 	
 	public SCAD append(String text) {
-		return new SCAD(this.scad+text, included);
+		return new SCAD(this.scad+text);
 	}
 	
 	public SCAD append(SCAD scad) {
-		return new SCAD(this.scad+scad.scad, included || scad.included);
+		return new SCAD(this.scad+scad.scad);
 	}
 
-	public SCAD include() {
-		return new SCAD(this.scad, true);
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (included ? 1231 : 1237);
 		result = prime * result + ((scad == null) ? 0 : scad.hashCode());
 		return result;
 	}
@@ -64,9 +53,6 @@ public class SCAD {
 			return false;
 		}
 		SCAD other = (SCAD) obj;
-		if (included != other.included) {
-			return false;
-		}
 		if (scad == null) {
 			if (other.scad != null) {
 				return false;

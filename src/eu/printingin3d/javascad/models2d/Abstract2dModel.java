@@ -1,6 +1,6 @@
 package eu.printingin3d.javascad.models2d;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.models.IModel;
@@ -25,7 +25,7 @@ public abstract class Abstract2dModel implements IModel {
 	 * and moves or rotations 
 	 * @return the representation of the model
 	 */
-	protected abstract SCAD innerToScad(IScadGenerationContext context);
+	protected abstract SCAD innerToScad(IColorGenerationContext context);
 
 	protected abstract Boundaries2d getModelBoundaries();
 	
@@ -38,7 +38,7 @@ public abstract class Abstract2dModel implements IModel {
 	}
 
 	@Override
-	public SCAD toScad(IScadGenerationContext context) {
+	public SCAD toScad(IColorGenerationContext context) {
 		return innerToScad(context).prepend(Translate.getTranslate(move));
 	}
 

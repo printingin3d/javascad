@@ -9,7 +9,7 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertMatchToExpressio
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 
@@ -19,7 +19,7 @@ public class RoundedSquareTest {
 	public void testToScad() {
 		RoundedSquare square = new RoundedSquare(new Dims2d(3, 3), 0.5);
 		
-		String actual = square.toScad(ScadGenerationContextFactory.DEFAULT).getScad();
+		String actual = square.toScad(ColorHandlingContext.DEFAULT).getScad();
 		
 		assertMatchToExpressionWithoutWhiteSpaces("union\\(\\) \\{.*\\}", actual);
 		assertContainsWithoutWhiteSpaces("square([2,3], center=true);", actual);
@@ -37,7 +37,7 @@ public class RoundedSquareTest {
 	public void testToScadWithNoStraightX() {
 		RoundedSquare square = new RoundedSquare(new Dims2d(1, 3), 0.5);
 		
-		String actual = square.toScad(ScadGenerationContextFactory.DEFAULT).getScad();
+		String actual = square.toScad(ColorHandlingContext.DEFAULT).getScad();
 		
 		assertMatchToExpressionWithoutWhiteSpaces("union\\(\\) \\{.*\\}", actual);
 		assertContainsWithoutWhiteSpaces("square([1,2], center=true);", actual);
@@ -52,7 +52,7 @@ public class RoundedSquareTest {
 	public void testToScadWithNoStraightY() {
 		RoundedSquare square = new RoundedSquare(new Dims2d(3, 1), 0.5);
 		
-		String actual = square.toScad(ScadGenerationContextFactory.DEFAULT).getScad();
+		String actual = square.toScad(ColorHandlingContext.DEFAULT).getScad();
 		
 		assertMatchToExpressionWithoutWhiteSpaces("union\\(\\) \\{.*\\}", actual);
 		assertContainsWithoutWhiteSpaces("square([2,1], center=true);", actual);
@@ -67,7 +67,7 @@ public class RoundedSquareTest {
 	public void testToScadWithNoStraightXY() {
 		RoundedSquare square = new RoundedSquare(new Dims2d(1, 1), 0.5);
 		
-		String actual = square.toScad(ScadGenerationContextFactory.DEFAULT).getScad();
+		String actual = square.toScad(ColorHandlingContext.DEFAULT).getScad();
 		
 		assertEqualsWithoutWhiteSpaces("circle(r=0.5, center=true);", actual);
 	}
@@ -76,7 +76,7 @@ public class RoundedSquareTest {
 	public void toScadShouldBeRounded() {
 		RoundedSquare square = new RoundedSquare(new Dims2d(Math.PI*10.0, 20.0), Math.PI);
 		
-		String actual = square.toScad(ScadGenerationContextFactory.DEFAULT).getScad();
+		String actual = square.toScad(ColorHandlingContext.DEFAULT).getScad();
 		assertMatchToExpressionWithoutWhiteSpaces("union\\(\\) \\{.*\\}", actual);
 		assertContainsWithoutWhiteSpaces("square([25.1327,20], center=true);", actual);
 		assertContainsWithoutWhiteSpaces("square([31.4159,13.7168], center=true);", actual);

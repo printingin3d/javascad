@@ -81,11 +81,11 @@ public class EqualsAndHashCodeBatchTest {
 				new TestCase<SCAD>(
 						new SCAD("test"), 
 						new SCAD("test"), 
-						new SCAD("not test"), new SCAD("test").include()),
+						new SCAD("not test")),
 				new TestCase<SCAD>(
 						new SCAD(null), 
 						new SCAD(null), 
-						new SCAD("not test"), new SCAD(null).include()),
+						new SCAD("not test")),
 				new TestCase<TestAbstract2d>(
 						new TestAbstract2d(0.1, 20.0), 
 						new TestAbstract2d(1.0/10.0, 20.0), 

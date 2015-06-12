@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.tranzitions;
 
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
@@ -38,7 +39,7 @@ public class Scale extends Complex3dModel {
 	}
 
 	@Override
-	protected SCAD innerToScad(IScadGenerationContext context) {
+	protected SCAD innerToScad(IColorGenerationContext context) {
 		if (scale.isIdent()) {
 			return model.toScad(context);
 		}

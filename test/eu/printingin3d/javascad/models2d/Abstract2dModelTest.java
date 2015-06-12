@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
@@ -21,7 +21,7 @@ public class Abstract2dModelTest {
 	
 	@Test
 	public void shouldReturnWithTheInnerScadValue() {
-		AssertEx.assertEqualsWithoutWhiteSpaces("(model)", testSubject.toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+		AssertEx.assertEqualsWithoutWhiteSpaces("(model)", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test

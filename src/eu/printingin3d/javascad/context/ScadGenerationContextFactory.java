@@ -7,19 +7,10 @@ public class ScadGenerationContextFactory {
 	/**
 	 * The default generation context. It includes everything - no filtering or exclusion.
 	 */
-	public static final IScadGenerationContext DEFAULT = new FullScadGenerationContext(null, null, 0); 
+	public static final IScadGenerationContext DEFAULT = FullScadGenerationContext.INSTANCE; 
 	
 	private final Set<Integer> included = new HashSet<>(); 
 	private final Set<Integer> excluded = new HashSet<>();
-	private final TagColors tagColors; 
-	
-	public ScadGenerationContextFactory() {
-		this(null);
-	}
-	
-	public ScadGenerationContextFactory(TagColors tagColors) {
-		this.tagColors = tagColors;
-	}
 
 	public ScadGenerationContextFactory include(int... values) {
 		for (int i : values) {
@@ -38,11 +29,10 @@ public class ScadGenerationContextFactory {
 	public IScadGenerationContext create() {
 		if (included.isEmpty()) {
 			if (excluded.isEmpty()) {
-				return new FullScadGenerationContext(tagColors, null, 0);
+				return FullScadGenerationContext.INSTANCE;
 			}
-			return new ExcludeGenerationContext(excluded, tagColors, null, 0);
+			return new ExcludeGenerationContext(excluded);
 		}
-		return new IncludeGenerationContext(excluded.isEmpty() ? null : excluded, included,
-				tagColors, null, 0);
+		return new IncludeGenerationContext(excluded.isEmpty() ? null : excluded, included);
 	}
 }

@@ -1,10 +1,11 @@
 package eu.printingin3d.javascad.context;
 
 
-public class FullScadGenerationContext extends AbstractColorHandlingContext implements IScadGenerationContext {
-
-	public FullScadGenerationContext(TagColors tagColors, IColorGenerationContext parent, int tag) {
-		super(tagColors, parent, tag);
+public class FullScadGenerationContext implements IScadGenerationContext {
+	public static final IScadGenerationContext INSTANCE = new FullScadGenerationContext();
+	
+	private FullScadGenerationContext() {
+		// preventing instantiating this class
 	}
 
 	@Override
@@ -14,7 +15,7 @@ public class FullScadGenerationContext extends AbstractColorHandlingContext impl
 
 	@Override
 	public IScadGenerationContext applyTag(int tag) {
-		return (tag==0 || tag==this.tag) ? this : new FullScadGenerationContext(tagColors, this, tag);
+		return this;
 	}
 
 }

@@ -5,6 +5,7 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import org.junit.Assert;
 import org.junit.Test;
 
+import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -19,13 +20,13 @@ public class ScaleTest {
 	@Test
 	public void testToScad() {
 		assertEqualsWithoutWhiteSpaces("scale([1,1.5,3.1416]) (model)", 
-				new Scale(Test3dModel.DEFAULT, new Coords3d(1, 1.5, Math.PI)).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				new Scale(Test3dModel.DEFAULT, new Coords3d(1, 1.5, Math.PI)).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testToScadWithIdentScale() {
 		assertEqualsWithoutWhiteSpaces("(model)", 
-				new Scale(Test3dModel.DEFAULT, new Coords3d(1, 1, 1)).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				new Scale(Test3dModel.DEFAULT, new Coords3d(1, 1, 1)).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 
 	@Test
@@ -80,7 +81,7 @@ public class ScaleTest {
 				).withTag(11);
 		
 		assertEqualsWithoutWhiteSpaces("scale([10,20,30]) (model12)", 
-				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -91,7 +92,7 @@ public class ScaleTest {
 				).withTag(11);
 		
 		assertEqualsWithoutWhiteSpaces("scale([10,20,30]) (model12)",
-				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ScadGenerationContextFactory.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test

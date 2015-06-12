@@ -15,8 +15,8 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
-import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
+import eu.printingin3d.javascad.context.ColorHandlingContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.ConstsTest;
 import eu.printingin3d.javascad.models.IModel;
@@ -116,8 +116,8 @@ public class SaveScadFilesTest {
 			}
 
 			@Override
-			public IScadGenerationContext getContext() {
-				return ScadGenerationContextFactory.DEFAULT;
+			public IColorGenerationContext getContext() {
+				return ColorHandlingContext.DEFAULT;
 			}
 		});
 		saveScadFiles.saveScadFiles();
