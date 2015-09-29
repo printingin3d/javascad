@@ -5,7 +5,7 @@ package eu.printingin3d.javascad.models;
  * @author Ivan
  *
  */
-public class ScadSurroundings {
+public final class ScadSurroundings {
 	public static final ScadSurroundings EMPTY = new ScadSurroundings("", ""); 
 	
 	private final String prefix;

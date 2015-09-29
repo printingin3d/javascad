@@ -8,7 +8,7 @@ import eu.printingin3d.javascad.tranzitions.Direction;
 public class TransformationFactory {
 	
 	public static ITransformation getTranlationMatrix(Abstract3d delta) {
-        double elemenents[] = {
+        double[] elemenents = {
                 1, 0, 0, delta.getX(), 
                 0, 1, 0, delta.getY(), 
                 0, 0, 1, delta.getZ() 
@@ -21,7 +21,7 @@ public class TransformationFactory {
 		Coords3d y = Coords3d.Y.rotate(angles);
 		Coords3d z = Coords3d.Z.rotate(angles);
 		
-		double elemenents[] = {
+		double[] elemenents = {
 	            x.getX(), y.getX(), z.getX(), 0, 
 	            x.getY(), y.getY(), z.getY(), 0, 
 	            x.getZ(), y.getZ(), z.getZ(), 0, 
@@ -34,7 +34,7 @@ public class TransformationFactory {
     }
     
     public static ITransformation getScaleMatrix(double x, double y, double z) {
-        double elemenents[] = {
+        double[] elemenents = {
             x, 0, 0, 0, 
             0, y, 0, 0, 
             0, 0, z, 0};

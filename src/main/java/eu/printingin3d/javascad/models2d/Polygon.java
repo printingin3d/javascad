@@ -33,7 +33,8 @@ public class Polygon extends Abstract2dModel {
 	 * <p>The given list should contain at least 3 coordinates, otherwise an 
 	 * {@link eu.printingin3d.javascad.exceptions.IllegalValueException IllegalValueException} is thrown.</p> 
 	 * @param coords the coordinates
-	 * @throws eu.printingin3d.javascad.exceptions.IllegalValueException in case the given list contains fewer than 3 elements
+	 * @throws eu.printingin3d.javascad.exceptions.IllegalValueException in case the given list contains 
+	 * 				fewer than 3 elements
 	 */
 	public Polygon(List<Coords2d> coords) {
 		this(Coords2d.ZERO, coords);

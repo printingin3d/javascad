@@ -7,7 +7,7 @@ import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.ITagColors;
 
 public class FacetGenerationContext extends ColorHandlingContext {
-	public final static FacetGenerationContext DEFAULT = new FacetGenerationContext(null, null, 0);
+	public static final FacetGenerationContext DEFAULT = new FacetGenerationContext(null, null, 0);
 	
 	public FacetGenerationContext(ITagColors tagColors, IColorGenerationContext parent, int tag) {
 		super(tagColors, parent, tag);

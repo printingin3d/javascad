@@ -14,8 +14,8 @@
  *       provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY Michael Hoffer <info@michaelhoffer.de> "AS IS" AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Michael Hoffer <info@michaelhoffer.de> OR
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Michael Hoffer <info@michaelhoffer.de> OR
  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
@@ -42,7 +42,7 @@ import eu.printingin3d.javascad.utils.AssertValue;
  * the front and/or back subtrees. This is not a leafy BSP tree since there is
  * no distinction between internal and leaf nodes.
  */
-public class Node {
+public final class Node {
 
     /**
      * Polygons.
@@ -62,7 +62,8 @@ public class Node {
     private Node back;
 
     private Node(List<Polygon> polygons, Node front, Node back) {
-    	AssertValue.isNotEmpty(polygons, "Polygons should be provided! If it is empty use the other constructor with the basePlane.");
+    	AssertValue.isNotEmpty(polygons, 
+    			"Polygons should be provided! If it is empty use the other constructor with the basePlane.");
     	
     	this.polygons = polygons;
     	this.basePlane = null;
@@ -80,11 +81,10 @@ public class Node {
     }
 
 	/**
-     * Constructor.
-     *
      * Creates a BSP node consisting of the specified polygons.
      *
      * @param polygons polygons
+     * @return a new Node based on the list of polygons given
      */
     public static Node fromPoligons(List<Polygon> polygons) {
     	AssertValue.isNotEmpty(polygons, "Cannot create a Node from an empty list!");
@@ -111,6 +111,11 @@ public class Node {
         return new Node(newPolygons, newFront, newBack);
     }
 
+    /**
+     * Inverts the node by flipping all the poligons it contains and inverting the front and 
+     * back nodes as well. 
+     * @return a new node which contains the reversed poligons
+     */
 	public Node invert() {
     	List<Polygon> newPolygons = new ArrayList<>();
 
@@ -160,8 +165,11 @@ public class Node {
         return frontP;
     }
 
-    // Remove all polygons in this BSP tree that are inside the other BSP tree
-    // `bsp`.
+    /**
+     * Remove all polygons in this BSP tree that are inside the given other BSP tree.
+     * @param bsp the tree to remove
+     * @return a new object to contain the clipped poligons 
+     */
 	public Node clipTo(Node bsp) {
         List<Polygon> newPolygons = bsp.clipPolygons(this.polygons);
         Node newFront = null;
@@ -176,6 +184,10 @@ public class Node {
         return createNewNode(newPolygons, newFront, newBack);
     }
 
+	/**
+	 * Returns with all the polygons this node holds including those which are in the front and back nodes.
+	 * @return all the polygons this node holds
+	 */
 	public List<Polygon> allPolygons() {
         List<Polygon> localPolygons = new ArrayList<>(polygons);
         if (front != null) {

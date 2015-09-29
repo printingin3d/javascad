@@ -1,6 +1,6 @@
 package eu.printingin3d.javascad.context;
 
-public class ExcludedScadGenerationContext implements IScadGenerationContext {
+public final class ExcludedScadGenerationContext implements IScadGenerationContext {
 	public static final IScadGenerationContext INSTANCE = new ExcludedScadGenerationContext();
 
 	private ExcludedScadGenerationContext() {

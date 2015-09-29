@@ -12,7 +12,8 @@ import eu.printingin3d.javascad.models.Abstract3dModel;
  */
 public interface IModelProvider {
 	/**
-	 * Returns the assembled object. The object should be assembled using the parts returned by getParts method.
+	 * Returns the assembled object. The object should be assembled using the parts 
+	 * returned by getParts method.
 	 * @return the assembled object
 	 */
 	Abstract3dModel getAssembledModel();

@@ -1,7 +1,7 @@
 package eu.printingin3d.javascad.context;
 
 
-public class FullScadGenerationContext implements IScadGenerationContext {
+public final class FullScadGenerationContext implements IScadGenerationContext {
 	public static final IScadGenerationContext INSTANCE = new FullScadGenerationContext();
 	
 	private FullScadGenerationContext() {

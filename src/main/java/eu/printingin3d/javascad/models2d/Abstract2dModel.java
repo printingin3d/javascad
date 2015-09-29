@@ -45,7 +45,8 @@ public abstract class Abstract2dModel implements IModel {
 	/**
 	 * Moves this object by the given coordinates.
 	 * @param delta the coordinates used by the move
-	 * @return a new object which has been moved by the given coordinates - the original object left unmodified
+	 * @return a new object which has been moved by the given coordinates - 
+	 * the original object left unmodified
 	 */
 	public abstract Abstract2dModel move(Coords2d delta);
 }

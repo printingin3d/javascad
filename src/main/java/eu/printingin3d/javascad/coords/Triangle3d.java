@@ -27,7 +27,8 @@ public class Triangle3d {
 	 */
 	public static List<Triangle3d> getTriangles(List<Coords3d> coords) {
 		AssertValue.isNotNull(coords, "coords should not be null");
-		AssertValue.isTrue(coords.size() >= 3, "There should be at least 3 verticies given, but was only "+coords.size());
+		AssertValue.isTrue(coords.size() >= 3, 
+				"There should be at least 3 verticies given, but was only "+coords.size());
 		
     	List<Triangle3d> triangles = new ArrayList<>();
     	Coords3d firstVertex = coords.get(0);

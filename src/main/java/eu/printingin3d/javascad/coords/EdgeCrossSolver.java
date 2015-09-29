@@ -32,12 +32,15 @@ public class EdgeCrossSolver {
 	
 	
 	public static Coords3d findIntersection(Coords3d e1v1, Coords3d e1v2, Coords3d e2v1, Coords3d e2v2) {
-		IntersectionResult xy = findIntersection(new Coords2d(e1v1.getX(), e1v1.getY()), new Coords2d(e1v2.getX(), e1v2.getY()), 
-									   new Coords2d(e2v1.getX(), e2v1.getY()), new Coords2d(e2v2.getX(), e2v2.getY()));
-		IntersectionResult yz = findIntersection(new Coords2d(e1v1.getY(), e1v1.getZ()), new Coords2d(e1v2.getY(), e1v2.getZ()), 
-									   new Coords2d(e2v1.getY(), e2v1.getZ()), new Coords2d(e2v2.getY(), e2v2.getZ()));
-		IntersectionResult xz = findIntersection(new Coords2d(e1v1.getX(), e1v1.getZ()), new Coords2d(e1v2.getX(), e1v2.getZ()), 
-									   new Coords2d(e2v1.getX(), e2v1.getZ()), new Coords2d(e2v2.getX(), e2v2.getZ()));
+		IntersectionResult xy = findIntersection(
+				new Coords2d(e1v1.getX(), e1v1.getY()), new Coords2d(e1v2.getX(), e1v2.getY()),
+				new Coords2d(e2v1.getX(), e2v1.getY()), new Coords2d(e2v2.getX(), e2v2.getY()));
+		IntersectionResult yz = findIntersection(
+				new Coords2d(e1v1.getY(), e1v1.getZ()), new Coords2d(e1v2.getY(), e1v2.getZ()), 
+				new Coords2d(e2v1.getY(), e2v1.getZ()), new Coords2d(e2v2.getY(), e2v2.getZ()));
+		IntersectionResult xz = findIntersection(
+				new Coords2d(e1v1.getX(), e1v1.getZ()), new Coords2d(e1v2.getX(), e1v2.getZ()), 
+				new Coords2d(e2v1.getX(), e2v1.getZ()), new Coords2d(e2v2.getX(), e2v2.getZ()));
 		
 		if (xy!=null && yz!=null && xz!=null &&
 				xy.matchX(xz) &&
@@ -55,7 +58,8 @@ public class EdgeCrossSolver {
 		
 		if (doubleEquals(c1.getY(), c2.getY())) {
 			if (doubleEquals(c3.getY(), c4.getY())) {
-				return doubleEquals(c1.getY(), c3.getY()) ? new IntersectionResult(true, 0.0, c1.getY()) : null;
+				return doubleEquals(c1.getY(), c3.getY()) ? 
+						new IntersectionResult(true, 0.0, c1.getY()) : null;
 			}
 			y = c1.getY();
 			double a2 = (c4.getX()-c3.getX()) / (c4.getY()-c3.getY());

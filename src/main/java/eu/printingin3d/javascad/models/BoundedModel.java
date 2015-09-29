@@ -9,7 +9,8 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * <p>There are cases, when we want to have an object, which boundaries differ from the calculated ones.
- * An example could be a wardrobe, when we don't want to include the handles into the boundary calculation, when we align the object.</p>
+ * An example could be a wardrobe, when we don't want to include the handles into the boundary calculation,
+ * when we align the object.</p>
  * <p>This object could be used to achieve that goal.</p>
  *
  * @author ivivan <ivivan@printingin3d.eu>

@@ -27,7 +27,8 @@ public class Ring extends Atomic3dModel {
 
 	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
-		return new SCAD("rotate_extrude() "+Translate.getTranslate(Coords3d.xOnly(radius))).append(model.toScad(context)).append(";");
+		return new SCAD("rotate_extrude() "+
+					Translate.getTranslate(Coords3d.xOnly(radius))).append(model.toScad(context)).append(";");
 	}
 
 	@Override

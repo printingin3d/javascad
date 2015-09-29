@@ -38,7 +38,8 @@ public abstract class Extendable3dModel extends Complex3dModel {
 		try {
 			newInstance = getClass().getConstructor().newInstance();
 		} catch (ReflectiveOperationException | IllegalArgumentException | SecurityException e) {
-			throw new IllegalValueException("Creating the new instance of this class ("+getClass()+") has failed! "+
+			throw new IllegalValueException("Creating the new instance of this "
+					+ "class ("+getClass()+") has failed! "+
 					"Possibly there is no default constructor for this class.", e);
 		}
 		newInstance.baseModel = baseModel.subModel(context);

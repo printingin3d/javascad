@@ -4,7 +4,8 @@ import java.awt.Color;
 import java.util.Map;
 
 /**
- * Represents the tag-color relation. It is most conveniently created by {@link eu.printingin3d.javascad.context.TagColorsBuilder TagColorsBuilder}.
+ * Represents the tag-color relation. It is most conveniently created by 
+ * {@link eu.printingin3d.javascad.context.TagColorsBuilder TagColorsBuilder}.
  * @author Ivan
  *
  */

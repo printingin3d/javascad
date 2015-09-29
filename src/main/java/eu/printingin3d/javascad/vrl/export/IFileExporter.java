@@ -14,7 +14,8 @@ public interface IFileExporter {
 	
 	/**
 	 * Do the actual export to file. 
-	 * @param facets the facets to export. See the {@link eu.printingin3d.javascad.vrl.CSG#toFacets() CSG.toFacets()} method
+	 * @param facets the facets to export.
+	 * See the {@link eu.printingin3d.javascad.vrl.CSG#toFacets() CSG.toFacets()} method
 	 * @throws IOException if any IO error happens during the export.
 	 */
 	void writeToFile(List<Facet> facets) throws IOException;

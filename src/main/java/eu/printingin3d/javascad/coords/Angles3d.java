@@ -185,7 +185,8 @@ public class Angles3d extends Abstract3d {
 			}
 		}
 
-		throw new IllegalValueException("No solution found for adding "+this+" to "+delta+". Please send a bug report to the developer.");
+		throw new IllegalValueException("No solution found for adding "+this+" to "+delta+
+				". Please send a bug report to the developer.");
 	}
 	
 	protected double getXRad() {

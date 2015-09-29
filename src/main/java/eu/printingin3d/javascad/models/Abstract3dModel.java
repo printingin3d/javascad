@@ -135,8 +135,8 @@ public abstract class Abstract3dModel implements IModel {
 	protected abstract SCAD innerToScad(IColorGenerationContext context);
 	
 	/**
-	 * Returns true if and only if this object represents a primitive, atomic 3D object. This method used internally and must return 
-	 * true in build in primitives.
+	 * Returns true if and only if this object represents a primitive, atomic 3D object.
+	 * This method used internally and must return true in build in primitives.
 	 * @return true if and only if this object represents a primitive, atomic 3D object
 	 */
 	protected abstract boolean isPrimitive();
@@ -383,9 +383,9 @@ public abstract class Abstract3dModel implements IModel {
 	protected abstract Abstract3dModel innerSubModel(IScadGenerationContext context);
 
 	/**
-	 * <p>Copies parts of the model to a new model based on the given context. It is very useful if we want to use a tagged
-	 * part of the model as a separate model. Lots of things can be done to the new model: we can render it or we can use it
-	 * to align to it.</p>
+	 * <p>Copies parts of the model to a new model based on the given context. It is very useful if we want
+	 * to use a tagged part of the model as a separate model. Lots of things can be done to the new model:
+	 * we can render it or we can use it to align to it.</p>
 	 * <p>If the given context is the {@link ScadGenerationContextFactory#DEFAULT} then this method call is logically 
 	 * equivalent to a {@link #cloneModel()} method call.</p>
 	 * @param context the context to be used as a filter during the copy process.

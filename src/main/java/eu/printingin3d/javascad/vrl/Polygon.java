@@ -44,15 +44,15 @@ import eu.printingin3d.javascad.tranform.ITransformation;
 import eu.printingin3d.javascad.utils.AssertValue;
 
 /**
- * Represents a convex polygon. A polygon is represented by its points which should be on the same plane (not tested, 
- * but guaranteed by the used algorithms), its normal (calculated from the points), 
+ * Represents a convex polygon. A polygon is represented by its points which should be on the same plane 
+ * (not tested, but guaranteed by the used algorithms), its normal (calculated from the points), 
  * its color and its distance from the origin.
  *
  */
-public class Polygon {
+public final class Polygon {
 
     /**
-     * Polygon vertices
+     * Polygon vertices.
      */
     private final List<Coords3d> vertices;
     /**
@@ -76,7 +76,8 @@ public class Polygon {
 		
 		for (Coords3d v : vertices) {
 			VertexPosition position = calculateVertexPosition(v);
-			AssertValue.isTrue(position==VertexPosition.COPLANAR, "Every vertex in a polygon must be coplanar, but was "+position+"!");
+			AssertValue.isTrue(position==VertexPosition.COPLANAR, 
+					"Every vertex in a polygon must be coplanar, but was "+position+"!");
 		}
 	}
 
@@ -101,7 +102,7 @@ public class Polygon {
     /**
      * Flips this polygon.
      *
-     * @return this polygon
+     * @return a new polygon with the vertices in reversed order
      */
     public Polygon flip() {
     	List<Coords3d> newVertices = new ArrayList<>(vertices);
@@ -238,7 +239,8 @@ public class Polygon {
 			break;
 		}
 		if (position.add(calculateVertexPosition(nextVertex)) == VertexPosition.SPANNING) {
-		    double t = (this.dist - this.normal.dot(currentVertex)) / this.normal.dot(nextVertex.move(currentVertex.inverse()));
+		    double t = (this.dist - this.normal.dot(currentVertex)) / 
+		    				this.normal.dot(nextVertex.move(currentVertex.inverse()));
 		    Coords3d v = currentVertex.lerp(nextVertex, t);
 			addVertexToList(f, v);
 			addVertexToList(b, v);
@@ -255,7 +257,8 @@ public class Polygon {
     		for (Coords3d c : vertices) {
     			Coords3d cross = EdgeCrossSolver.findIntersection(prev, c, lastVertex, newVertex);
     			if (cross!=null && !cross.equals(newVertex) && !cross.equals(lastVertex)) {
-    				System.out.println("Added new vertex: "+cross+" between "+lastVertex+" and "+newVertex+" ("+prev+", "+c+")");
+    				System.out.println(
+    				"Added new vertex: "+cross+" between "+lastVertex+" and "+newVertex+" ("+prev+", "+c+")");
     				list.add(cross);
     				break;
     			}

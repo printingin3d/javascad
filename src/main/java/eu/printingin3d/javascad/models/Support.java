@@ -11,8 +11,8 @@ import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.tranzitions.Difference;
 
 /**
- * <p>Represents support material to hold the above objects. This helps when the object cannot be printed without support, but
- * the slicer software cannot handle support material.</p>
+ * <p>Represents support material to hold the above objects. This helps when the object cannot be printed
+ * without support, but the slicer software cannot handle support material.</p>
  * <p>The resulting object is a thin continuous line which fills the given block.</p> 
  *  
  * @author ivivan <ivivan@printingin3d.eu>
@@ -51,7 +51,8 @@ public class Support extends Extendable3dModel {
 	}
 	
 	/**
-	 * Creates a support object. The resulting object is a <i>thickness</i> thin continuous line which fills the given <i>dims</i> block. 
+	 * Creates a support object. The resulting object is a <i>thickness</i> thin continuous
+	 * line which fills the given <i>dims</i> block. 
 	 * @param dims the dimensions of the support object
 	 * @param thickness the thickness of the wall to be used when creating the object
 	 */

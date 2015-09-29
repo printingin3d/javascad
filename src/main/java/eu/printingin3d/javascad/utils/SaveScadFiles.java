@@ -130,14 +130,16 @@ public class SaveScadFiles {
 	/**
 	 * <p>Adds a SCAD file with the given file name and the given model. 
 	 * A default {@link Consts} is added before the model.</p>
-	 * <p>A method for backward compatibility only - use <code>addModel(fileName, model.subModel(context))</code> instead.</p>
+	 * <p>A method for backward compatibility only - use 
+	 * <code>addModel(fileName, model.subModel(context))</code> instead.</p>
 	 * @param fileName the name of the file where the model will be saved
 	 * @param model the model to be saved
 	 * @param scadContext the context used for the scad file generation
 	 * @return return this object to make it possible to chain more method call
 	 */
 	@Deprecated
-	public SaveScadFiles addModel(String fileName, Abstract3dModel model, IScadGenerationContext scadContext) {
+	public SaveScadFiles addModel(String fileName, Abstract3dModel model, 
+			IScadGenerationContext scadContext) {
 		return addModel(fileName, model.subModel(scadContext));
 	}
 	
@@ -155,7 +157,6 @@ public class SaveScadFiles {
 	 * Adds a model provider with the given tag colors.
 	 * A default {@link Consts} is added before the model.
 	 * @param provider the provider to be added
-	 * @param context the context used for the scad file generation
 	 * @return return this object to make it possible to chain more method call
 	 */
 	public SaveScadFiles addModelProvider(IModelProvider provider, ITagColors tagColors) {

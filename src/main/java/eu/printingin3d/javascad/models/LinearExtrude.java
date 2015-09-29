@@ -34,8 +34,10 @@ public class LinearExtrude extends Atomic3dModel {
 
 	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
-		return new SCAD("linear_extrude(height="+DoubleUtils.formatDouble(height)+", center=true, convexity=10, "
-					+ "twist="+DoubleUtils.formatDouble(twist)+",scale="+DoubleUtils.formatDouble(scale)+")")
+		return new SCAD("linear_extrude(height="+DoubleUtils.formatDouble(height)
+					+ ", center=true, convexity=10, "
+					+ "twist="+DoubleUtils.formatDouble(twist)
+					+ ",scale="+DoubleUtils.formatDouble(scale)+")")
 				.append(model.toScad(context));
 	}
 
