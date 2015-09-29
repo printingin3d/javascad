@@ -20,6 +20,6 @@ public enum VertexPosition {
     private static final double EPSILON = 1e-6;
     
     public static VertexPosition fromSquareDistance(double dist) {
-    	return (dist < -EPSILON) ? BACK : (dist > EPSILON) ? FRONT : COPLANAR;
+    	return dist < -EPSILON ? BACK : dist > EPSILON ? FRONT : COPLANAR;
     }
 }

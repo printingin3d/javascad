@@ -26,7 +26,7 @@ public class FacetGenerationContext extends ColorHandlingContext {
 	}
 	
 	public FacetGenerationContext applyTag(int tag) {
-		if ((tag==this.tag) || tag==0) {
+		if (tag==this.tag || tag==0) {
 			return this;
 		}
 		

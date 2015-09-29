@@ -38,7 +38,7 @@ public class ColorHandlingContext implements IColorGenerationContext {
 	
 	@Override
 	public IColorGenerationContext applyTag(int tag) {
-		if ((tag==this.tag) || tag==0) {
+		if (tag==this.tag || tag==0) {
 			return this;
 		}
 		

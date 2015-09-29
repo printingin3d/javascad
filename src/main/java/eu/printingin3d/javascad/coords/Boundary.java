@@ -219,6 +219,6 @@ public class Boundary {
 	 * @return true if and only if this boundary is inside of the given boundary
 	 */
 	public boolean isInsideOf(Boundary b) {
-		return (b.min<=this.min && b.max>=this.max);
+		return b.min<=this.min && b.max>=this.max;
 	}
 }

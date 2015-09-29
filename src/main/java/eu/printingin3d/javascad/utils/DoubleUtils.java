@@ -55,6 +55,6 @@ public final class DoubleUtils {
 	 * @return  true if and only if the given value is between value1 and value2
 	 */
 	public static boolean between(double value, double value1, double value2) {
-		return (value1<=value && value<=value2) || (value2<=value && value<=value1);
+		return value1<=value && value<=value2 || value2<=value && value<=value1;
 	}
 }
