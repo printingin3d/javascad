@@ -18,7 +18,12 @@ import eu.printingin3d.javascad.openscad.Consts;
 /**
  * <p>Helper class to save several models to a directory.<p>
  * <p>A typical usage looks like this:<p>
- * <code>new SaveScadFiles(new File("c:/temp")).addModel("test.scad", new TestModel()).saveScadFiles();</code>
+ * <blockquote><pre>
+ *new SaveScadFiles(new File("c:/temp"))
+ *  .addModel("test.scad", new TestModel())
+ *  .saveScadFiles();
+ * </pre></blockquote>
+
  * @author ivivan <ivivan@printingin3d.eu>
  */
 public class SaveScadFiles {

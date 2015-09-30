@@ -10,6 +10,10 @@ import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.utils.AssertValue;
 
+/**
+ * Represents a 2D rounded square - the corners of the square will be rounded by the given radius.
+ * @author ivivan <ivivan@printingin3d.eu>
+ */
 public class RoundedSquare extends Square {
 	private final double radius;
 
@@ -22,6 +26,13 @@ public class RoundedSquare extends Square {
 		this.radius = radius;
 	}
 
+	/**
+	 * Create a 2D rounded square.
+	 * @param size the size of the object including the rounding
+	 * @param radius the radius of the rounding
+	 * @throws eu.printingin3d.javascad.exceptions.IllegalValueException 
+	 * 			if either dimension is less the double the radius
+	 */
 	public RoundedSquare(Dims2d size, double radius) {
 		this(Coords2d.ZERO, size, radius);
 	}

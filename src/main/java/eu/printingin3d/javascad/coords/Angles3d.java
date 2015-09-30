@@ -94,6 +94,10 @@ public class Angles3d extends Abstract3d {
 		return result;
 	}
 	
+	/**
+	 * Internal use only.
+	 * @author ivivan <ivivan@printingin3d.eu>
+	 */
 	private static class Config {
 		private final Coords3d coord1;
 		private final Coords3d coord2;

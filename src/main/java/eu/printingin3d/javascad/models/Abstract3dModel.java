@@ -243,7 +243,7 @@ public abstract class Abstract3dModel implements IModel {
 	}
 	
 	/**
-	 * Returns true if the result will contain rotating transformation
+	 * Returns true if the result will contain rotating transformation.
 	 * @return true if the result will contain rotating transformation
 	 */
 	public boolean isRotated() {
@@ -335,6 +335,11 @@ public abstract class Abstract3dModel implements IModel {
 		return csg;
 	}
 	
+	/**
+	 * Renders this model to its CSG interpretation - convenient method which used the default
+	 * generation context.
+	 * @return the CSG interpretation
+	 */
 	public final CSG toCSG() {
 		return toCSG(FacetGenerationContext.DEFAULT);
 	}
@@ -364,6 +369,7 @@ public abstract class Abstract3dModel implements IModel {
 	 * <code>model1.addModelTo(side, model2)</code> is always equivalent to 
 	 * <code>model1.addModel(model2.align(side, model1, false))</code>.
 	 * @see Abstract3dModel#addModel(Abstract3dModel)
+	 * @param side where to move this model
 	 * @param model the model to be added to this object
 	 * @return a new model which contains the union of this object and the given object
 	 */

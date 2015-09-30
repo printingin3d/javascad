@@ -40,7 +40,7 @@ public class StlBinaryFile implements IFileExporter {
 		byteBuffer.put(facet.getNormal().toByteArray());
 		
 		for (Vertex v : facet.getVertexes()) {
-			byteBuffer.put(v.getCoords().toByteArray());
+			byteBuffer.put(v.toByteArray());
 		}
 		
 		byteBuffer.putShort((short)0);

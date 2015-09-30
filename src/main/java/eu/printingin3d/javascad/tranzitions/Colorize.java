@@ -25,7 +25,7 @@ public class Colorize extends Complex3dModel {
 	private final Abstract3dModel baseModel;
 
 	/**
-	 * Creates a Colorized object of the given object with the given color
+	 * Creates a Colorized object of the given object with the given color.
 	 * @param color the color which will be used
 	 * @param model the model which will be colored
 	 * @throws eu.printingin3d.javascad.exceptions.IllegalValueException if either the model or the color null
@@ -58,6 +58,11 @@ public class Colorize extends Complex3dModel {
 		return baseModel.toCSG(context);
 	}
 
+	/**
+	 * Generates the SCAD representation of the given color.
+	 * @param color the color to be converted
+	 * @return the string representation of the color
+	 */
 	public static String getStringRepresentation(Color color) {
 		StringBuilder sb = new StringBuilder();
 		sb.append('[').

@@ -8,6 +8,9 @@ import eu.printingin3d.javascad.coords.Coords3d;
  * @author ivivan <ivivan@printingin3d.eu>
  */
 public class Coords2d extends Abstract2d {
+	/**
+	 * The coordinate of the origin.
+	 */
 	public static final Coords2d ZERO = new Coords2d(0, 0); 
 
 	/**

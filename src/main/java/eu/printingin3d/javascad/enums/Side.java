@@ -4,7 +4,9 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 
 /**
- * This class is used by the {@link Abstract3dModel#align(Side, Abstract3dModel, boolean)} method to 
+ * This class is used by the {@link eu.printingin3d.javascad.models.Abstract3dModel
+ * 		#align(Side, eu.printingin3d.javascad.models.Abstract3dModel, boolean)
+ * 	    Abstract3dModel.align(Side, Abstract3dModel, boolean)} method to 
  * set the side where the other model should be aligned.
  *
  * @author ivivan <ivivan@printingin3d.eu>

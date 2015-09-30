@@ -15,7 +15,7 @@ import eu.printingin3d.javascad.testutils.RandomUtils;
 public class FacetTest {
 
 	@Test
-	public void testVertexes() {
+	public void testVertices() {
 		Triangle3d triangle = RandomUtils.getRandomTriangle();
 		Coords3d normal = RandomUtils.getRandomCoords();
 		Color color = RandomUtils.getRandomColor();
@@ -23,13 +23,11 @@ public class FacetTest {
 		
 		assertEquals(normal, facet.getNormal());
 		
-		Set<Coords3d> facetCoords = new HashSet<>();
-		for (Vertex v : facet.getVertexes()) {
-			assertEquals(color, v.getColor());
-			facetCoords.add(v.getCoords());
+		Set<Vertex> expectedVertices = new HashSet<>();
+		for (Coords3d c : triangle.getPoints()) {
+			expectedVertices.add(new Vertex(c, color));
 		}
 		
-		assertEquals(new HashSet<Coords3d>(triangle.getPoints()), facetCoords); 
-		
+		assertEquals(expectedVertices, new HashSet<Vertex>(facet.getVertexes())); 
 	}
 }

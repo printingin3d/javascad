@@ -3,10 +3,9 @@ package eu.printingin3d.javascad.context;
 import java.awt.Color;
 
 /**
- * Base class for all classes which implement IColorGenerationContext interface.
- * Implements the logic of the getColor() method. 
- * @author Ivan
- *
+ * The default implementation of the {@link IColorGenerationContext} interface. Gives an implementation
+ * based on tag-color pairs provided by the {@link ITagColors}. 
+ * @author ivivan <ivivan@printingin3d.eu>
  */
 public class ColorHandlingContext implements IColorGenerationContext {
 	/**

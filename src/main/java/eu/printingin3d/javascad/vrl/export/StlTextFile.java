@@ -44,7 +44,7 @@ public class StlTextFile implements IFileExporter {
 	        append("    outer loop\n");
 
 		for (Vertex v : facet.getVertexes()) {
-	        sb.append("    vertex ").append(v.getCoords().format(OutputFormat.STL)).append('\n');
+	        sb.append("    vertex ").append(v.format(OutputFormat.STL)).append('\n');
 		}
 		
 		return sb.append("    endloop\n").append("  endfacet\n").toString();

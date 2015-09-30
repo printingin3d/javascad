@@ -89,6 +89,10 @@ public class CSG {
 
     private final List<Polygon> polygons;
 
+    /**
+     * Creates a new CSG file based on the given polygons.
+     * @param polygons the polygons to be used
+     */
     public CSG(List<Polygon> polygons) {
     	this.polygons = Collections.unmodifiableList(polygons);
     }
@@ -219,6 +223,10 @@ public class CSG {
         return new CSG(a.allPolygons());
     }
 
+    /**
+     * Returns with all the facet this CSG object holds.
+     * @return all the facet this CSG object holds
+     */
     public List<Facet> toFacets() {
     	List<Facet> facets = new ArrayList<>();
     	for (Polygon p : polygons) {

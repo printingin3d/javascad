@@ -1,8 +1,9 @@
 package eu.printingin3d.javascad.enums;
 
 /**
- * The output format used by the toString method of the {@link Abstract3d} class.
- * @author Ivan
+ * The output format used by the toString method of the 
+ * {@link eu.printingin3d.javascad.coords.Abstract3d Abstract3d} class.
+ * @author ivivan <ivivan@printingin3d.eu>
  */
 public enum OutputFormat {
 	/**
@@ -12,7 +13,11 @@ public enum OutputFormat {
 	/**
 	 * The textual STL output format. The format of a coordinate in an STL file is <code>10 20 30</code>
 	 */
-	STL("", "", " ");
+	STL("", "", " "),
+	/**
+	 * The textual Polygon output format. The format of a coordinate in Polygon file is <code>10 20 30</code>
+	 */
+	POLYGON("", "", " ");
 	
 	private final String preText;
 	private final String postText;

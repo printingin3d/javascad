@@ -200,6 +200,11 @@ public final class Node {
         return localPolygons;
     }
 
+	/**
+	 * Build a new node adding the given polygons - splitting the polygons in necessary.
+	 * @param polygons the polygons to be added
+	 * @return a new node with the added polygons
+	 */
 	public Node build(List<Polygon> polygons) {
     	if (polygons==null || polygons.isEmpty()) {
 			return this;

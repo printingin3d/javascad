@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.printingin3d.javascad.utils.DoubleUtils;
+import eu.printingin3d.javascad.enums.OutputFormat;
 import eu.printingin3d.javascad.vrl.Facet;
 import eu.printingin3d.javascad.vrl.Vertex;
 import eu.printingin3d.javascad.vrl.VertexMap;
@@ -52,7 +52,7 @@ public class PolygonFile implements IFileExporter {
 			
 			// list of vertexes
 			for (Vertex v : sortedList) {
-				ps.println(vertexToString(v) );
+				ps.println(v.format(OutputFormat.POLYGON));
 			}
 			
 			for (Facet f : facets) {
@@ -68,15 +68,5 @@ public class PolygonFile implements IFileExporter {
 		finally {
 			ps.close();
 		}
-	}
-
-	public static String vertexToString(Vertex v) {
-		return 
-			DoubleUtils.formatDouble(v.getCoords().getX())+" "+
-			DoubleUtils.formatDouble(v.getCoords().getY())+" "+
-			DoubleUtils.formatDouble(v.getCoords().getZ())+" "+
-			v.getColor().getRed()+" "+
-			v.getColor().getGreen()+" "+
-			v.getColor().getBlue();
 	}
 }

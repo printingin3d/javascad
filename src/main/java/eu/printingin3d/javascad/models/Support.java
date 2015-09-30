@@ -3,12 +3,16 @@ package eu.printingin3d.javascad.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.IColorGenerationContext;
+import eu.printingin3d.javascad.coords.Boundaries3d;
+import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
 import eu.printingin3d.javascad.enums.AlignType;
 import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.tranzitions.Difference;
+import eu.printingin3d.javascad.vrl.CSG;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * <p>Represents support material to hold the above objects. This helps when the object cannot be printed
@@ -17,12 +21,24 @@ import eu.printingin3d.javascad.tranzitions.Difference;
  *  
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Support extends Extendable3dModel {
+public class Support extends Atomic3dModel {
+	private static final double SLICE_MUL = 10.0; 
 	
-	private static interface IStepper {
+	private final Dims3d dims;
+	private final double thickness;
+	
+	/**
+	 * Internal use only.
+	 * @author ivivan <ivivan@printingin3d.eu>
+	 */
+	private interface IStepper {
 		double nextStep(double current);
 	}
 	
+	/**
+	 * Internal use only.
+	 * @author ivivan <ivivan@printingin3d.eu>
+	 */
 	private static class MovingStepper implements IStepper {
 		private final double step;
 
@@ -36,6 +52,10 @@ public class Support extends Extendable3dModel {
 		}
 	}
 	
+	/**
+	 * Internal use only.
+	 * @author ivivan <ivivan@printingin3d.eu>
+	 */
 	private static class ZigZagStepper implements IStepper {
 		private final double step;
 
@@ -47,7 +67,6 @@ public class Support extends Extendable3dModel {
 		public double nextStep(double current) {
 			return current>0.0 ? -step : +step;
 		}
-		
 	}
 	
 	/**
@@ -57,8 +76,16 @@ public class Support extends Extendable3dModel {
 	 * @param thickness the thickness of the wall to be used when creating the object
 	 */
 	public Support(Dims3d dims, double thickness) {
-		final double SLICE_MUL = 10.0; 
-		
+		this.dims = dims;
+		this.thickness = thickness;
+	}
+
+	@Override
+	protected Abstract3dModel innerCloneModel() {
+		return new Support(dims, thickness);
+	}
+	
+	private Abstract3dModel getModel() {
 		Abstract3dModel base = new Cube(dims);
 		List<Abstract3dModel> slices = new ArrayList<>();
 		IStepper xStepper;
@@ -90,13 +117,28 @@ public class Support extends Extendable3dModel {
 			y = yStepper.nextStep(y);
 		}
 		
-		this.baseModel = new Difference(base, slices);
+		return new Difference(base, slices);
 	}
 
 	@Override
-	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
-		// TODO Auto-generated method stub
-		return null;
+	protected SCAD innerToScad(IColorGenerationContext context) {
+		return getModel().toScad(context);
+	}
+
+	@Override
+	protected Boundaries3d getModelBoundaries() {
+		double x = dims.getX()/2.0;
+		double y = dims.getY()/2.0;
+		double z = dims.getZ()/2.0;
+		return new Boundaries3d(
+				new Boundary(-x, x),
+				new Boundary(-y, y),
+				new Boundary(-z, z));
+	}
+
+	@Override
+	protected CSG toInnerCSG(FacetGenerationContext context) {
+		return getModel().toCSG(context);
 	}
 
 }

@@ -82,13 +82,14 @@ public final class Polygon {
 	}
 
 	/**
-     * Creates a new polygon that consists of the specified
-     * vertices.
+     * Creates a new polygon that consists of the specified vertices.
      *
      * <b>Note:</b> the vertices used to initialize a polygon must be coplanar
      * and form a convex loop.
      *
      * @param vertices polygon vertices
+     * @param color the color of the polygon
+     * @return a new polygon that consists of the specified vertices
      */
     public static Polygon fromPolygons(List<Coords3d> vertices, Color color) {
     	Coords3d a = vertices.get(0);
@@ -112,6 +113,10 @@ public final class Polygon {
         return new Polygon(newVertices, normal.inverse(), -dist, color);
     }
 
+    /**
+     * Converts this polygon to triangles.
+     * @return a list of triangles
+     */
     public List<Facet> toFacets() {
     	List<Facet> facets = new ArrayList<>();
         if (this.vertices.size() >= 3) {
@@ -193,13 +198,15 @@ public final class Polygon {
             case SPANNING:
             	splitPolygon(polygon, front, back);
                 break;
+		default:
+			break;
         }
     }
     
     // Classify the entire polygon into one of the four possible classes.
     private VertexPosition calculatePolygonPosition(Polygon polygon) {
         VertexPosition polygonType = VertexPosition.COPLANAR;
-        for (Coords3d v : polygon.getVertices()) {
+        for (Coords3d v : polygon.vertices) {
             polygonType = polygonType.add(calculateVertexPosition(v));
         }
     	
@@ -209,10 +216,10 @@ public final class Polygon {
 	private void splitPolygon(Polygon polygon, List<Polygon> front, List<Polygon> back) {
 		List<Coords3d> f = new ArrayList<>();
 		List<Coords3d> b = new ArrayList<>();
-		for (int i = 0; i < polygon.getVertices().size(); i++) {
-		    int j = (i + 1) % polygon.getVertices().size();
-		    Coords3d vi = polygon.getVertices().get(i);
-		    Coords3d vj = polygon.getVertices().get(j);
+		for (int i = 0; i < polygon.vertices.size(); i++) {
+		    int j = (i + 1) % polygon.vertices.size();
+		    Coords3d vi = polygon.vertices.get(i);
+		    Coords3d vj = polygon.vertices.get(j);
 		    classifyAndSplitVertex(vi, vj, f, b);
 		}
 		AssertValue.isTrue(f.size() >= 3, "The front list shouldn't have less than 3 values!");
@@ -266,8 +273,4 @@ public final class Polygon {
     	}*/
     	list.add(newVertex);
     }
-    
-	public List<Coords3d> getVertices() {
-		return vertices;
-	}
 }

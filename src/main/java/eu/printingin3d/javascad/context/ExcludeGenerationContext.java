@@ -1,26 +1,20 @@
 package eu.printingin3d.javascad.context;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
-public class ExcludeGenerationContext implements IScadGenerationContext {
-	private final Set<Integer> excluded;
+/**
+ * <p>Used internally by the context generation framework.</p>
+ * <p>Use the {@link ScadGenerationContextFactory} to generate generation context.</p>
+ * @author ivivan <ivivan@printingin3d.eu>
+ */
+public class ExcludeGenerationContext extends IncludeGenerationContext {
 	
 	protected ExcludeGenerationContext(Collection<Integer> excluded) {
-		this.excluded = excluded==null ? null : new HashSet<>(excluded);
+		super(excluded, null);
 	}
 
 	@Override
 	public boolean isTagIncluded() {
 		return true;
-	}
-	
-	@Override
-	public IScadGenerationContext applyTag(int tag) {
-		if (excluded!=null && excluded.contains(Integer.valueOf(tag))) {
-			return ExcludedScadGenerationContext.INSTANCE;
-		}
-		return this;
 	}
 }
