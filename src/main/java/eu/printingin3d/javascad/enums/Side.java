@@ -2,7 +2,6 @@ package eu.printingin3d.javascad.enums;
 
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.models.Abstract3dModel;
 
 /**
  * This class is used by the {@link Abstract3dModel#align(Side, Abstract3dModel, boolean)} method to 

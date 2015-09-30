@@ -15,8 +15,11 @@ import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.IModel;
 import eu.printingin3d.javascad.openscad.Consts;
-/* 
- * @author ivivan <ivivan@printingin3d.eu> 
+/**
+ * <p>Helper class to save several models to a directory.<p>
+ * <p>A typical usage looks like this:<p>
+ * <code>new SaveScadFiles(new File("c:/temp")).addModel("test.scad", new TestModel()).saveScadFiles();</code>
+ * @author ivivan <ivivan@printingin3d.eu>
  */
 public class SaveScadFiles {
 	private final List<IScadFile> scadFiles = new ArrayList<>();
@@ -157,6 +160,7 @@ public class SaveScadFiles {
 	 * Adds a model provider with the given tag colors.
 	 * A default {@link Consts} is added before the model.
 	 * @param provider the provider to be added
+	 * @param tagColors the tag-color pairs to be used for the SCAD file generation
 	 * @return return this object to make it possible to chain more method call
 	 */
 	public SaveScadFiles addModelProvider(IModelProvider provider, ITagColors tagColors) {
@@ -167,7 +171,7 @@ public class SaveScadFiles {
 	 * Adds a model provider with the given color context.
 	 * A default {@link Consts} is added before the model.
 	 * @param provider the provider to be added
-	 * @param context the context used for the scad file generation
+	 * @param context the context used for the SCAD file generation
 	 * @return return this object to make it possible to chain more method call
 	 */
 	public SaveScadFiles addModelProvider(IModelProvider provider, IColorGenerationContext context) {

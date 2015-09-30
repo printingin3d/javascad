@@ -24,10 +24,25 @@ public final class DoubleUtils {
 		return Math.abs(a-b)<EPSILON;
 	}
 	
+	/**
+	 * <p>Create a hash value of the given double. It will satisfy the basic rule of equals and hashCode methods that if
+	 * two values are equals they have to have to same hash code value.</p> 
+	 * <p>So this class's {@link #equalsEps(double, double)} method and this method satisfies this rule: 
+	 * if two double value gives back true with equalEps than this method will generate the same 
+	 * hash code for them.</p> 
+	 * @param value the double value to be used to generate the hash code
+	 * @return the calculated hash code
+	 */
 	public static int hashCodeEps(double value) {
 		return Long.valueOf(Math.round(value/EPSILON)).hashCode();
 	}
 	
+	/**
+	 * Checks if the given double value is zero using a stricter epsilon value 
+	 * than {@link #equalsEps(double, double)}.
+	 * @param a the double value to be checked
+	 * @return true if and only if the value is closed than a predefined epsilon value
+	 */
 	public static boolean isZero(double a) {
 		return Math.abs(a)<ZERO_EPSILON;
 	}

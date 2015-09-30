@@ -174,8 +174,8 @@ public class Coords3d extends Abstract3d {
     
     /**
      * Calculates the distance between this coordinate and the given coordinate.
-     * @param d
-     * @return
+     * @param d the other coordinate
+     * @return the calculated distance
      */
     public double distance(Coords3d d) {
     	return this.move(d.inverse()).magnitude();

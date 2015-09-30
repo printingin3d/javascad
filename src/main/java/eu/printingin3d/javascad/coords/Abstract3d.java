@@ -1,6 +1,5 @@
 package eu.printingin3d.javascad.coords;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -71,6 +70,11 @@ public class Abstract3d {
 		return format(OutputFormat.SCAD);
 	}
 	
+	/**
+	 * Formats the coordinates using the given output format.
+	 * @param outputFormat the output format to be used
+	 * @return the string representation of this object
+	 */
 	public String format(OutputFormat outputFormat) {
 		return new StringBuilder().append(outputFormat.getPreText()).
 				append(DoubleUtils.formatDouble(x)).append(outputFormat.getSeparator()).
@@ -79,7 +83,11 @@ public class Abstract3d {
 				toString();
 	}
     
-    public byte[] toByteArray() throws IOException {
+	/**
+	 * Returns the byte array representation of this object used by the binary STL export function.
+	 * @return a byte array containing the three coordinates.
+	 */
+    public byte[] toByteArray() {
 		ByteBuffer byteBuffer = ByteBuffer.allocate(12).order(ByteOrder.LITTLE_ENDIAN);
 
 		byteBuffer.putFloat((float)x);
@@ -118,19 +126,16 @@ public class Abstract3d {
 	}
 	
 	/**
-	 * Checks a much closed equal relation than the equals method does. The difference could be much smaller this way.
-	 * @param value1 
-	 * @param value2
+	 * Checks a much closer equal relation than the equals method does. The difference could be much smaller this way.
+	 * @param value1 the first value to be checked
+	 * @param value2 the second value to be checked
 	 * @return true if and only if the two coordinate is very close to each other
 	 */
 	public static boolean closeEquals(Abstract3d value1, Abstract3d value2) {
 		if (value1 == value2) {
 			return true;
 		}
-		if (value1 == null || value2 == null) {
-			return value2==value1;
-		}
-		if (value1.getClass() != value2.getClass()) {
+		if (value1 == null || value2 == null || value1.getClass() != value2.getClass()) {
 			return false;
 		}
 		

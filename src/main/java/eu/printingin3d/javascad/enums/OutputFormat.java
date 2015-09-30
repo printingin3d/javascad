@@ -1,7 +1,17 @@
 package eu.printingin3d.javascad.enums;
 
+/**
+ * The output format used by the toString method of the {@link Abstract3d} class.
+ * @author Ivan
+ */
 public enum OutputFormat {
+	/**
+	 * The SCAD output format. The format of a coordinate in SCAD is <code>[10,20,30]</code>.
+	 */
 	SCAD("[", "]", ","),
+	/**
+	 * The textual STL output format. The format of a coordinate in an STL file is <code>10 20 30</code>
+	 */
 	STL("", "", " ");
 	
 	private final String preText;
@@ -14,14 +24,26 @@ public enum OutputFormat {
 		this.separator = separator;
 	}
 
+	/**
+	 * Returns with the string before the three numbers.
+	 * @return the string before the three numbers
+	 */
 	public String getPreText() {
 		return preText;
 	}
 
+	/**
+	 * Returns with the string after the three numbers.
+	 * @return the string after the three numbers
+	 */
 	public String getPostText() {
 		return postText;
 	}
 
+	/**
+	 * Returns with the string separating the three numbers.
+	 * @return the string separating the three numbers
+	 */
 	public String getSeparator() {
 		return separator;
 	}

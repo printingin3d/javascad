@@ -10,6 +10,11 @@ import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
+/**
+ * Represents a 2D circle.
+ * @author Ivan
+ *
+ */
 public class Circle extends Abstract2dModel {
 	private final double radius;
 
@@ -18,6 +23,10 @@ public class Circle extends Abstract2dModel {
 		this.radius = radius;
 	}
 	
+	/**
+	 * Constructs the object using the given radius.
+	 * @param radius the radius of the circle
+	 */
 	public Circle(double radius) {
 		this(Coords2d.ZERO, radius);
 	}

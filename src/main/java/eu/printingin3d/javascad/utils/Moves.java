@@ -10,7 +10,7 @@ import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 
 /**
- * Represents moves which can be used to move models.
+ * An immutable representation of moves which can be used to move models.
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
@@ -37,8 +37,9 @@ public class Moves implements Iterable<Coords3d> {
 	}
 	
 	/**
-	 * Adds the delta value to all of the moves.
+	 * Adds the delta value to all of the moves. This object will be unchanged.
 	 * @param delta the coordinates used by the move
+	 * @return a new object with the modified moves
 	 */
 	public Moves move(Coords3d delta) {
 		return new Moves(innerMove(delta));
@@ -47,8 +48,9 @@ public class Moves implements Iterable<Coords3d> {
 	/**
 	 * Add more moves, which makes this a multi-move, representing more than one move coordinates.
 	 * This operation multiplies the number of moves represented by this object by the number of
-	 * coordinates in the delta parameter.
+	 * coordinates in the delta parameter. This object will be unchanged.
 	 * @param delta the collection of coordinates used by the move operation
+	 * @return a new object with the modified moves
 	 */
 	public Moves moves(Collection<Coords3d> delta) {
 		if (!delta.isEmpty()) {
@@ -62,8 +64,9 @@ public class Moves implements Iterable<Coords3d> {
 	}
 	
 	/**
-	 * Rotates all of the moves represented by this object.
+	 * Rotates all of the moves represented by this object. This object will be unchanged.
 	 * @param delta the angle it will be rotated
+	 * @return a new object with the modified moves
 	 */
 	public Moves rotate(Angles3d delta) {
 		List<Coords3d> temp = new ArrayList<>(moves.size());

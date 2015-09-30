@@ -23,6 +23,7 @@ public class Facet {
 	 * Creates a facet based on a triangle and a normal vector.
 	 * @param triangle the triangle
 	 * @param normal the normal vector
+	 * @param color the color of the facet
 	 */
 	public Facet(Triangle3d triangle, Coords3d normal, Color color) {
 		this.triangle = triangle;
@@ -30,14 +31,22 @@ public class Facet {
 		this.color = color;
 	}
 	
+	/**
+	 * Returns all the vertices this facet holds. The result will always contain exactly three vertices.
+	 * @return all the vertices this facet holds
+	 */
 	public List<Vertex> getVertexes() {
-		List<Vertex> vertexes = new ArrayList<>();
+		List<Vertex> vertexes = new ArrayList<>(3);
 		for (Coords3d c : triangle.getPoints()) {
 			vertexes.add(new Vertex(c, color));
 		}
 		return vertexes;
 	}
 
+	/**
+	 * Returns the normal of this facet.
+	 * @return the normal of this facet
+	 */
 	public Coords3d getNormal() {
 		return normal;
 	}

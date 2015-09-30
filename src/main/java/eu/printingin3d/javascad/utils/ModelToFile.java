@@ -55,6 +55,7 @@ public class ModelToFile {
 	
 	/**
 	 * Saves the models to the file.
+	 * @param context the color context to be used for the generation
 	 * @throws IOException if any IO error happens during opening, writing or closing the file
 	 */
 	public void saveToFile(IColorGenerationContext context) throws IOException {

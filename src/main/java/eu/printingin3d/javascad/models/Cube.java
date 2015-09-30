@@ -23,7 +23,7 @@ public class Cube extends Atomic3dModel {
 	private final Dims3d size;
 	
 	/**
-	 * Creates a cuboid with the given corners
+	 * Creates a cuboid with the given corners.
 	 * @param minCorner the corner with the lower coordinates
 	 * @param maxCorner the corner with the higher coordinates 
 	 * @throws eu.printingin3d.javascad.exceptions.IllegalValueException the minCorner has bigger value 
