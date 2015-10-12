@@ -11,13 +11,17 @@ import eu.printingin3d.javascad.vrl.Facet;
 import eu.printingin3d.javascad.vrl.Vertex;
 
 /**
- * 
- * @author Ivan
- *
+ * An IFileExporter implementation for the textual STL file format. The usual extension of the file
+ * is .stl. The exported file does not contain the color information of the objects.
+ * @author ivivan <ivivan@printingin3d.eu>
  */
 public class StlTextFile implements IFileExporter {
 	private final File file;
 	
+	/**
+	 * Constructs the object with the given file.
+	 * @param file the file to write to
+	 */
 	public StlTextFile(File file) {
 		this.file = file;
 	}
@@ -38,7 +42,7 @@ public class StlTextFile implements IFileExporter {
 		}
 	}
 	
-	public static String facetToStlString(Facet facet) {
+	private static String facetToStlString(Facet facet) {
 		StringBuilder sb = new StringBuilder().
 	        append("  facet normal ").append(facet.getNormal().format(OutputFormat.STL)).append('\n').
 	        append("    outer loop\n");

@@ -11,9 +11,18 @@ import eu.printingin3d.javascad.vrl.Facet;
 import eu.printingin3d.javascad.vrl.Vertex;
 import eu.printingin3d.javascad.vrl.VertexMap;
 
+/**
+ * An IFileExporter implementation for the Polygon file format. The usual extension of the file
+ * is .ply. The exported file contains the color information of the objects too.
+ * @author ivivan <ivivan@printingin3d.eu>
+ */
 public class PolygonFile implements IFileExporter {
 	private final File file;
 	
+	/**
+	 * Constructs the object with the given file.
+	 * @param file the file to write to
+	 */
 	public PolygonFile(File file) {
 		this.file = file;
 	}

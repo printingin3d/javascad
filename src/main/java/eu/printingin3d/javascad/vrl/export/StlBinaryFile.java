@@ -10,9 +10,18 @@ import java.util.List;
 import eu.printingin3d.javascad.vrl.Facet;
 import eu.printingin3d.javascad.vrl.Vertex;
 
+/**
+ * An IFileExporter implementation for the binary STL file format. The usual extension of the file
+ * is .stl. The exported file does not contain the color information of the objects.
+ * @author ivivan <ivivan@printingin3d.eu>
+ */
 public class StlBinaryFile implements IFileExporter {
 	private final File file;
 	
+	/**
+	 * Constructs the object with the given file.
+	 * @param file the file to write to
+	 */
 	public StlBinaryFile(File file) {
 		this.file = file;
 	}
@@ -34,7 +43,7 @@ public class StlBinaryFile implements IFileExporter {
     	}
 	}
 	
-	public static byte[] facetToBinaryStl(Facet facet) throws IOException {
+	private static byte[] facetToBinaryStl(Facet facet) throws IOException {
 		ByteBuffer byteBuffer = ByteBuffer.allocate(50).order(ByteOrder.LITTLE_ENDIAN);
 		
 		byteBuffer.put(facet.getNormal().toByteArray());
