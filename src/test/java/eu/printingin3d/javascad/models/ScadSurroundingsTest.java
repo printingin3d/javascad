@@ -1,6 +1,7 @@
 package eu.printingin3d.javascad.models;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ public class ScadSurroundingsTest {
 		
 		SCAD changed = ScadSurroundings.EMPTY.surroundScad(scad);
 		
-		assertEquals(scad, changed);
+		assertSame(scad, changed);
 	}
 
 	@Test
@@ -25,12 +26,22 @@ public class ScadSurroundingsTest {
 	}
 	
 	@Test
+	public void prefixShouldNotDoAnythingIfTheGivenParameterIsEmpty() {
+		assertSame(ScadSurroundings.EMPTY, ScadSurroundings.EMPTY.appendPrefix(""));
+	}
+	
+	@Test
 	public void postfixShouldBePutBeforeScad() {
 		SCAD scad = new SCAD("test scad");
 		
 		SCAD changed = ScadSurroundings.EMPTY.appendPostfix(" test").surroundScad(scad);
 		
 		assertEquals("test scad test", changed.getScad());
+	}
+	
+	@Test
+	public void postfixShouldNotDoAnythingIfTheGivenParameterIsEmpty() {
+		assertSame(ScadSurroundings.EMPTY, ScadSurroundings.EMPTY.appendPostfix(""));
 	}
 	
 	@Test
@@ -45,6 +56,18 @@ public class ScadSurroundingsTest {
 				.surroundScad(scad);
 		
 		assertEquals("{(test scad)}", changed.getScad());
+	}
+	
+	@Test
+	public void surroundScadShouldReturnEmptyIfTheGivenParameterIsEmpty() {
+		SCAD changed = ScadSurroundings.EMPTY
+				.appendPrefix("{")
+				.appendPostfix("}")
+				.appendPrefix("(")
+				.appendPostfix(")")
+				.surroundScad(SCAD.EMPTY);
+		
+		assertSame(SCAD.EMPTY, changed);
 	}
 	
 	@Test

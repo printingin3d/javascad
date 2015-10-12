@@ -1,5 +1,7 @@
 package eu.printingin3d.javascad.models;
 
+import eu.printingin3d.javascad.utils.StringUtils;
+
 /**
  * Immutable representation of prefix and suffix of the generated SCAD output.
  * @author ivivan <ivivan@printingin3d.eu>
@@ -25,7 +27,9 @@ public final class ScadSurroundings {
 	 * @return object representing the new prefix and suffix
 	 */
 	public ScadSurroundings appendPrefix(String prefix) {
-		return new ScadSurroundings(this.prefix + prefix, this.postfix);
+		return StringUtils.hasText(prefix) 
+				? new ScadSurroundings(StringUtils.append(this.prefix, prefix), this.postfix)
+		        : this;
 	}
 	
 	/**
@@ -35,7 +39,9 @@ public final class ScadSurroundings {
 	 * @return object representing the new prefix and suffix
 	 */
 	public ScadSurroundings appendPostfix(String postfix) {
-		return new ScadSurroundings(this.prefix, postfix + this.postfix);
+		return StringUtils.hasText(postfix)
+				? new ScadSurroundings(this.prefix, StringUtils.append(postfix, this.postfix))
+				: this;
 	}
 	
 	/**
@@ -54,7 +60,8 @@ public final class ScadSurroundings {
 	 * @return a new SCAD file representing the surrounded source 
 	 */
 	public SCAD surroundScad(SCAD source) {
-		return source
+		return source.isEmpty() ? source :
+				source
 				.prepend(prefix)
 				.append(postfix);
 	}

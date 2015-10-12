@@ -9,7 +9,6 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.enums.AlignType;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 
@@ -20,8 +19,8 @@ public class BoundaryTest {
 	
 	public static void assertBoundaryEquals(Boundary expected, Boundary actual) {
 		assertDoubleEquals("Min values mismatch", expected.getMin(), actual.getMin());
-		assertDoubleEquals("Middle values mismatch", expected.getMiddle(), actual.getMiddle());
 		assertDoubleEquals("Max values mismatch", expected.getMax(), actual.getMax());
+		assertDoubleEquals("Middle values mismatch", expected.getMiddle(), actual.getMiddle());
 	}
 
 	@Test

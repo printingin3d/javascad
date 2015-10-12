@@ -1,5 +1,7 @@
 package eu.printingin3d.javascad.models;
 
+import eu.printingin3d.javascad.utils.StringUtils;
+
 /**
  * Immutable object for the SCAD output.
  * @author ivivan <ivivan@printingin3d.eu>
@@ -18,14 +20,6 @@ public class SCAD {
 	 */
 	public SCAD(String scad) {
 		this.scad = scad;
-	}
-	
-	/**
-	 * True if this result should be included into the output.
-	 * @return true if this result should be included into the output
-	 */
-	public boolean isIncluded() {
-		return !scad.isEmpty();
 	}
 	
 	/**
@@ -50,7 +44,9 @@ public class SCAD {
 	 * @return a new object containing the newly concatenated string
 	 */
 	public SCAD prepend(String text) {
-		return new SCAD(text+this.scad);
+		return StringUtils.hasText(text)
+				? new SCAD(StringUtils.append(text, this.scad))
+				: this;
 	}
 	
 	/**
@@ -59,7 +55,9 @@ public class SCAD {
 	 * @return a new object containing the newly concatenated string
 	 */
 	public SCAD append(String text) {
-		return new SCAD(this.scad+text);
+		return StringUtils.hasText(text)
+				? new SCAD(StringUtils.append(this.scad, text))
+				: this;
 	}
 	
 	/**
@@ -68,15 +66,13 @@ public class SCAD {
 	 * @return a new object containing the newly concatenated string
 	 */
 	public SCAD append(SCAD scad) {
-		return new SCAD(this.scad+scad.scad);
+		return new SCAD(StringUtils.append(this.scad, scad.scad));
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((scad == null) ? 0 : scad.hashCode());
-		return result;
+		return prime + ((scad == null) ? 0 : scad.hashCode());
 	}
 
 	@Override

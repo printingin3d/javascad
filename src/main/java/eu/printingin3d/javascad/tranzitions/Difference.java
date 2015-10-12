@@ -62,7 +62,7 @@ public class Difference extends Complex3dModel {
 	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
 		SCAD baseModel = model1.toScad(context);
-		if (!baseModel.isIncluded()) {
+		if (baseModel.isEmpty()) {
 			return SCAD.EMPTY;
 		}
 		

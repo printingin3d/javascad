@@ -144,7 +144,7 @@ public abstract class Abstract3dModel implements IModel {
 	private SCAD getOne(IColorGenerationContext context) {
 		SCAD item = innerToScad(context);
 		
-		if (item==null || !item.isIncluded()) {
+		if (item==null || item.isEmpty()) {
 			return SCAD.EMPTY;
 		}
 		
@@ -158,7 +158,7 @@ public abstract class Abstract3dModel implements IModel {
 	private SCAD addMovesScad(IColorGenerationContext context) {
 		SCAD oneItem = getOne(context);
 		SCAD result = SCAD.EMPTY;
-		if (oneItem.isIncluded()) {
+		if (!oneItem.isEmpty()) {
 			for (Coords3d coord : moves) {
 				result = result.append(Translate.getTranslate(coord))
 				      .append(oneItem);
@@ -191,10 +191,7 @@ public abstract class Abstract3dModel implements IModel {
 					.appendPostfix("}");
 		}
 		SCAD result = addMovesScad(currentContext);
-		if (result.isIncluded()) {
-			return surroundings.surroundScad(result);
-		}
-		return SCAD.EMPTY;
+		return surroundings.surroundScad(result);
 	}
 	
 	private ScadSurroundings getScadColor(IColorGenerationContext currentContext) {
@@ -392,7 +389,8 @@ public abstract class Abstract3dModel implements IModel {
 	 * <p>Copies parts of the model to a new model based on the given context. It is very useful if we want
 	 * to use a tagged part of the model as a separate model. Lots of things can be done to the new model:
 	 * we can render it or we can use it to align to it.</p>
-	 * <p>If the given context is the {@link ScadGenerationContextFactory#DEFAULT} then this method call is logically 
+	 * <p>If the given context is the {@link eu.printingin3d.javascad.context.ScadGenerationContextFactory#DEFAULT 
+	 * ScadGenerationContextFactory.DEFAULT} then this method call is logically 
 	 * equivalent to a {@link #cloneModel()} method call.</p>
 	 * @param context the context to be used as a filter during the copy process.
 	 * @return a copy of the selected parts of this model
