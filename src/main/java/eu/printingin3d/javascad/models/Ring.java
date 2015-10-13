@@ -11,10 +11,20 @@ import eu.printingin3d.javascad.tranzitions.Translate;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
+/**
+ * A ring 3D object based on a 2D object.
+ * @author ivivan <ivivan@printingin3d.eu>
+ */
 public class Ring extends Atomic3dModel {
 	private final Abstract2dModel model;
 	private final double radius;
 	
+	/**
+	 * Creates the ring with the given parameters. The ready object will be the 2D model extruded into a ring
+	 * with the given radius between the origin and the origin of the 2D model.
+	 * @param radius the radius of the extrusion
+	 * @param model the model to be rotated
+	 */
 	public Ring(double radius, Abstract2dModel model) {
 		this.model = model;
 		this.radius = radius;

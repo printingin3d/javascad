@@ -3,9 +3,18 @@ package eu.printingin3d.javascad.coords;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
-
-public class EdgeCrossSolver {
+/**
+ * Experimental helper class to make the STL export manifold, with very little success so far.
+ * @author ivivan <ivivan@printingin3d.eu>
+ */
+public final class EdgeCrossSolver {
 	
+	private EdgeCrossSolver() {}
+	
+	/**
+	 * Helper class used internally.
+	 * @author ivivan <ivivan@printingin3d.eu>
+	 */
 	private static class IntersectionResult {
 		private final boolean allX;
 		private final double x;
@@ -30,7 +39,15 @@ public class EdgeCrossSolver {
 		}
 	}
 	
-	
+	/**
+	 * Finds the intersection of the e1v1-e1v2 and e2v1-e2v2 line segments. Returns with the
+	 * coordinate of the intersection or null if it doesn't exist.
+	 * @param e1v1 the start of the first line segment
+	 * @param e1v2 the end of the first line segment
+	 * @param e2v1 the start of the second line segment
+	 * @param e2v2 the end of the second line segment
+	 * @return the coordinate of the intersection or null if the two line segments are not crossing
+	 */
 	public static Coords3d findIntersection(Coords3d e1v1, Coords3d e1v2, Coords3d e2v1, Coords3d e2v2) {
 		IntersectionResult xy = findIntersection(
 				new Coords2d(e1v1.getX(), e1v1.getY()), new Coords2d(e1v2.getX(), e1v2.getY()),

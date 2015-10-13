@@ -97,7 +97,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
-                    <failOnViolation>false</failOnViolation>
+                    <failOnViolation>true</failOnViolation>
                     <logViolationsToConsole>true</logViolationsToConsole>
                     <violationSeverity>warning</violationSeverity>
                 </configuration>
