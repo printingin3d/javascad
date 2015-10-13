@@ -62,23 +62,25 @@ public class Abstract3dModelTest {
 
 	@Test
 	public void testMoves() {
-		testSubject.moves(Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)));
+		Abstract3dModel moved = testSubject.moves(
+				Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)));
 		assertEqualsWithoutWhiteSpaces("union(){translate([10,20,30])(empty)translate([30,10,20])(empty)}", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				moved.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void movesWithEmptyListDoesNothing() {
-		testSubject.moves(Collections.<Coords3d>emptyList());
-		assertEqualsWithoutWhiteSpaces("(empty)", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		Abstract3dModel moved = testSubject.moves(Collections.<Coords3d>emptyList());
+		assertEqualsWithoutWhiteSpaces("(empty)", moved.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testMovesWithDebug() {
-		testSubject.moves(Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)));
-		testSubject.debug();
+		Abstract3dModel moved = testSubject
+				.moves(Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)))
+				.debug();
 		assertEqualsWithoutWhiteSpaces("# union(){translate([10,20,30])(empty)translate([30,10,20])(empty)}", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				moved.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 
 	@Test
@@ -115,10 +117,11 @@ public class Abstract3dModelTest {
 	
 	@Test
 	public void testMovesAndRotate() {
-		testSubject.rotate(new Angles3d(10.0, 20.0, 30.0));
-		testSubject.moves(Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)));
+		Abstract3dModel moved = testSubject
+				.rotate(new Angles3d(10.0, 20.0, 30.0))
+				.moves(Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)));
 		assertEqualsWithoutWhiteSpaces("union(){translate([10,20,30]) rotate([10,20,30]) (empty) translate([30,10,20]) rotate([10,20,30]) (empty)}", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				moved.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test

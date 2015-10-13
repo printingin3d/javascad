@@ -22,7 +22,6 @@ import eu.printingin3d.javascad.tranzitions.Rotate;
 import eu.printingin3d.javascad.tranzitions.Translate;
 import eu.printingin3d.javascad.tranzitions.Union;
 import eu.printingin3d.javascad.utils.AssertValue;
-import eu.printingin3d.javascad.utils.Moves;
 import eu.printingin3d.javascad.utils.RoundProperties;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
@@ -30,13 +29,12 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 /**
  * <p>Implements IModel interface and adds convenient methods to make it easier to move or rotate
  * the 3D models. Every primitive 3D object and 3D transition extend this class.</p>
- * <p>It can even represent more than one model on certain cases - see {@link #moves(Collection)}.</p>
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
 public abstract class Abstract3dModel implements IModel {
 	private int tag = 0;
-	private Moves moves = new Moves();
+	private Coords3d move = Coords3d.ZERO;
 	private Angles3d rotate = Angles3d.ZERO;
 	private boolean debug = false;
 	private boolean background = false;
@@ -48,21 +46,22 @@ public abstract class Abstract3dModel implements IModel {
 	 * @return return this object to make it possible to chain more method call
 	 */
 	public Abstract3dModel move(Coords3d delta) {
-		moves = moves.move(delta);
+		move = move.move(delta);
 		return this;
 	}
 
 	/**
-	 * Add moves to this model, which makes this a multi-model, representing more than one model.
-	 * This operation multiplies the number of models represented by this object by the number of
-	 * coordinates in the delta parameter.
-	 * Please be aware that not every method works on multi-models, see {@link #isMulti()}  
+	 * Add moves to this model, which converts this to an {@link Union}, representing more than one model.  
 	 * @param delta the collection of coordinates used by the move operation
 	 * @return this object to make it possible to chain more method call
 	 */
 	public Abstract3dModel moves(Collection<Coords3d> delta) {
 		if (!delta.isEmpty()) {
-			moves = moves.moves(delta);
+			List<Abstract3dModel> newModels = new ArrayList<>();
+			for (Coords3d c : delta) {
+				newModels.add(this.cloneModel().move(c));
+			}
+			return new Union(newModels);
 		}
 		return this;
 	}
@@ -74,7 +73,7 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	public Abstract3dModel rotate(Angles3d delta) {
 		this.rotate = this.rotate.rotate(delta);
-		this.moves = this.moves.rotate(delta);
+		this.move = this.move.rotate(delta);
 		return this;
 	}
 	
@@ -101,14 +100,6 @@ public abstract class Abstract3dModel implements IModel {
 	}
 	
 	/**
-	 * Tells if this object represents a multi-model.
-	 * @return true if and only if the result of this model will be more than one model after rendering
-	 */
-	public final boolean isMulti() {
-		return moves.isMulti();
-	}
-	
-	/**
 	 * Creates a clone of this model, so after the cloning any change on it won't affect.
 	 * this model
 	 * @return a copy of this model
@@ -117,7 +108,7 @@ public abstract class Abstract3dModel implements IModel {
 		Abstract3dModel model = innerCloneModel();
 		
 		model.tag = tag;
-		model.moves = moves;
+		model.move = move;
 		model.rotate = rotate;
 		model.debug = debug;
 		model.background = background;
@@ -159,10 +150,8 @@ public abstract class Abstract3dModel implements IModel {
 		SCAD oneItem = getOne(context);
 		SCAD result = SCAD.EMPTY;
 		if (!oneItem.isEmpty()) {
-			for (Coords3d coord : moves) {
-				result = result.append(Translate.getTranslate(coord))
-				      .append(oneItem);
-			}
+			result = result.append(Translate.getTranslate(move))
+			      .append(oneItem);
 		}
 		return result;
 	}
@@ -186,10 +175,6 @@ public abstract class Abstract3dModel implements IModel {
 				.include(getScadColor(currentContext))
 				.include(getScadRounding());
 		
-		if (isMulti()) {
-			surroundings = surroundings.appendPrefix("union(){")
-					.appendPostfix("}");
-		}
 		SCAD result = addMovesScad(currentContext);
 		return surroundings.surroundScad(result);
 	}
@@ -227,12 +212,7 @@ public abstract class Abstract3dModel implements IModel {
 	 * @return the calculated boundaries
 	 */
 	public final Boundaries3d getBoundaries() {
-		Boundaries3d b = getModelBoundaries().rotate(rotate);
-		List<Boundaries3d> bounds = new ArrayList<>();
-		for (Coords3d d : moves) {
-			bounds.add(b.move(d));
-		}
-		Boundaries3d boundaries = Boundaries3d.combine(bounds);
+		Boundaries3d boundaries = getModelBoundaries().rotate(rotate).move(move);
 		for (RoundProperties rp : roundingPlane.values()) {
 			boundaries = boundaries.add(rp.getRoundingSize());
 		}
@@ -252,7 +232,7 @@ public abstract class Abstract3dModel implements IModel {
 	 * @return true if this object is moved false otherwise
 	 */
 	public boolean isMoved() {
-		return moves.isMoved();
+		return !move.isZero();
 	}
 	
 	/**
@@ -308,25 +288,8 @@ public abstract class Abstract3dModel implements IModel {
 			csg = csg.transformed(TransformationFactory.getRotationMatrix(rotate));
 		}
 		
-		if (isMulti()) {
-			CSG union = null;
-			for (Coords3d move : moves) {
-				CSG transformed = null;
-				if (!move.isZero()) {
-					transformed = csg.transformed(TransformationFactory.getTranlationMatrix(move));
-				}
-				else {
-					transformed = csg;
-				}
-				union = (union==null) ? transformed : union.union(transformed);
-			}
-			csg = union;
-		} else {
-			for (Coords3d move : moves) {
-				if (!move.isZero()) {
-					csg = csg.transformed(TransformationFactory.getTranlationMatrix(move));
-				}
-			}
+		if (!move.isZero()) {
+			csg = csg.transformed(TransformationFactory.getTranlationMatrix(move));
 		}
 		
 		return csg;
@@ -404,7 +367,7 @@ public abstract class Abstract3dModel implements IModel {
 			model.debug = debug;
 			model.background = background;
 			
-			model.moves = moves;
+			model.move = move;
 			model.rotate = rotate;
 		}
 		
