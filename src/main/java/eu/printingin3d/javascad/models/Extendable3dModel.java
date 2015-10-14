@@ -1,7 +1,10 @@
 package eu.printingin3d.javascad.models;
 
+import java.lang.reflect.Constructor;
+
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
+import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.vrl.CSG;
@@ -21,8 +24,7 @@ public abstract class Extendable3dModel extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		throw new UnsupportedOperationException("Cloning is not permitted for extendable 3D model unless "
-				+ "it is specifically handled in the derived class!");
+		return innerSubModel(ScadGenerationContextFactory.DEFAULT);
 	}
 
 	@Override
@@ -45,7 +47,9 @@ public abstract class Extendable3dModel extends Complex3dModel {
 	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
 		Extendable3dModel newInstance;
 		try {
-			newInstance = getClass().getConstructor().newInstance();
+			Constructor<? extends Extendable3dModel> constructor = getClass().getDeclaredConstructor();
+			constructor.setAccessible(true);
+			newInstance = constructor.newInstance();
 		} catch (ReflectiveOperationException | IllegalArgumentException | SecurityException e) {
 			throw new IllegalValueException("Creating the new instance of this "
 					+ "class ("+getClass()+") has failed! "+

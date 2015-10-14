@@ -129,8 +129,7 @@ public class CloneModelTest {
 		Abstract3dModel clone = original.cloneModel();
 		SCAD scad = clone.toScad(ColorHandlingContext.DEFAULT);
 		if (!scad.isEmpty()) {
-			original.move(RandomUtils.getRandomCoords());
-			assertFalse(scad.equals(original.toScad(ColorHandlingContext.DEFAULT)));
+			assertFalse(scad.equals(original.move(RandomUtils.getRandomCoords()).toScad(ColorHandlingContext.DEFAULT)));
 		}
 	}
 	

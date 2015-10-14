@@ -42,11 +42,7 @@ public class Intersection extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		List<Abstract3dModel> cloneModels = new ArrayList<>();
-		for (Abstract3dModel model : models) {
-			cloneModels.add(model.cloneModel());
-		}
-		return new Intersection(cloneModels);
+		return new Intersection(new ArrayList<Abstract3dModel>(models));
 	}
 
 	@Override

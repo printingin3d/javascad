@@ -58,7 +58,7 @@ public class Rotate extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return new Rotate(model.cloneModel(), angles);
+		return new Rotate(model, angles);
 	}
 
 	@Override

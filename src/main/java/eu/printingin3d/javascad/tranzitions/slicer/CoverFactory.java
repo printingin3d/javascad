@@ -17,63 +17,75 @@ import eu.printingin3d.javascad.tranzitions.Direction;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Cover extends Cube {
+public final class CoverFactory {
 
+	private CoverFactory() {}
+	
 	/**
-	 * Create this helper class.
+	 * Create a helper object to be used.
 	 * @param model model to be sliced
 	 * @param direction the direction of the slicing
 	 * @param sizeRate the rate of the part to be cut off
 	 * @param lower which end should be cut off
+	 * @return the cover object which hides the proper part of the given model
 	 */
-	public Cover(Abstract3dModel model, Direction direction, double sizeRate, boolean lower) {
-		super(calculateSize(model, direction, sizeRate));
+	public static Abstract3dModel createCover(Abstract3dModel model, Direction direction, 
+			double sizeRate, boolean lower) {
+		Abstract3dModel result = new Cube(calculateSize(model, direction, sizeRate));
 		Boundaries3d b3d = model.getBoundaries();
-		move(new Coords3d(
+		result = result.move(new Coords3d(
 				b3d.getX().getMiddle(), 
 				b3d.getY().getMiddle(),
 				b3d.getZ().getMiddle()));
 		if (lower) {
-			moveLower(model, direction);
+			return moveLower(result, model, direction);
 		} else {
-			moveUpper(model, direction);
+			return moveUpper(result, model, direction);
 		}
 	}
 
-	private void moveLower(Abstract3dModel model, Direction direction) {
+	private static Abstract3dModel moveLower(Abstract3dModel result, Abstract3dModel model, Direction direction) {
 		switch (direction) {
 		case X:
-			align(Side.LEFT, model, true);
-			move(Coords3d.xOnly(-1.0));
+			result = result
+					.align(Side.LEFT, model, true)
+					.move(Coords3d.xOnly(-1.0));
 			break;
 		case Y:
-			align(Side.FRONT, model, true);
-			move(Coords3d.yOnly(-1.0));
+			result = result
+					.align(Side.FRONT, model, true)
+					.move(Coords3d.yOnly(-1.0));
 			break;
 		case Z:
 		default:
-			align(Side.BOTTOM, model, true);
-			move(Coords3d.zOnly(-1.0));
+			result = result
+					.align(Side.BOTTOM, model, true)
+					.move(Coords3d.zOnly(-1.0));
 			break;
 		}
+		return result;
 	}
 	
-	private void moveUpper(Abstract3dModel model, Direction direction) {
+	private static Abstract3dModel moveUpper(Abstract3dModel result, Abstract3dModel model, Direction direction) {
 		switch (direction) {
 		case X:
-			align(Side.RIGHT, model, true);
-			move(Coords3d.xOnly(+1.0));
+			result = result
+					.align(Side.RIGHT, model, true)
+					.move(Coords3d.xOnly(+1.0));
 			break;
 		case Y:
-			align(Side.BACK, model, true);
-			move(Coords3d.yOnly(+1.0));
+			result = result
+					.align(Side.BACK, model, true)
+					.move(Coords3d.yOnly(+1.0));
 			break;
 		case Z:
 		default:
-			align(Side.TOP, model, true);
-			move(Coords3d.zOnly(+1.0));
+			result = result
+					.align(Side.TOP, model, true)
+					.move(Coords3d.zOnly(+1.0));
 			break;
 		}
+		return result;
 	}
 
 	private static Dims3d calculateSize(Abstract3dModel model, Direction direction, double sizeRate) {

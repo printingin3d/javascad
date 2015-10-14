@@ -25,16 +25,17 @@ public class Cube extends Atomic3dModel {
 	/**
 	 * Creates a cuboid with the given corners.
 	 * @param minCorner the corner with the lower coordinates
-	 * @param maxCorner the corner with the higher coordinates 
+	 * @param maxCorner the corner with the higher coordinates
+	 * @return a cuboid with the given corners.
 	 * @throws eu.printingin3d.javascad.exceptions.IllegalValueException the minCorner has bigger value 
 	 * 			then maxCorner in any coordinate (x, y or z)
 	 */
-	public Cube(Coords3d minCorner, Coords3d maxCorner) {
-		this(new Dims3d(
+	public static Abstract3dModel fromCoordinates(Coords3d minCorner, Coords3d maxCorner) {
+		Abstract3dModel result = new Cube(new Dims3d(
 				maxCorner.getX()-minCorner.getX(), 
 				maxCorner.getY()-minCorner.getY(), 
 				maxCorner.getZ()-minCorner.getZ()));
-		align(new Side(AlignType.MIN, AlignType.MIN, AlignType.MIN), minCorner);
+		return result.align(new Side(AlignType.MIN, AlignType.MIN, AlignType.MIN), minCorner);
 	}
 	
 	/**

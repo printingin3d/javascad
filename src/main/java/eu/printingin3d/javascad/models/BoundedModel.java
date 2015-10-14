@@ -35,7 +35,7 @@ public class BoundedModel extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return new BoundedModel(baseModel.cloneModel(), boundaries3d);
+		return new BoundedModel(baseModel, boundaries3d);
 	}
 
 	@Override

@@ -101,10 +101,10 @@ public class Abstract3dModelAlignBatchTest {
 		Abstract3dModel testSubject = new Test3dModel("(base)", boundaries);
 		Coords3d coords = RandomUtils.getRandomCoords();
 		
-		testSubject.align(testCase.getSize(), coords);
+		Abstract3dModel ts = testSubject.align(testCase.getSize(), coords);
 		
-		assertOneAxis(testCase.getX(), coords.getX(), testSubject.getBoundaries().getX(), boundaries.getX());
-		assertOneAxis(testCase.getY(), coords.getY(), testSubject.getBoundaries().getY(), boundaries.getY());
-		assertOneAxis(testCase.getZ(), coords.getZ(), testSubject.getBoundaries().getZ(), boundaries.getZ());
+		assertOneAxis(testCase.getX(), coords.getX(), ts.getBoundaries().getX(), boundaries.getX());
+		assertOneAxis(testCase.getY(), coords.getY(), ts.getBoundaries().getY(), boundaries.getY());
+		assertOneAxis(testCase.getZ(), coords.getZ(), ts.getBoundaries().getZ(), boundaries.getZ());
 	}
 }

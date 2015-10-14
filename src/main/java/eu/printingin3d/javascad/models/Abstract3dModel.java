@@ -41,19 +41,21 @@ public abstract class Abstract3dModel implements IModel {
 	private final Map<Plane, RoundProperties> roundingPlane = new HashMap<>();
 	
 	/**
-	 * Moves this object by the given coordinates.
+	 * Moves this object by the given coordinates. This object won't be changed, but a new object will be created.
 	 * @param delta the coordinates used by the move
-	 * @return return this object to make it possible to chain more method call
+	 * @return the new object created
 	 */
 	public Abstract3dModel move(Coords3d delta) {
-		move = move.move(delta);
-		return this;
+		Abstract3dModel result = cloneModel();
+		result.move = this.move.move(delta);
+		return result;
 	}
 
 	/**
-	 * Add moves to this model, which converts this to an {@link Union}, representing more than one model.  
+	 * Add moves to this model, which converts this to an {@link Union}, representing more than one model.
+	 * This object won't be changed.  
 	 * @param delta the collection of coordinates used by the move operation
-	 * @return this object to make it possible to chain more method call
+	 * @return a new object which holds the moved objects
 	 */
 	public Abstract3dModel moves(Collection<Coords3d> delta) {
 		if (!delta.isEmpty()) {
@@ -67,36 +69,39 @@ public abstract class Abstract3dModel implements IModel {
 	}
 	
 	/**
-	 * Rotates the current model.
+	 * Creates a new object by rotating this object with the given angle.
 	 * @param delta the angle it will be rotated
-	 * @return this object to make it possible to chain more method call
+	 * @return the new object created
 	 */
 	public Abstract3dModel rotate(Angles3d delta) {
-		this.rotate = this.rotate.rotate(delta);
-		this.move = this.move.rotate(delta);
-		return this;
+		Abstract3dModel result = cloneModel();
+		result.rotate = this.rotate.rotate(delta);
+		result.move = this.move.rotate(delta);
+		return result;
 	}
 	
 	/**
-	 * Denotes this object to be debugged, which means it is rendered in a different color 
+	 * Creates a new object with the debug flag set, which means it is rendered in a different color 
 	 * in preview mode (it does not affect the CGAL rendering or STL export). It is quite 
 	 * useful debugging Difference. 
-	 * @return this object to make it possible to chain more method call
+	 * @return the new object created
 	 */
 	public Abstract3dModel debug() {
-		this.debug = true;
-		return this;
+		Abstract3dModel result = cloneModel();
+		result.debug = true;
+		return result;
 	}
 	
 	/**
-	 * Denotes this object as a background object, which means it will render in a transparent
+	 * Creates a new object with the background flag set, which means it will render in a transparent
 	 * light gray color in preview mode and is skipped in CGAL rendering or STL export.
 	 * This is mainly used as a helping object for reference during the sketch. 
-	 * @return this object to make it possible to chain more method call
+	 * @return the new object created
 	 */
 	public Abstract3dModel background() {
-		this.background = true;
-		return this;
+		Abstract3dModel result = cloneModel();
+		result.background = true;
+		return result;
 	}
 	
 	/**
@@ -112,6 +117,7 @@ public abstract class Abstract3dModel implements IModel {
 		model.rotate = rotate;
 		model.debug = debug;
 		model.background = background;
+		model.roundingPlane.putAll(roundingPlane);
 		
 		return model;
 	}
@@ -241,11 +247,10 @@ public abstract class Abstract3dModel implements IModel {
 	 * @param place where to move this model
 	 * @param model the model used as a reference point
 	 * @param inside controls which side of the aligned model will be aligned 
-	 * @return this object to make it possible to chain more method call
+	 * @return the new object created
 	 */
 	public Abstract3dModel align(Side place, Abstract3dModel model, boolean inside) {
-		move(place.calculateCoords(getBoundaries(), model.getBoundaries(), inside));
-		return this;
+		return move(place.calculateCoords(getBoundaries(), model.getBoundaries(), inside));
 	}
 	
 	/**
@@ -253,11 +258,10 @@ public abstract class Abstract3dModel implements IModel {
 	 * the place - see {@link Side}.</p>
 	 * @param place where to move this model
 	 * @param coords the coordinates used as a reference point
-	 * @return this object to make it possible to chain more method call
+	 * @return the new object created
 	 */
 	public Abstract3dModel align(Side place, Coords3d coords) {
-		move(place.calculateCoords(getBoundaries(), coords));
-		return this;
+		return move(place.calculateCoords(getBoundaries(), coords));
 	}
 	
 	/**
@@ -266,14 +270,15 @@ public abstract class Abstract3dModel implements IModel {
 	 * <p>Please pay attention that the rounding increases the objects size with the given radius.</>
 	 * @param plane the rounding will happen on this plane - or all around if it set to ALL.
 	 * @param radius the radius of the rounding
-	 * @return this object to make it possible to chain more method call
+	 * @return the newly created object
 	 * @throws IllegalValueException if the given radius is negative
 	 */
 	public Abstract3dModel round(Plane plane, double radius) throws IllegalValueException {
 		AssertValue.isNotNegative(radius, "Radius of the rounding should not be negative!");
 		
-		roundingPlane.put(plane, new RoundProperties(plane, radius));
-		return this;
+		Abstract3dModel result = cloneModel();
+		result.roundingPlane.put(plane, new RoundProperties(plane, radius));
+		return result;
 	}
 	
 	protected abstract CSG toInnerCSG(FacetGenerationContext context);
@@ -311,8 +316,9 @@ public abstract class Abstract3dModel implements IModel {
 	 * @return this object to make it possible to chain more method call 
 	 */
 	public Abstract3dModel withTag(int tag) {
-		this.tag = tag;
-		return this;
+		Abstract3dModel result = cloneModel();
+		result.tag = tag;
+		return result;
 	}
 
 	/**
@@ -369,6 +375,8 @@ public abstract class Abstract3dModel implements IModel {
 			
 			model.move = move;
 			model.rotate = rotate;
+			
+			model.roundingPlane.putAll(roundingPlane);
 		}
 		
 		return model;

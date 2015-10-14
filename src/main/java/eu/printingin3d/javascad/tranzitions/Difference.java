@@ -107,11 +107,7 @@ public class Difference extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		List<Abstract3dModel> cloneModels = new ArrayList<>();
-		for (Abstract3dModel model : model2) {
-			cloneModels.add(model.cloneModel());
-		}
-		return new Difference(model1.cloneModel(), cloneModels);
+		return new Difference(model1, new ArrayList<Abstract3dModel>(model2));
 	}
 
 	@Override

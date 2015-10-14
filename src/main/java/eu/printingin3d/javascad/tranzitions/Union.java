@@ -82,11 +82,7 @@ public class Union extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		List<Abstract3dModel> cloneModels = new ArrayList<>();
-		for (Abstract3dModel model : models) {
-			cloneModels.add(model.cloneModel());
-		}
-		return new Union(cloneModels);
+		return new Union(new ArrayList<Abstract3dModel>(models));
 	}
 
 	@Override

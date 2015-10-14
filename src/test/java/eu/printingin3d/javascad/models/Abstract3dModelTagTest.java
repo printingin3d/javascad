@@ -85,11 +85,10 @@ public class Abstract3dModelTagTest {
 	}
 	
 	@Test
-	public void subModuleShouldReturnWithTheCloneOfTheModelIfTheItemIsIncluded() {
+	public void subModuleShouldReturnWithTheSameObjectIfTheItemIsIncluded() {
 		Abstract3dModel testSubject2 = new Test3dModel("(model)").withTag(11);
 		Abstract3dModel subModel = testSubject2
 				.subModel(new ScadGenerationContextFactory().include(11).create());
-		assertEqualsWithoutWhiteSpaces("(model)", subModel.toScad(ColorHandlingContext.DEFAULT).getScad());
-		Assert.assertNotSame(testSubject2, subModel);
+		Assert.assertSame(testSubject2, subModel);
 	}
 }

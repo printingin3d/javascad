@@ -61,7 +61,7 @@ public class Translate extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return new Translate(model.cloneModel(), move);
+		return new Translate(model, move);
 	}
 
 	@Override

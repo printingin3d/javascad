@@ -76,7 +76,7 @@ public final class Mirror extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return new Mirror(model.cloneModel(), direction);
+		return new Mirror(model, direction);
 	}
 
 	@Override

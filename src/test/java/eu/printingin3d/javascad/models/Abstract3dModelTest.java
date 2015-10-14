@@ -37,27 +37,27 @@ public class Abstract3dModelTest {
 	
 	@Test
 	public void testDefaultWithDebug() {
-		testSubject.debug();
-		assertEqualsWithoutWhiteSpaces("# (empty)", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		Abstract3dModel ts = testSubject.debug();
+		assertEqualsWithoutWhiteSpaces("# (empty)", ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testDefaultWithBackground() {
-		testSubject.background();
-		assertEqualsWithoutWhiteSpaces("% (empty)", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		Abstract3dModel ts = testSubject.background();
+		assertEqualsWithoutWhiteSpaces("% (empty)", ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testDefaultWithDebugAndBackground() {
-		testSubject.background().debug();
-		assertEqualsWithoutWhiteSpaces("# % (empty)", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		Abstract3dModel ts = testSubject.background().debug();
+		assertEqualsWithoutWhiteSpaces("# % (empty)", ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testMove() {
-		testSubject.move(new Coords3d(10.0, 20.0, 30.0));
+		Abstract3dModel ts = testSubject.move(new Coords3d(10.0, 20.0, 30.0));
 		assertEqualsWithoutWhiteSpaces("translate([10,20,30])(empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 
 	@Test
@@ -85,34 +85,37 @@ public class Abstract3dModelTest {
 
 	@Test
 	public void testRotate() {
-		testSubject.rotate(new Angles3d(10.0, 20.0, 30.0));
+		Abstract3dModel ts = testSubject.rotate(new Angles3d(10.0, 20.0, 30.0));
 		assertEqualsWithoutWhiteSpaces("rotate([10,20,30]) (empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testMoveAndRotate() {
-		testSubject.rotate(new Angles3d(10.0, 20.0, 30.0));
-		testSubject.move(new Coords3d(30.0, 10.0, 20.0));
+		Abstract3dModel ts = testSubject
+				.rotate(new Angles3d(10.0, 20.0, 30.0))
+				.move(new Coords3d(30.0, 10.0, 20.0));
 		assertEqualsWithoutWhiteSpaces("translate([30,10,20]) rotate([10,20,30]) (empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testRotateAndMove() {
-		testSubject.move(Coords3d.yOnly(30.0));
-		testSubject.rotate(Angles3d.ROTATE_PLUS_X);
+		Abstract3dModel ts = testSubject
+				.move(Coords3d.yOnly(30.0))
+				.rotate(Angles3d.ROTATE_PLUS_X);
 		assertEqualsWithoutWhiteSpaces("translate([0,0,30]) rotate([90,0,0]) (empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testMoveRotateAndMove() {
-		testSubject.move(Coords3d.yOnly(30.0));
-		testSubject.rotate(Angles3d.ROTATE_PLUS_X);
-		testSubject.move(new Coords3d(30.0, 10.0, 20.0));
+		Abstract3dModel ts = testSubject
+				.move(Coords3d.yOnly(30.0))
+				.rotate(Angles3d.ROTATE_PLUS_X)
+				.move(new Coords3d(30.0, 10.0, 20.0));
 		assertEqualsWithoutWhiteSpaces("translate([30,10,50]) rotate([90,0,0]) (empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
@@ -127,55 +130,55 @@ public class Abstract3dModelTest {
 	@Test
 	public void testAlignTop() {
 		Cube cube1 = new Cube(30.0);
-		testSubject.align(Side.TOP, cube1, false);
+		Abstract3dModel ts = testSubject.align(Side.TOP, cube1, false);
 		// moves up with half of the cube -> 30/2=15 + 10, because the testSubject's bottom is at that point
 		assertEqualsWithoutWhiteSpaces("translate([0, 0, 25]) (empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testAlignBottom() {
 		Cube cube1 = new Cube(30.0);
-		testSubject.align(Side.BOTTOM, cube1, false);
+		Abstract3dModel ts = testSubject.align(Side.BOTTOM, cube1, false);
 		// moves down with half of the cube -> -30/2=-15 - 15, because the testSubject's top is at that point
 		assertEqualsWithoutWhiteSpaces("translate([0, 0, -30]) (empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testAlignRight() {
 		Cube cube1 = new Cube(30.0);
-		testSubject.align(Side.RIGHT, cube1, false);
+		Abstract3dModel ts = testSubject.align(Side.RIGHT, cube1, false);
 		// moves right with half of the cube -> 30/2=15 + 10, because the testSubject's left side is at that point
 		assertEqualsWithoutWhiteSpaces("translate([25, 0, 0]) (empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testAlignLeft() {
 		Cube cube1 = new Cube(30.0);
-		testSubject.align(Side.LEFT, cube1, false);
+		Abstract3dModel ts = testSubject.align(Side.LEFT, cube1, false);
 		// moves right with half of the cube -> -30/2=-15 - 15, because the testSubject's top is at that point
 		assertEqualsWithoutWhiteSpaces("translate([-30, 0, 0]) (empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testAlignBack() {
 		Cube cube1 = new Cube(30.0);
-		testSubject.align(Side.BACK, cube1, false);
+		Abstract3dModel ts = testSubject.align(Side.BACK, cube1, false);
 		// moves back with half of the cube -> 30/2=15 + 10, because the testSubject's front side is at that point
 		assertEqualsWithoutWhiteSpaces("translate([0, 25, 0]) (empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testAlignFront() {
 		Cube cube1 = new Cube(30.0);
-		testSubject.align(Side.FRONT, cube1, false);
+		Abstract3dModel ts = testSubject.align(Side.FRONT, cube1, false);
 		// moves front with half of the cube -> -30/2=-15 - 15, because the testSubject's back is at that point
 		assertEqualsWithoutWhiteSpaces("translate([0, -30, 0]) (empty)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test

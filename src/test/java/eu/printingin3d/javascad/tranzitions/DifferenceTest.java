@@ -103,9 +103,9 @@ public class DifferenceTest {
 	@Test
 	public void boundaryShouldBeCalculatedWithCubes() {
 		Test3dModel model1 = new Test3dModel("(model1)", new Boundaries3d(new Boundary(10.0, 20.0), new Boundary(15.0, 25.0), new Boundary(0.0, 50.0)));
-		Abstract3dModel model2 = new Cube(new Coords3d(5.5, 12.9, 20.9), new Coords3d(25.0, 25.1, 51.1));
-		Abstract3dModel model3 = new Cube(new Coords3d(5.5, 12.9, -2.0), new Coords3d(15.0, 25.1, 22.0));
-		Abstract3dModel model4 = new Cube(new Coords3d(10.0, 20.9, -2.0), new Coords3d(25.0, 25.1, 22.0));
+		Abstract3dModel model2 = Cube.fromCoordinates(new Coords3d(5.5, 12.9, 20.9), new Coords3d(25.0, 25.1, 51.1));
+		Abstract3dModel model3 = Cube.fromCoordinates(new Coords3d(5.5, 12.9, -2.0), new Coords3d(15.0, 25.1, 22.0));
+		Abstract3dModel model4 = Cube.fromCoordinates(new Coords3d(10.0, 20.9, -2.0), new Coords3d(25.0, 25.1, 22.0));
 		Difference difference = new Difference(model1, model2, model3, model4);
 		Boundaries3d boundaries = difference.getBoundaries();
 		
@@ -120,9 +120,9 @@ public class DifferenceTest {
 	@Test
 	public void boundaryShouldNotBeCalculatedWithCubesIfTheCubesAreRotated() {
 		Test3dModel model1 = new Test3dModel("(model1)", new Boundaries3d(new Boundary(10.0, 20.0), new Boundary(15.0, 25.0), new Boundary(0.0, 50.0)));
-		Abstract3dModel model2 = new Cube(new Coords3d(5.5, 12.9, 20.9), new Coords3d(25.0, 25.1, 51.1)).rotate(new Angles3d(0.001, 0, 0));
-		Abstract3dModel model3 = new Cube(new Coords3d(5.5, 12.9, -2.0), new Coords3d(15.0, 25.1, 22.0)).rotate(new Angles3d(0, 0.001, 0));
-		Abstract3dModel model4 = new Cube(new Coords3d(10.0, 20.9, -2.0), new Coords3d(25.0, 25.1, 22.0)).rotate(new Angles3d(0, 0, 0.001));
+		Abstract3dModel model2 = Cube.fromCoordinates(new Coords3d(5.5, 12.9, 20.9), new Coords3d(25.0, 25.1, 51.1)).rotate(new Angles3d(0.001, 0, 0));
+		Abstract3dModel model3 = Cube.fromCoordinates(new Coords3d(5.5, 12.9, -2.0), new Coords3d(15.0, 25.1, 22.0)).rotate(new Angles3d(0, 0.001, 0));
+		Abstract3dModel model4 = Cube.fromCoordinates(new Coords3d(10.0, 20.9, -2.0), new Coords3d(25.0, 25.1, 22.0)).rotate(new Angles3d(0, 0, 0.001));
 		Difference difference = new Difference(model1, model2, model3, model4);
 		Boundaries3d boundaries = difference.getBoundaries();
 		

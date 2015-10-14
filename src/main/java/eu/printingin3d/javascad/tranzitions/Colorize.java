@@ -45,7 +45,7 @@ public class Colorize extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return new Colorize(color, baseModel.cloneModel());
+		return new Colorize(color, baseModel);
 	}
 
 	@Override

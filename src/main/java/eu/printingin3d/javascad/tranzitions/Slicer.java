@@ -7,7 +7,7 @@ import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Complex3dModel;
 import eu.printingin3d.javascad.models.SCAD;
-import eu.printingin3d.javascad.tranzitions.slicer.Cover;
+import eu.printingin3d.javascad.tranzitions.slicer.CoverFactory;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
@@ -74,14 +74,14 @@ public class Slicer extends Complex3dModel {
 			if (highRate<=EPSILON) {
 				return null;
 			}
-			return new Cover(model, direction, highRate, false);
+			return CoverFactory.createCover(model, direction, highRate, false);
 		}
 		if (highRate<=EPSILON) {
-			return new Cover(model, direction, lowRate, true);
+			return CoverFactory.createCover(model, direction, lowRate, true);
 		}
 		return new Union(
-				new Cover(model, direction, lowRate, true),
-				new Cover(model, direction, highRate, false)
+				CoverFactory.createCover(model, direction, lowRate, true),
+				CoverFactory.createCover(model, direction, highRate, false)
 			);
 	}
 
@@ -119,7 +119,7 @@ public class Slicer extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return new Slicer(model.cloneModel(), direction, lowRate, highRate);
+		return new Slicer(model, direction, lowRate, highRate);
 	}
 
 	@Override

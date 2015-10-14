@@ -16,7 +16,7 @@ public abstract class Atomic3dModel extends Abstract3dModel {
 	@Override
 	protected final Abstract3dModel innerSubModel(IScadGenerationContext context) {
 		if (context.isTagIncluded()) {
-			return this.cloneModel();
+			return this;
 		}
 		return null;
 	}

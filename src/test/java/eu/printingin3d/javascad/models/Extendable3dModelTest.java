@@ -43,15 +43,10 @@ public class Extendable3dModelTest {
 
 	@Test
 	public void operationOnTheExtendableModelShouldNotAffectTheBaseModel() {
-		testSubject.move(RandomUtils.getRandomCoords());
+		Abstract3dModel ts = testSubject.move(RandomUtils.getRandomCoords());
 		
 		Assert.assertNotEquals(baseModel.toScad(ColorHandlingContext.DEFAULT), 
-				testSubject.toScad(ColorHandlingContext.DEFAULT));
-	}
-	
-	@Test(expected=UnsupportedOperationException.class)
-	public void cloningShouldThrowUnsupportedOperationException() {
-		testSubject.cloneModel();
+				ts.toScad(ColorHandlingContext.DEFAULT));
 	}
 	
 	@Test
@@ -66,8 +61,19 @@ public class Extendable3dModelTest {
 	}
 	
 	@Test(expected=IllegalValueException.class)
-	public void subModelShouldThrowExceptonIsThereIsNoDefaultConstructor() {
-		testSubject.subModel(ScadGenerationContextFactory.DEFAULT);
+	public void subModelShouldThrowExceptonIfThereIsNoDefaultConstructor() {
+		Abstract3dModel ts = new Extendable3dModel() {
+		};
+		
+		ts.subModel(ScadGenerationContextFactory.DEFAULT);
+	}
+	
+	@Test(expected=IllegalValueException.class)
+	public void cloneModelShouldThrowExceptonIfThereIsNoDefaultConstructor() {
+		Abstract3dModel ts = new Extendable3dModel() {
+		};
+		
+		ts.cloneModel();
 	}
 	
 	@Test

@@ -9,7 +9,6 @@ import org.junit.Test;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.enums.AlignType;
 import eu.printingin3d.javascad.enums.Side;
-import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
@@ -25,142 +24,142 @@ public class Abstract3dModelAlignTest {
 		testSubject = new Test3dModel("(subject)", testSubjectsBoundaries);
 	}
 	
-	private void assertXDidNotChanged() {
-		assertBoundaryEquals(testSubjectsBoundaries.getX(), testSubject.getBoundaries().getX());
+	private void assertXDidNotChanged(Abstract3dModel ts) {
+		assertBoundaryEquals(testSubjectsBoundaries.getX(), ts.getBoundaries().getX());
 	}
 	
-	private void assertYDidNotChanged() {
-		assertBoundaryEquals(testSubjectsBoundaries.getY(), testSubject.getBoundaries().getY());
+	private void assertYDidNotChanged(Abstract3dModel ts) {
+		assertBoundaryEquals(testSubjectsBoundaries.getY(), ts.getBoundaries().getY());
 	}
 	
-	private void assertZDidNotChanged() {
-		assertBoundaryEquals(testSubjectsBoundaries.getZ(), testSubject.getBoundaries().getZ());
+	private void assertZDidNotChanged(Abstract3dModel ts) {
+		assertBoundaryEquals(testSubjectsBoundaries.getZ(), ts.getBoundaries().getZ());
 	}
 	
 	@Test
 	public void testAlignTopOutside() {
-		testSubject.align(Side.TOP, base, false);
+		Abstract3dModel ts = testSubject.align(Side.TOP, base, false);
 		
-		assertXDidNotChanged();
-		assertYDidNotChanged();
-		assertDoubleEquals(base.getBoundaries().getZ().getMax(), testSubject.getBoundaries().getZ().getMin());
+		assertXDidNotChanged(ts);
+		assertYDidNotChanged(ts);
+		assertDoubleEquals(base.getBoundaries().getZ().getMax(), ts.getBoundaries().getZ().getMin());
 	}
 	
 	@Test
 	public void testAlignTopInside() {
-		testSubject.align(Side.TOP, base, true);
+		Abstract3dModel ts = testSubject.align(Side.TOP, base, true);
 
-		assertXDidNotChanged();
-		assertYDidNotChanged();
-		assertDoubleEquals(base.getBoundaries().getZ().getMax(), testSubject.getBoundaries().getZ().getMax());
+		assertXDidNotChanged(ts);
+		assertYDidNotChanged(ts);
+		assertDoubleEquals(base.getBoundaries().getZ().getMax(), ts.getBoundaries().getZ().getMax());
 	}
 	
 	@Test
 	public void testAlignBottomOutside() {
-		testSubject.align(Side.BOTTOM, base, false);
+		Abstract3dModel ts = testSubject.align(Side.BOTTOM, base, false);
 		
-		assertXDidNotChanged();
-		assertYDidNotChanged();
-		assertDoubleEquals(base.getBoundaries().getZ().getMin(), testSubject.getBoundaries().getZ().getMax());
+		assertXDidNotChanged(ts);
+		assertYDidNotChanged(ts);
+		assertDoubleEquals(base.getBoundaries().getZ().getMin(), ts.getBoundaries().getZ().getMax());
 	}
 	
 	@Test
 	public void testAlignBottomInside() {
-		testSubject.align(Side.BOTTOM, base, true);
+		Abstract3dModel ts = testSubject.align(Side.BOTTOM, base, true);
 		
-		assertXDidNotChanged();
-		assertYDidNotChanged();
-		assertDoubleEquals(base.getBoundaries().getZ().getMin(), testSubject.getBoundaries().getZ().getMin());
+		assertXDidNotChanged(ts);
+		assertYDidNotChanged(ts);
+		assertDoubleEquals(base.getBoundaries().getZ().getMin(), ts.getBoundaries().getZ().getMin());
 	}
 	
 	@Test
 	public void testAlignLeftOutside() {
-		testSubject.align(Side.LEFT, base, false);
+		Abstract3dModel ts = testSubject.align(Side.LEFT, base, false);
 		
-		assertDoubleEquals(base.getBoundaries().getX().getMin(), testSubject.getBoundaries().getX().getMax());
-		assertYDidNotChanged();
-		assertZDidNotChanged();
+		assertDoubleEquals(base.getBoundaries().getX().getMin(), ts.getBoundaries().getX().getMax());
+		assertYDidNotChanged(ts);
+		assertZDidNotChanged(ts);
 	}
 	
 	@Test
 	public void testAlignLeftInside() {
-		testSubject.align(Side.LEFT, base, true);
+		Abstract3dModel ts = testSubject.align(Side.LEFT, base, true);
 		
-		assertDoubleEquals(base.getBoundaries().getX().getMin(), testSubject.getBoundaries().getX().getMin());
-		assertYDidNotChanged();
-		assertZDidNotChanged();
+		assertDoubleEquals(base.getBoundaries().getX().getMin(), ts.getBoundaries().getX().getMin());
+		assertYDidNotChanged(ts);
+		assertZDidNotChanged(ts);
 	}
 	
 	@Test
 	public void testAlignRightOutside() {
-		testSubject.align(Side.RIGHT, base, false);
+		Abstract3dModel ts = testSubject.align(Side.RIGHT, base, false);
 		
-		assertDoubleEquals(base.getBoundaries().getX().getMax(), testSubject.getBoundaries().getX().getMin());
-		assertYDidNotChanged();
-		assertZDidNotChanged();
+		assertDoubleEquals(base.getBoundaries().getX().getMax(), ts.getBoundaries().getX().getMin());
+		assertYDidNotChanged(ts);
+		assertZDidNotChanged(ts);
 	}
 	
 	@Test
 	public void testAlignRightInside() {
-		testSubject.align(Side.RIGHT, base, true);
+		Abstract3dModel ts = testSubject.align(Side.RIGHT, base, true);
 		
-		assertDoubleEquals(base.getBoundaries().getX().getMax(), testSubject.getBoundaries().getX().getMax());
-		assertYDidNotChanged();
-		assertZDidNotChanged();
+		assertDoubleEquals(base.getBoundaries().getX().getMax(), ts.getBoundaries().getX().getMax());
+		assertYDidNotChanged(ts);
+		assertZDidNotChanged(ts);
 	}
 	
 	@Test
 	public void testAlignFrontOutside() {
-		testSubject.align(Side.FRONT, base, false);
+		Abstract3dModel ts = testSubject.align(Side.FRONT, base, false);
 		
-		assertXDidNotChanged();
-		assertDoubleEquals(base.getBoundaries().getY().getMin(), testSubject.getBoundaries().getY().getMax());
-		assertZDidNotChanged();
+		assertXDidNotChanged(ts);
+		assertDoubleEquals(base.getBoundaries().getY().getMin(), ts.getBoundaries().getY().getMax());
+		assertZDidNotChanged(ts);
 	}
 	
 	@Test
 	public void testAlignFrontInside() {
-		testSubject.align(Side.FRONT, base, true);
+		Abstract3dModel ts = testSubject.align(Side.FRONT, base, true);
 		
-		assertXDidNotChanged();
-		assertDoubleEquals(base.getBoundaries().getY().getMin(), testSubject.getBoundaries().getY().getMin());
-		assertZDidNotChanged();
+		assertXDidNotChanged(ts);
+		assertDoubleEquals(base.getBoundaries().getY().getMin(), ts.getBoundaries().getY().getMin());
+		assertZDidNotChanged(ts);
 	}
 	
 	@Test
 	public void testAlignBackOutside() {
-		testSubject.align(Side.BACK, base, false);
+		Abstract3dModel ts = testSubject.align(Side.BACK, base, false);
 		
-		assertXDidNotChanged();
-		assertDoubleEquals(base.getBoundaries().getY().getMax(), testSubject.getBoundaries().getY().getMin());
-		assertZDidNotChanged();
+		assertXDidNotChanged(ts);
+		assertDoubleEquals(base.getBoundaries().getY().getMax(), ts.getBoundaries().getY().getMin());
+		assertZDidNotChanged(ts);
 	}
 	
 	@Test
 	public void testAlignBackInside() {
-		testSubject.align(Side.BACK, base, true);
+		Abstract3dModel ts = testSubject.align(Side.BACK, base, true);
 		
-		assertXDidNotChanged();
-		assertDoubleEquals(base.getBoundaries().getY().getMax(), testSubject.getBoundaries().getY().getMax());
-		assertZDidNotChanged();
+		assertXDidNotChanged(ts);
+		assertDoubleEquals(base.getBoundaries().getY().getMax(), ts.getBoundaries().getY().getMax());
+		assertZDidNotChanged(ts);
 	}
 	
 	@Test
 	public void testAlignCenterInside() {
-		testSubject.align(new Side(AlignType.CENTER, AlignType.CENTER, AlignType.CENTER), base, true);
+		Abstract3dModel ts = testSubject.align(new Side(AlignType.CENTER, AlignType.CENTER, AlignType.CENTER), base, true);
 		
-		assertDoubleEquals(base.getBoundaries().getX().getMiddle(), testSubject.getBoundaries().getX().getMiddle());
-		assertDoubleEquals(base.getBoundaries().getY().getMiddle(), testSubject.getBoundaries().getY().getMiddle());
-		assertDoubleEquals(base.getBoundaries().getZ().getMiddle(), testSubject.getBoundaries().getZ().getMiddle());
+		assertDoubleEquals(base.getBoundaries().getX().getMiddle(), ts.getBoundaries().getX().getMiddle());
+		assertDoubleEquals(base.getBoundaries().getY().getMiddle(), ts.getBoundaries().getY().getMiddle());
+		assertDoubleEquals(base.getBoundaries().getZ().getMiddle(), ts.getBoundaries().getZ().getMiddle());
 	}
 	
 	@Test
 	public void testAlignCenterOutside() {
-		testSubject.align(new Side(AlignType.CENTER, AlignType.CENTER, AlignType.CENTER), base, false);
+		Abstract3dModel ts = testSubject.align(new Side(AlignType.CENTER, AlignType.CENTER, AlignType.CENTER), base, false);
 		
-		assertDoubleEquals(base.getBoundaries().getX().getMiddle(), testSubject.getBoundaries().getX().getMiddle());
-		assertDoubleEquals(base.getBoundaries().getY().getMiddle(), testSubject.getBoundaries().getY().getMiddle());
-		assertDoubleEquals(base.getBoundaries().getZ().getMiddle(), testSubject.getBoundaries().getZ().getMiddle());
+		assertDoubleEquals(base.getBoundaries().getX().getMiddle(), ts.getBoundaries().getX().getMiddle());
+		assertDoubleEquals(base.getBoundaries().getY().getMiddle(), ts.getBoundaries().getY().getMiddle());
+		assertDoubleEquals(base.getBoundaries().getZ().getMiddle(), ts.getBoundaries().getZ().getMiddle());
 	}
 	
 }
