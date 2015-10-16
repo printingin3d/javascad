@@ -3,8 +3,7 @@ package eu.printingin3d.javascad.tranzitions.slicer;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
-import eu.printingin3d.javascad.enums.Side;
-import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.enums.AlignType;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
 import eu.printingin3d.javascad.tranzitions.Direction;
@@ -38,77 +37,25 @@ public final class CoverFactory {
 				b3d.getY().getMiddle(),
 				b3d.getZ().getMiddle()));
 		if (lower) {
-			return moveLower(result, model, direction);
+			return direction
+					.moveTo(result, model, AlignType.MIN)
+					.move(direction.getCoords().inverse());
 		} else {
-			return moveUpper(result, model, direction);
+			return direction
+					.moveTo(result, model, AlignType.MAX)
+					.move(direction.getCoords());
 		}
-	}
-
-	private static Abstract3dModel moveLower(Abstract3dModel result, Abstract3dModel model, Direction direction) {
-		switch (direction) {
-		case X:
-			result = result
-					.align(Side.LEFT, model, true)
-					.move(Coords3d.xOnly(-1.0));
-			break;
-		case Y:
-			result = result
-					.align(Side.FRONT, model, true)
-					.move(Coords3d.yOnly(-1.0));
-			break;
-		case Z:
-		default:
-			result = result
-					.align(Side.BOTTOM, model, true)
-					.move(Coords3d.zOnly(-1.0));
-			break;
-		}
-		return result;
-	}
-	
-	private static Abstract3dModel moveUpper(Abstract3dModel result, Abstract3dModel model, Direction direction) {
-		switch (direction) {
-		case X:
-			result = result
-					.align(Side.RIGHT, model, true)
-					.move(Coords3d.xOnly(+1.0));
-			break;
-		case Y:
-			result = result
-					.align(Side.BACK, model, true)
-					.move(Coords3d.yOnly(+1.0));
-			break;
-		case Z:
-		default:
-			result = result
-					.align(Side.TOP, model, true)
-					.move(Coords3d.zOnly(+1.0));
-			break;
-		}
-		return result;
 	}
 
 	private static Dims3d calculateSize(Abstract3dModel model, Direction direction, double sizeRate) {
+		Coords3d dirSizeRate = direction.getCoords().mul(sizeRate)
+				.move(new Coords3d(1, 1, 1).move(direction.getCoords().inverse()));
 		Boundaries3d b3d = model.getBoundaries();
-		switch (direction) {
-		case X:
-			return new Dims3d(
-					b3d.getX().getSize()*sizeRate+1, 
-					b3d.getY().getSize()+1, 
-					b3d.getZ().getSize()+1);
-		case Y:
-			return new Dims3d(
-					b3d.getX().getSize()+1, 
-					b3d.getY().getSize()*sizeRate+1, 
-					b3d.getZ().getSize()+1);
-		case Z:
-			return new Dims3d(
-					b3d.getX().getSize()+1, 
-					b3d.getY().getSize()+1, 
-					b3d.getZ().getSize()*sizeRate+1);
-		default:
-			throw new IllegalValueException("Unknown direction: "+direction);
-		}
+		return new Dims3d(
+				b3d.getX().getSize()*dirSizeRate.getX(),
+				b3d.getY().getSize()*dirSizeRate.getY(),
+				b3d.getZ().getSize()*dirSizeRate.getZ())
+			.increase();
 	}
 
 }

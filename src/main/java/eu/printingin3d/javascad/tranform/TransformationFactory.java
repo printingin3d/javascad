@@ -76,16 +76,7 @@ public final class TransformationFactory {
      * @return the transformation representing a mirror
      */
     public static ITransformation getMirrorMatrix(Direction direction) {
-    	switch (direction) {
-    	case X:
-    		return getScaleMatrix(-1, 1, 1);
-    	case Y:
-    		return getScaleMatrix(1, -1, 1);
-    	case Z:
-    		return getScaleMatrix(1, 1, -1);
-    	default:
-    		return getIdentityMatrix();
-    	}
+    	return getScaleMatrix(direction.getCoords().mul(-2.0).move(new Coords3d(1, 1, 1)));
     }
     
     /**

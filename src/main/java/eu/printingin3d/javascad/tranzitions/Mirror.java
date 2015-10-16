@@ -62,7 +62,7 @@ public final class Mirror extends Complex3dModel {
 
 	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
-		return new SCAD("mirror(["+direction.getOpenScadMirrorParams()+"])").append(model.toScad(context));
+		return new SCAD("mirror("+direction.getCoords()+")").append(model.toScad(context));
 	}
 
 	@Override
