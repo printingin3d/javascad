@@ -8,9 +8,6 @@ import static org.junit.Assert.assertNotSame;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.coords.Angles3d;
-import eu.printingin3d.javascad.coords.Coords3d;
-
 public class Coords3dTest {
 	
 	public static void assertCoords3dEquals(Coords3d expected, Coords3d actual) {
@@ -94,15 +91,6 @@ public class Coords3dTest {
 		double d2 = result.x*result.x + result.y*result.y + result.z*result.z;
 		assertDoubleEquals(d1, d2);
 	}
-	
-	@Test
-	public void testInverse() {
-		Coords3d start = getRandomCoords();
-		Coords3d result = start.inverse();
-		assertDoubleEquals(-start.x, result.x);
-		assertDoubleEquals(-start.y, result.y);
-		assertDoubleEquals(-start.z, result.z);
-	}
 
 	@Test
 	public void testStaticConstructors() {
@@ -133,20 +121,5 @@ public class Coords3dTest {
 		assertDoubleEquals((a.x+b.x)/2.0, midPoint.x);
 		assertDoubleEquals((a.y+b.y)/2.0, midPoint.y);
 		assertDoubleEquals((a.z+b.z)/2.0, midPoint.z);
-	}
-	
-	@Test
-	public void testMove() {
-		Coords3d a = getRandomCoords();
-		Coords3d b = getRandomCoords();
-		Coords3d result = a.move(b);
-
-		assertDoubleEquals(a.x+b.x, result.x);
-		assertDoubleEquals(a.y+b.y, result.y);
-		assertDoubleEquals(a.z+b.z, result.z);
-		
-		// should create a new object
-		assertNotSame(a, result);
-		assertNotSame(b, result);
 	}
 }

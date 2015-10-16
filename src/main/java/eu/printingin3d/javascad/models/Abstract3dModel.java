@@ -47,7 +47,7 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	public Abstract3dModel move(Coords3d delta) {
 		Abstract3dModel result = cloneModel();
-		result.move = this.move.move(delta);
+		result.move = this.move.add(delta);
 		return result;
 	}
 

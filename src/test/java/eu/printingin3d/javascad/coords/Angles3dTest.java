@@ -19,6 +19,15 @@ public class Angles3dTest {
 	}
 
 	@Test
+	public void testAddNormalization() {
+		Angles3d testSubject = new Angles3d(250.0, -135.0, 720.0)
+				.add(new Angles3d(250.0, -135.0, 720.0));
+		assertEquals(140.0, testSubject.x, EPSILON);
+		assertEquals(90.0, testSubject.y, EPSILON);
+		assertEquals(0.0, testSubject.z, EPSILON);
+	}
+	
+	@Test
 	public void rotateWithZeroShouldReturnWithTheSameAngle() {
 		Angles3d testSubject = RandomUtils.getRandomAngle();
 		assertEquals(testSubject, testSubject.rotate(Angles3d.ZERO));

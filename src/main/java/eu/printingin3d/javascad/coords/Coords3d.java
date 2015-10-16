@@ -5,7 +5,7 @@ package eu.printingin3d.javascad.coords;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Coords3d extends Abstract3d {
+public class Coords3d extends Basic3dFunc<Coords3d> {
 	/**
 	 * Represents the (1,0,0) coordinate.
 	 */
@@ -70,16 +70,6 @@ public class Coords3d extends Abstract3d {
 	public Coords3d(double x, double y, double z) {
 		super(x,y,z);
 	}
-	
-	/**
-	 * Moving this coordinate by the given vector, but this object will be unchanged and 
-	 * this method will create a new object with the new coordinates.
-	 * @param move the vector used by the move
-	 * @return a new coordinate instance which points to the new location
-	 */
-	public Coords3d move(Coords3d move) {
-		return new Coords3d(x+move.x, y+move.y, z+move.z);
-	}
 
 	/**
 	 * Rotating this coordinate by the given angle, but this object will be unchanged and 
@@ -109,14 +99,6 @@ public class Coords3d extends Abstract3d {
 		}
 		return result;
 	}
-	
-	/**
-	 * Return the inverse of this coordinate which means every coordinates will be negated.
-	 * @return the inverse of this coordinate
-	 */
-	public Coords3d inverse() {
-		return new Coords3d(-x, -y, -z);
-	}
 
     /**
      * Returns the cross product of this vector and the specified vector.
@@ -131,19 +113,6 @@ public class Coords3d extends Abstract3d {
                 this.z * a.x - this.x * a.z,
                 this.x * a.y - this.y * a.x
         );
-    }
-
-    /**
-     * Returns this vector devided by the specified value.
-     *
-     * @param a the value
-     *
-     * <b>Note:</b> this vector is not modified.
-     *
-     * @return this vector devided by the specified value
-     */
-    public Coords3d mul(double a) {
-        return new Coords3d(x * a, y * a, z * a);
     }
 
     /**
@@ -165,19 +134,15 @@ public class Coords3d extends Abstract3d {
      * @param a vector
      * @param t interpolation value
      *
-     * @return copy of this vector if {@code t = 0}; copy of a if {@code t = 1};
+     * @return copy of this vector if {@code t = 0}; copy of {@code a} if {@code t = 1};
      * the point midway between this and the specified vector if {@code t = 0.5}
      */
     public Coords3d lerp(Coords3d a, double t) {
-        return this.move(a.move(this.inverse()).mul(t));
+        return this.add(a.add(this.inverse()).mul(t));
     }
-    
-    /**
-     * Calculates the distance between this coordinate and the given coordinate.
-     * @param d the other coordinate
-     * @return the calculated distance
-     */
-    public double distance(Coords3d d) {
-    	return this.move(d.inverse()).magnitude();
-    }
+
+	@Override
+	protected Coords3d create(double x, double y, double z) {
+		return new Coords3d(x, y, z);
+	}
 }

@@ -128,6 +128,6 @@ public class Cylinder extends Atomic3dModel {
     private Coords3d cylPoint(double z, double r, double slice) {
         double angle = slice * Math.PI * 2;
         Coords3d out = new Coords3d(Math.cos(angle), Math.sin(angle), 0.0);
-        return out.mul(r).move(Coords3d.zOnly(z));
+        return out.mul(r).add(Coords3d.zOnly(z));
     }
 }

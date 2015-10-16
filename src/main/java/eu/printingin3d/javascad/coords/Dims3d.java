@@ -8,7 +8,7 @@ import eu.printingin3d.javascad.utils.AssertValue;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Dims3d extends Abstract3d {
+public class Dims3d extends Basic3dFunc<Dims3d> {
 
 	/**
 	 * Creates a new object with the given values. 
@@ -30,5 +30,10 @@ public class Dims3d extends Abstract3d {
 	 */
 	public Dims3d increase() {
 		return new Dims3d(x+1.0, y+1.0, z+1.0);
+	}
+
+	@Override
+	protected Dims3d create(double x, double y, double z) {
+		return new Dims3d(x, y, z);
 	}
 }

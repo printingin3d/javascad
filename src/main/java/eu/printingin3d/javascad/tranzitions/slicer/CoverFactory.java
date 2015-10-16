@@ -49,13 +49,10 @@ public final class CoverFactory {
 
 	private static Dims3d calculateSize(Abstract3dModel model, Direction direction, double sizeRate) {
 		Coords3d dirSizeRate = direction.getCoords().mul(sizeRate)
-				.move(new Coords3d(1, 1, 1).move(direction.getCoords().inverse()));
-		Boundaries3d b3d = model.getBoundaries();
-		return new Dims3d(
-				b3d.getX().getSize()*dirSizeRate.getX(),
-				b3d.getY().getSize()*dirSizeRate.getY(),
-				b3d.getZ().getSize()*dirSizeRate.getZ())
-			.increase();
+				.add(new Coords3d(1, 1, 1).add(direction.getCoords().inverse()));
+		return model.getBoundaries()
+				.getSize().mul(dirSizeRate)
+				.increase();
 	}
 
 }

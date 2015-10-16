@@ -11,7 +11,7 @@ import eu.printingin3d.javascad.utils.DoubleUtils;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Abstract3d {
+public abstract class Abstract3d {
 	protected final double x;
 	protected final double y;
 	protected final double z;
@@ -21,7 +21,7 @@ public class Abstract3d {
 		this.y = y;
 		this.z = z;
 	}
-
+	
 	/**
 	 * Checks if the X coordinate is zero.
 	 * @return return true if and only if the X coordinate is zero
@@ -186,4 +186,5 @@ public class Abstract3d {
     public double magnitude() {
         return Math.sqrt(this.dot(this));
     }
+    
 }

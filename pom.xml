@@ -4,7 +4,7 @@
 
     <groupId>eu.printingin3d.javascad</groupId>
     <artifactId>javascad</artifactId>
-    <version>0.9</version>
+    <version>0.9.0.0</version>
     <packaging>jar</packaging>
     <name>JavaSCAD</name>
     <url>http://www.printingin3d.eu/javascad</url>
@@ -205,6 +205,21 @@
                                 </pluginExecution>
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.1</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <Implementation-Build>${version}</Implementation-Build>
+                            </manifestEntries>
+                        </archive>
                     </configuration>
                 </plugin>
             </plugins>

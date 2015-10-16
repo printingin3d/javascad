@@ -95,7 +95,7 @@ public final class Polygon {
     	Coords3d a = vertices.get(0);
     	Coords3d b = vertices.get(1);
     	Coords3d c = vertices.get(2);
-    	Coords3d n = b.move(a.inverse()).cross(c.move(a.inverse())).unit();
+    	Coords3d n = b.add(a.inverse()).cross(c.add(a.inverse())).unit();
         
     	return new Polygon(vertices, n, n.dot(a), color);
     }
@@ -247,7 +247,7 @@ public final class Polygon {
 		}
 		if (position.add(calculateVertexPosition(nextVertex)) == VertexPosition.SPANNING) {
 		    double t = (this.dist - this.normal.dot(currentVertex)) / 
-		    				this.normal.dot(nextVertex.move(currentVertex.inverse()));
+		    				this.normal.dot(nextVertex.add(currentVertex.inverse()));
 		    Coords3d v = currentVertex.lerp(nextVertex, t);
 			addVertexToList(f, v);
 			addVertexToList(b, v);

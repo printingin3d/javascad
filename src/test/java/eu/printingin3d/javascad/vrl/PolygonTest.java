@@ -68,9 +68,9 @@ public class PolygonTest {
 		Facet f = facetList.get(0);
 		
 		assertEquals(Arrays.asList(
-				new Vertex(POINT_1.move(delta), color), 
-				new Vertex(POINT_2.move(delta), color), 
-				new Vertex(POINT_3.move(delta), color)), f.getVertexes());
+				new Vertex(POINT_1.add(delta), color), 
+				new Vertex(POINT_2.add(delta), color), 
+				new Vertex(POINT_3.add(delta), color)), f.getVertexes());
 		
 		assertEquals(new Coords3d(0, 0, 1), f.getNormal());
 	}

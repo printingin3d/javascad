@@ -16,7 +16,7 @@ import eu.printingin3d.javascad.utils.DoubleUtils;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public class Angles3d extends Abstract3d {
+public class Angles3d extends Basic3dFunc<Angles3d> {
 	/**
 	 * the zero angle, which does nothing - usually used as a starting point.
 	 */
@@ -115,13 +115,6 @@ public class Angles3d extends Abstract3d {
 			this.norm1 = norm1;
 			this.norm2 = norm2;
 			this.norm3 = norm3;
-		}
-
-		@Override
-		public String toString() {
-			return "Config [coord1=" + coord1 + ", coord2=" + coord2
-					+ ", coord3=" + coord3 + ", norm1=" + norm1 + ", norm2="
-					+ norm2 + ", norm3=" + norm3 + "]";
 		}
 	}
 	
@@ -244,5 +237,10 @@ public class Angles3d extends Abstract3d {
 	@Override
 	public int hashCode() {
 		return -super.hashCode();
+	}
+
+	@Override
+	protected Angles3d create(double x, double y, double z) {
+		return new Angles3d(x, y, z);
 	}
 }
