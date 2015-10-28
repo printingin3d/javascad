@@ -109,7 +109,7 @@ public abstract class Abstract3dModel implements IModel {
 	 * this model
 	 * @return a copy of this model
 	 */
-	public final Abstract3dModel cloneModel() {
+	protected final Abstract3dModel cloneModel() {
 		Abstract3dModel model = innerCloneModel();
 		
 		model.tag = tag;

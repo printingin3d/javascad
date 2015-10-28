@@ -38,6 +38,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.tranform.ITransformation;
 
 /**
@@ -113,6 +114,20 @@ public class CSG {
      */
     public List<Polygon> getPolygons() {
         return polygons;
+    }
+    
+    /**
+     * Get all the points this CSG holds.
+     * @return the points this CSG holds
+     */
+    public List<Coords3d> getPoints() {
+    	List<Coords3d> result = new ArrayList<>();
+    	
+    	for (Polygon p : getPolygons()) {
+			result.addAll(p.getVertices());
+    	}
+    	
+    	return result;
     }
 
     /**

@@ -172,6 +172,17 @@ public class BoundaryTest {
 	}
 	
 	@Test
+	public void isInsideShouldReturnTrueIfTheGivenValueIsInsideOfTheBoundary() {
+		Boundary a = new Boundary(0.0, 5.5);
+		Boundary b = new Boundary(5.0, 10.5);
+		Boundary c = new Boundary(1.0, 3.5);
+		
+		assertFalse(a.isInside(-5.0));
+		assertFalse(b.isInside(20));
+		assertTrue(c.isInside(2.2));
+	}
+	
+	@Test
 	public void removeShouldDecreaseTheMaximumValueIfTheRemovedValuesAreBiggerThenTheMinimumButLessThenTheMaximum() {
 		Boundary a = new Boundary(0.0, 5.5);
 		Boundary b = new Boundary(5.0, 10.5);

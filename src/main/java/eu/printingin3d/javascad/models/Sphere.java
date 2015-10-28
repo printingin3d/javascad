@@ -59,32 +59,37 @@ public class Sphere extends Atomic3dModel {
         int numStacks = numSlices/2;
         for (int i = 0; i < numSlices; i++) {
             for (int j = 0; j < numStacks; j++) {
-                List<Coords3d> vertices = new ArrayList<>();
-
-                vertices.add(
-                        sphereVertex(r, i / (double) numSlices,
-                                j / (double) numStacks)
-                );
-                if (j > 0) {
-                    vertices.add(
-                            sphereVertex(r, (i + 1) / (double) numSlices,
-                                    j / (double) numStacks)
-                    );
-                }
-                if (j < numStacks - 1) {
-                    vertices.add(
-                            sphereVertex(r, (i + 1) / (double) numSlices,
-                                    (j + 1) / (double) numStacks)
-                    );
-                }
-                vertices.add(
-                        sphereVertex(r, i / (double) numSlices,
-                                (j + 1) / (double) numStacks)
-                );
+                List<Coords3d> vertices = getVertices(numSlices, numStacks, i, j);
                 polygons.add(Polygon.fromPolygons(vertices, context.getColor()));
             }
         }
         return new CSG(polygons);
+	}
+
+	private List<Coords3d> getVertices(int numSlices, int numStacks, int i, int j) {
+		List<Coords3d> vertices = new ArrayList<>();
+
+		vertices.add(
+		        sphereVertex(r, i / (double) numSlices,
+		                j / (double) numStacks)
+		);
+		if (j > 0) {
+		    vertices.add(
+		            sphereVertex(r, (i + 1) / (double) numSlices,
+		                    j / (double) numStacks)
+		    );
+		}
+		if (j < numStacks - 1) {
+		    vertices.add(
+		            sphereVertex(r, (i + 1) / (double) numSlices,
+		                    (j + 1) / (double) numStacks)
+		    );
+		}
+		vertices.add(
+		        sphereVertex(r, i / (double) numSlices,
+		                (j + 1) / (double) numStacks)
+		);
+		return vertices;
 	}
 
     private Coords3d sphereVertex(double r, double theta, double phi) {

@@ -10,10 +10,10 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.NotImplementedException;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
+import eu.printingin3d.javascad.vrl.Polygon;
 
 /**
  * <p>
@@ -122,6 +122,10 @@ public class Polyhedron extends Atomic3dModel {
 
 	@Override
 	protected CSG toInnerCSG(FacetGenerationContext context) {
-		throw new NotImplementedException();
+		List<Polygon> polygons = new ArrayList<>();
+		for (Triangle3d c : triangles) {
+			polygons.add(Polygon.fromPolygons(c.getPoints(), context.getColor()));
+		}
+		return new CSG(polygons);
 	}
 }

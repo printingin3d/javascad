@@ -7,8 +7,10 @@ import org.junit.Test;
 
 import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
+import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.testutils.RandomUtils;
+import eu.printingin3d.javascad.vrl.CSG;
 
 public class SphereTest {
 	private static final double EPSILON = 0.001;
@@ -53,5 +55,14 @@ public class SphereTest {
 		Assert.assertEquals(15.0, sphere.getBoundaries().getX().getMax(), EPSILON);
 		Assert.assertEquals(15.0, sphere.getBoundaries().getY().getMax(), EPSILON);
 		Assert.assertEquals(15.0, sphere.getBoundaries().getZ().getMax(), EPSILON);
+	}
+	
+	@Test
+	public void csgShouldGenerateAllPointsEqualDistance() {
+		CSG csg = new Sphere(15.0).toCSG();
+
+		for (Coords3d v : csg.getPoints()) {
+			Assert.assertEquals(15.0, v.distance(Coords3d.ZERO), EPSILON);
+		}
 	}
 }

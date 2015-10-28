@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.models;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertDoubleEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,7 +72,7 @@ public class PolyhedronTest {
 	}
 	
 	@Test
-	public void testScad() {
+	public void testScad() throws IOException {
 		Coords3d c0 = new Coords3d(10,10,0);
 		Coords3d c1 = new Coords3d(10,-10,0);
 		Coords3d c2 = new Coords3d(-10,-10,0);

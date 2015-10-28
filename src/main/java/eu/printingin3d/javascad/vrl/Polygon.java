@@ -131,7 +131,10 @@ public final class Polygon {
         }
         return facets;
     }
-
+    protected List<Coords3d> getVertices() {
+    	return vertices;
+    }
+    
     /**
      * Returns a transformed copy of this polygon.
      *

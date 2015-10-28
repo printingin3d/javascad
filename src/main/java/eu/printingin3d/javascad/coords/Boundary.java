@@ -221,4 +221,13 @@ public class Boundary {
 	public boolean isInsideOf(Boundary b) {
 		return b.min<=this.min && b.max>=this.max;
 	}
+	
+	/**
+	 * Returns true if and only if the given value is within this boundaries limits.
+	 * @param value the given value
+	 * @return true if and only if the given value is inside of this boundary
+	 */
+	public boolean isInside(double value) {
+		return value>=this.min && value<=this.max;
+	}
 }
