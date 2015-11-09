@@ -82,6 +82,7 @@
                     <bottom>Copyright &#169; 2014&#x2013;{currentYear}, Printing in 3D. All rights reserved.</bottom>
                     <show>protected</show>
                     <quiet>true</quiet>
+                    <additionalparam>-Xdoclint:none</additionalparam>
                 </configuration>
                 <executions>
                     <execution>

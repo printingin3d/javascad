@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
  * Annotation to be used by the 
  * {@link eu.printingin3d.javascad.utils.AnnotatedModelProvider AnnotatedModelProvider} class to identify
  * the methods which returns with a printable part.
- * @author ivivan <ivivan@printingin3d.eu>
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
