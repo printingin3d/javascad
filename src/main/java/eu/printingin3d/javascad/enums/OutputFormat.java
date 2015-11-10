@@ -23,7 +23,7 @@ public enum OutputFormat {
 	private final String postText;
 	private final String separator;
 	
-	private OutputFormat(String preText, String postText, String separator) {
+	OutputFormat(String preText, String postText, String separator) {
 		this.preText = preText;
 		this.postText = postText;
 		this.separator = separator;

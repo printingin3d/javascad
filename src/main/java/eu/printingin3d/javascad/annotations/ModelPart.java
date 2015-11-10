@@ -16,6 +16,7 @@ public @interface ModelPart {
 	/**
 	 * Returns with the name of the output file. The filename will be the methods name
 	 * if this value is omitted.
+	 * @return the name of the output file
 	 */
 	String value() default "";
 }

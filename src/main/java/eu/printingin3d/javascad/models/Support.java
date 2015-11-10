@@ -42,7 +42,7 @@ public class Support extends Atomic3dModel {
 	private static class MovingStepper implements IStepper {
 		private final double step;
 
-		public MovingStepper(double step) {
+		MovingStepper(double step) {
 			this.step = step;
 		}
 
@@ -59,7 +59,7 @@ public class Support extends Atomic3dModel {
 	private static class ZigZagStepper implements IStepper {
 		private final double step;
 
-		public ZigZagStepper(double step) {
+		ZigZagStepper(double step) {
 			this.step = step;
 		}
 

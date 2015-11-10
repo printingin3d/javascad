@@ -29,7 +29,7 @@ public enum Direction {
 	
 	private final Coords3d coords;
 
-	private Direction(Coords3d coords) {
+	Direction(Coords3d coords) {
 		this.coords = coords;
 	}
 

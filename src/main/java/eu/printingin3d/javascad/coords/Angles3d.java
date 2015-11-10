@@ -107,7 +107,7 @@ public class Angles3d extends Basic3dFunc<Angles3d> {
 		private final Normal3d norm2;
 		private final Normal3d norm3;
 		
-		public Config(Coords3d coord1, Coords3d coord2, Coords3d coord3,
+		Config(Coords3d coord1, Coords3d coord2, Coords3d coord3,
 				Normal3d norm1, Normal3d norm2, Normal3d norm3) {
 			this.coord1 = coord1;
 			this.coord2 = coord2;

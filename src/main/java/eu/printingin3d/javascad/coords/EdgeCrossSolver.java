@@ -20,7 +20,7 @@ public final class EdgeCrossSolver {
 		private final double x;
 		private final double y;
 		
-		public IntersectionResult(boolean allX, double x, double y) {
+		IntersectionResult(boolean allX, double x, double y) {
 			this.allX = allX;
 			this.x = x;
 			this.y = y;

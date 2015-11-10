@@ -4,7 +4,7 @@
 
     <groupId>eu.printingin3d.javascad</groupId>
     <artifactId>javascad</artifactId>
-    <version>0.9.0.2</version>
+    <version>0.9.0.3</version>
     <packaging>jar</packaging>
     <name>JavaSCAD</name>
     <url>http://www.printingin3d.eu/javascad</url>
@@ -82,7 +82,6 @@
                     <bottom>Copyright &#169; 2014&#x2013;{currentYear}, Printing in 3D. All rights reserved.</bottom>
                     <show>protected</show>
                     <quiet>true</quiet>
-                    <additionalparam>-Xdoclint:none</additionalparam>
                 </configuration>
                 <executions>
                     <execution>
@@ -275,4 +274,24 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+	<profiles>
+  <profile>
+    <id>doclint-java8-disable</id>
+    <activation>
+      <jdk>[1.8,)</jdk>
+    </activation>
+
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <additionalparam>-Xdoclint:none</additionalparam>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
+  </profile>
+</profiles>
 </project>
