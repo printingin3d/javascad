@@ -2,7 +2,6 @@ package eu.printingin3d.javascad.models;
 
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.Assert;
@@ -63,7 +62,7 @@ public class Abstract3dModelTest {
 	@Test
 	public void testMoves() {
 		Abstract3dModel moved = testSubject.moves(
-				Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)));
+				new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0));
 		assertEqualsWithoutWhiteSpaces("union(){translate([10,20,30])(empty)translate([30,10,20])(empty)}", 
 				moved.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
@@ -77,7 +76,7 @@ public class Abstract3dModelTest {
 	@Test
 	public void testMovesWithDebug() {
 		Abstract3dModel moved = testSubject
-				.moves(Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)))
+				.moves(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0))
 				.debug();
 		assertEqualsWithoutWhiteSpaces("# union(){translate([10,20,30])(empty)translate([30,10,20])(empty)}", 
 				moved.toScad(ColorHandlingContext.DEFAULT).getScad());
@@ -88,6 +87,19 @@ public class Abstract3dModelTest {
 		Abstract3dModel ts = testSubject.rotate(new Angles3d(10.0, 20.0, 30.0));
 		assertEqualsWithoutWhiteSpaces("rotate([10,20,30]) (empty)", 
 				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void testRotates() {
+		Abstract3dModel ts = testSubject.rotates(new Angles3d(10.0, 20.0, 30.0), new Angles3d(30.0, 20.0, 10.0));
+		assertEqualsWithoutWhiteSpaces("union(){rotate([10,20,30]) (empty) rotate([30,20,10]) (empty)}", 
+				ts.toScad(ColorHandlingContext.DEFAULT).getScad());
+	}
+	
+	@Test
+	public void testRotatesWithEmpty() {
+		Abstract3dModel ts = testSubject.rotates(Collections.<Angles3d>emptyList());
+		Assert.assertSame(testSubject, ts);
 	}
 	
 	@Test
@@ -122,7 +134,7 @@ public class Abstract3dModelTest {
 	public void testMovesAndRotate() {
 		Abstract3dModel moved = testSubject
 				.rotate(new Angles3d(10.0, 20.0, 30.0))
-				.moves(Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)));
+				.moves(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0));
 		assertEqualsWithoutWhiteSpaces("union(){translate([10,20,30]) rotate([10,20,30]) (empty) translate([30,10,20]) rotate([10,20,30]) (empty)}", 
 				moved.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}

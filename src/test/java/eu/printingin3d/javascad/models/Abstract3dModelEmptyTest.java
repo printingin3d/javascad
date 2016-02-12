@@ -2,8 +2,6 @@ package eu.printingin3d.javascad.models;
 
 import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhiteSpaces;
 
-import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,7 +41,7 @@ public class Abstract3dModelEmptyTest {
 	
 	@Test
 	public void testMoves() {
-		testSubject.moves(Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)));
+		testSubject.moves(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0));
 		assertEqualsWithoutWhiteSpaces("", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 

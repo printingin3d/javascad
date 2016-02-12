@@ -40,4 +40,22 @@ public class Coords2d extends Abstract2d {
 	public Coords2d move(Coords2d move) {
 		return new Coords2d(x+move.x, y+move.y);
 	}
+	
+	/**
+	 * Creates a coordinate where the Y and Z fields are zero.
+	 * @param x the X coordinate
+	 * @return the newly create coordinate which points to (x,0,0)
+	 */
+	public static Coords2d xOnly(double x) {
+		return new Coords2d(x, 0.0);
+	}
+	
+	/**
+	 * Creates a coordinate where the X and Z fields are zero.
+	 * @param y the Y coordinate
+	 * @return the newly create coordinate which points to (0,y,0)
+	 */
+	public static Coords2d yOnly(double y) {
+		return new Coords2d(0.0, y);
+	}
 }

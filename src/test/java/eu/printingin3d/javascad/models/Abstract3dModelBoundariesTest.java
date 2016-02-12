@@ -3,8 +3,6 @@ package eu.printingin3d.javascad.models;
 import static eu.printingin3d.javascad.coords.Boundaries3dTest.assertBoundariesEquals;
 import static eu.printingin3d.javascad.testutils.AssertEx.assertDoubleEquals;
 
-import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +11,6 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.BoundaryTest;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 import eu.printingin3d.javascad.testutils.Test3dModel;
 
@@ -60,7 +57,7 @@ public class Abstract3dModelBoundariesTest {
 	
 	@Test
 	public void boundariesShouldCalculateBoundariesForMultiModels() {
-		Abstract3dModel testSubject = this.testSubject.moves(Arrays.asList(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0)));
+		Abstract3dModel testSubject = this.testSubject.moves(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0));
 		Boundaries3d boundaries = testSubject.getBoundaries();
 		
 		assertDoubleEquals(testSubjectsBoundaries.getX().getMin()+10.0, boundaries.getX().getMin());

@@ -2,6 +2,7 @@ package eu.printingin3d.javascad.models;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -61,11 +62,21 @@ public abstract class Abstract3dModel implements IModel {
 		if (!delta.isEmpty()) {
 			List<Abstract3dModel> newModels = new ArrayList<>();
 			for (Coords3d c : delta) {
-				newModels.add(this.cloneModel().move(c));
+				newModels.add(this.move(c));
 			}
 			return new Union(newModels);
 		}
 		return this;
+	}
+	
+	/**
+	 * Add moves to this model, which converts this to an {@link Union}, representing more than one model.
+	 * This object won't be changed.  
+	 * @param delta the collection of coordinates used by the move operation
+	 * @return a new object which holds the moved objects
+	 */
+	public Abstract3dModel moves(Coords3d... delta) {
+		return moves(Arrays.asList(delta));
 	}
 	
 	/**
@@ -78,6 +89,33 @@ public abstract class Abstract3dModel implements IModel {
 		result.rotate = this.rotate.rotate(delta);
 		result.move = this.move.rotate(delta);
 		return result;
+	}
+	
+	/**
+	 * Add rotates to this model, which converts this to an {@link Union}, representing more than one model.
+	 * This object won't be changed.  
+	 * @param delta the collection of angles used by the rotate operation
+	 * @return a new object which holds the moved objects
+	 */
+	public Abstract3dModel rotates(Collection<Angles3d> delta) {
+		if (!delta.isEmpty()) {
+			List<Abstract3dModel> newModels = new ArrayList<>();
+			for (Angles3d c : delta) {
+				newModels.add(this.rotate(c));
+			}
+			return new Union(newModels);
+		}
+		return this;
+	}
+	
+	/**
+	 * Add rotates to this model, which converts this to an {@link Union}, representing more than one model.
+	 * This object won't be changed.  
+	 * @param delta the collection of angles used by the rotate operation
+	 * @return a new object which holds the moved objects
+	 */
+	public Abstract3dModel rotates(Angles3d... delta) {
+		return rotates(Arrays.asList(delta));
 	}
 	
 	/**

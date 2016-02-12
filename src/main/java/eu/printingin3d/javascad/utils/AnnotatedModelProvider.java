@@ -35,7 +35,10 @@ public abstract class AnnotatedModelProvider implements IModelProvider {
 					relPath = m.getName() + ".scad";
 				}
 				try {
-					paths.add(new ModelWithPath((IModel)m.invoke(this), relPath));
+					IModel model = (IModel)m.invoke(this);
+					if (model!=null) {
+						paths.add(new ModelWithPath(model, relPath));
+					}
 				} catch (IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException e) {
 					throw new IllegalValueException("Unknown exception has been thrown", e);
