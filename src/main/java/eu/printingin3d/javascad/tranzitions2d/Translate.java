@@ -1,14 +1,14 @@
 package eu.printingin3d.javascad.tranzitions2d;
 
+import java.util.List;
+
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
-import eu.printingin3d.javascad.exceptions.NotImplementedException;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.models2d.Abstract2dModel;
 import eu.printingin3d.javascad.utils.AssertValue;
-import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
@@ -58,12 +58,12 @@ public class Translate extends Abstract2dModel {
 	}
 
 	@Override
-	public CSG toCSG(FacetGenerationContext context) {
-		throw new NotImplementedException();
+	public Abstract2dModel move(Coords2d delta) {
+		return new Translate(model, this.move.move(delta));
 	}
 
 	@Override
-	public Abstract2dModel move(Coords2d delta) {
-		return new Translate(model, this.move.move(delta));
+	protected List<Coords2d> getInnerPointCircle(FacetGenerationContext context) {
+		return model.getPointCircle(context);
 	}
 }

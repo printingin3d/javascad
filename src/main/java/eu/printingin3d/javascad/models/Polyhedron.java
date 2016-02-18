@@ -107,7 +107,7 @@ public class Polyhedron extends Atomic3dModel {
 
 	private SCAD addTriangles(SCAD b, List<Coords3d> points) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\n  triangles=[");
+		sb.append("\n  faces=[");
 		boolean first = true;
 		for (Triangle3d c : triangles) {
 			if (first) {

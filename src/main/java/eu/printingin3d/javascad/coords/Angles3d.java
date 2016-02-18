@@ -89,7 +89,7 @@ public class Angles3d extends Basic3dFunc<Angles3d> {
 		double a = normalVectorA.normalValue(temp);
 		double b = normalVectorB.normalValue(temp);
 		if (!DoubleUtils.isZero(a)) {
-			result = (a<0.0 ? -1.0 : 1.0) *toDeg(Math.acos(b/Math.sqrt(b*b+a*a)));
+			result = (a<0.0 ? -1.0 : 1.0) *Math.toDegrees(Math.acos(b/Math.sqrt(b*b+a*a)));
 		}
 		return result;
 	}
@@ -187,27 +187,19 @@ public class Angles3d extends Basic3dFunc<Angles3d> {
 	}
 	
 	protected double getXRad() {
-		return toRad(x);
+		return Math.toRadians(x);
 	}
 	
 	protected double getYRad() {
-		return toRad(y);
+		return Math.toRadians(y);
 	}
 	
 	protected double getZRad() {
-		return toRad(z);
+		return Math.toRadians(z);
 	}
 	
 	private static double normalize(double a) {
 		return Math.IEEEremainder(a, 360.0);
-	}
-	
-	private static double toRad(double deg) {
-		return deg/180.0*Math.PI;
-	}
-	
-	private static double toDeg(double rad) {
-		return rad*180.0/Math.PI;
 	}
 	
 	@Override

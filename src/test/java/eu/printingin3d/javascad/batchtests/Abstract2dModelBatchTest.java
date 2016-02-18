@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
@@ -19,9 +20,11 @@ import eu.printingin3d.javascad.models2d.Polygon;
 import eu.printingin3d.javascad.models2d.RoundedSquare;
 import eu.printingin3d.javascad.models2d.Square;
 import eu.printingin3d.javascad.tranzitions2d.Translate;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 @RunWith(Parameterized.class)
 public class Abstract2dModelBatchTest {
+	private static final Coords3d EXPECTED_NORM = new Coords3d(0, 0, -1);
 	private static final double EPSILON = 0.0001;
 	private final Abstract2dModel testSubject;
 
@@ -68,5 +71,34 @@ public class Abstract2dModelBatchTest {
 		
 		Assert.assertEquals(before.getX().getSize(), after.getX().getSize(), EPSILON);
 		Assert.assertEquals(before.getY().getSize(), after.getY().getSize(), EPSILON);
+	}
+	
+	@Test
+	public void testPointsNorm() {
+		Coords3d a = null;
+    	Coords3d b = null;
+    	Coords3d c = null;
+		
+		for (Coords2d coords : testSubject.getPointCircle(FacetGenerationContext.DEFAULT)) {
+			c = b;
+			b = a;
+			a = coords.withZ(0);
+			
+			if (a!=null && b!=null && c!=null) {
+		    	Coords3d n = b.add(a.inverse()).cross(c.add(a.inverse())).unit();
+		    	
+		    	Assert.assertEquals(EXPECTED_NORM, n);
+			}
+		}
+	}
+	
+	@Test
+	public void testPointsWithinBoundaries() {
+		Boundaries2d boundaries2d = testSubject.getBoundaries2d();
+		
+		for (Coords2d coords : testSubject.getPointCircle(FacetGenerationContext.DEFAULT)) {
+			Assert.assertTrue(boundaries2d.getX().isInside(coords.getX()));
+			Assert.assertTrue(boundaries2d.getY().isInside(coords.getY()));
+		}
 	}
 }

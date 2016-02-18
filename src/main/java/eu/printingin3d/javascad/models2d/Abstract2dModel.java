@@ -1,11 +1,14 @@
 package eu.printingin3d.javascad.models2d;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
-import eu.printingin3d.javascad.models.IModel;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.tranzitions2d.Translate;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * <p>Implements IModel interface and adds convenient methods to make it easier to move or rotate
@@ -13,7 +16,7 @@ import eu.printingin3d.javascad.tranzitions2d.Translate;
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
-public abstract class Abstract2dModel implements IModel {
+public abstract class Abstract2dModel {
 	protected final Coords2d move;
 	
 	protected Abstract2dModel(Coords2d move) {
@@ -37,7 +40,11 @@ public abstract class Abstract2dModel implements IModel {
 		return getModelBoundaries().move(move);
 	}
 
-	@Override
+	/**
+	 * Renders this model and returns with the generated OpenSCAD code.
+	 * @param context the color context to be used for the generation
+	 * @return the generated OpenSCAD code
+	 */
 	public SCAD toScad(IColorGenerationContext context) {
 		return innerToScad(context).prepend(Translate.getTranslate(move));
 	}
@@ -49,4 +56,19 @@ public abstract class Abstract2dModel implements IModel {
 	 * the original object left unmodified
 	 */
 	public abstract Abstract2dModel move(Coords2d delta);
+
+	protected abstract List<Coords2d> getInnerPointCircle(FacetGenerationContext context);
+	
+	/**
+	 * Returns with a list of points which forms the shape.
+	 * @param context the context to be used for the generation
+	 * @return the list of point to form this shape
+	 */
+	public final List<Coords2d> getPointCircle(FacetGenerationContext context) {
+		List<Coords2d> result = new ArrayList<>();
+		for (Coords2d c : getInnerPointCircle(context)) {
+			result.add(c.move(move));
+		}
+		return result;
+	}
 }

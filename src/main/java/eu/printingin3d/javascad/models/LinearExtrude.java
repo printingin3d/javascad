@@ -1,14 +1,22 @@
 package eu.printingin3d.javascad.models;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
+import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
-import eu.printingin3d.javascad.exceptions.NotImplementedException;
+import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.models2d.Abstract2dModel;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
+import eu.printingin3d.javascad.vrl.Polygon;
 
 /**
  * Linear extrude the given 2D model to create a 3D object.
@@ -86,7 +94,72 @@ public class LinearExtrude extends Atomic3dModel {
 
 	@Override
 	protected CSG toInnerCSG(FacetGenerationContext context) {
-		throw new NotImplementedException();
+		Color color = context.getColor();
+		
+		List<Coords2d> points = model.getPointCircle(context);
+		int numOfSteps = DoubleUtils.equalsEps(twist, 0.0) ? 1 : context.calculateNumberOfSlices(height);
+
+		double y1=-height/2;
+		double alpha1 = 0;
+		List<Coords3d> c1 = calculatePoints(points, y1, alpha1);
+
+		List<Coords3d> top = new ArrayList<>();
+		for (Coords3d c : c1) {
+			top.add(c);
+		}
+		
+		List<Polygon> polygons = new ArrayList<>();
+		for (int i=1;i<=numOfSteps;i++) {
+			double y2 = i*height/numOfSteps-height/2;
+			double alpha2 = i*twist/numOfSteps;
+			
+			List<Coords3d> c2 = calculatePoints(points, y2, alpha2);
+			
+			for (int t=0;t<points.size();t++) {
+				int p = (t+1) % points.size();
+				
+				polygons.add(Polygon.fromPolygons(Arrays.asList(
+						c1.get(t),
+						c2.get(p),
+						c2.get(t)
+					), color));
+				polygons.add(Polygon.fromPolygons(Arrays.asList(
+						c1.get(t),
+						c1.get(p),
+						c2.get(p)
+						), color));
+			}
+			
+			c1 = c2;
+			y1 = y2;
+			alpha1 = alpha2;
+		}
+
+		List<Coords3d> bottom = new ArrayList<>();
+		for (Coords3d c : c1) {
+			bottom.add(c);
+		}
+		
+		Collections.reverse(top);
+		
+		polygons.add(Polygon.fromPolygons(top, color));
+		polygons.add(Polygon.fromPolygons(bottom, color));
+		
+		return new CSG(polygons);
+	}
+	
+	private List<Coords3d> calculatePoints(List<Coords2d> points, double z, double alpha) {
+		double rad = Math.toRadians(alpha);
+		
+		List<Coords3d> result = new ArrayList<>();
+		for (Coords2d c : points) {
+			result.add(new Coords3d(
+					Math.cos(rad)*c.getX()-Math.sin(rad)*c.getY(), 
+					Math.sin(rad)*c.getX()+Math.cos(rad)*c.getY(),
+					z));
+		}
+
+		return result;
 	}
 
 }

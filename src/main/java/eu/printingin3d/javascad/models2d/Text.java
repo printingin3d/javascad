@@ -1,5 +1,7 @@
 package eu.printingin3d.javascad.models2d;
 
+import java.util.List;
+
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
@@ -8,7 +10,6 @@ import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.exceptions.NotImplementedException;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.utils.DoubleUtils;
-import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
@@ -36,11 +37,6 @@ public class Text extends Abstract2dModel {
 	}
 
 	@Override
-	public CSG toCSG(FacetGenerationContext context) {
-		throw new NotImplementedException();
-	}
-
-	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
 		return new SCAD("text(text=\""+text+"\","
 				+ "size="+DoubleUtils.formatDouble(size.getY())+","
@@ -60,4 +56,8 @@ public class Text extends Abstract2dModel {
 		return new Text(this.move.move(delta), text, size);
 	}
 
+	@Override
+	protected List<Coords2d> getInnerPointCircle(FacetGenerationContext context) {
+		throw new NotImplementedException();
+	}
 }

@@ -1,16 +1,15 @@
 package eu.printingin3d.javascad.models2d;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
-import eu.printingin3d.javascad.exceptions.NotImplementedException;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.utils.AssertValue;
-import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
@@ -38,11 +37,6 @@ public class Polygon extends Abstract2dModel {
 	 */
 	public Polygon(List<Coords2d> coords) {
 		this(Coords2d.ZERO, coords);
-	}
-
-	@Override
-	public CSG toCSG(FacetGenerationContext context) {
-		throw new NotImplementedException();
 	}
 
 	@Override
@@ -79,6 +73,11 @@ public class Polygon extends Abstract2dModel {
 	@Override
 	public Abstract2dModel move(Coords2d delta) {
 		return new Polygon(move.move(delta), coords);
+	}
+
+	@Override
+	public List<Coords2d> getInnerPointCircle(FacetGenerationContext context) {
+		return Collections.unmodifiableList(coords);
 	}
 
 }

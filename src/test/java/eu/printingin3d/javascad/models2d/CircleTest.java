@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
+import eu.printingin3d.javascad.coords2d.Coords2d;
+import eu.printingin3d.javascad.testutils.AssertEx;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 public class CircleTest {
 	@Test
@@ -32,5 +35,15 @@ public class CircleTest {
 		assertDoubleEquals(+5.5, boundaries2d.getX().getMax());
 		assertDoubleEquals(-5.5, boundaries2d.getY().getMin());
 		assertDoubleEquals(+5.5, boundaries2d.getY().getMax());
+	}
+	
+	@Test
+	public void testPointsDistance() {
+		Circle circle = new Circle(10.5);
+		
+		for (Coords2d c : circle.getPointCircle(FacetGenerationContext.DEFAULT)) {
+			double dist = Math.sqrt(c.getX()*c.getX()+c.getY()*c.getY());
+			AssertEx.assertDoubleEquals(10.5, dist);
+		}
 	}
 }

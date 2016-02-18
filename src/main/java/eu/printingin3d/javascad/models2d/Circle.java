@@ -1,13 +1,14 @@
 package eu.printingin3d.javascad.models2d;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
-import eu.printingin3d.javascad.exceptions.NotImplementedException;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.utils.DoubleUtils;
-import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
@@ -32,11 +33,6 @@ public class Circle extends Abstract2dModel {
 	}
 
 	@Override
-	public CSG toCSG(FacetGenerationContext context) {
-		throw new NotImplementedException();
-	}
-
-	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
 		return new SCAD("circle(r="+DoubleUtils.formatDouble(radius)+", center=true);\n");
 	}
@@ -51,6 +47,18 @@ public class Circle extends Abstract2dModel {
 	@Override
 	public Abstract2dModel move(Coords2d delta) {
 		return new Circle(this.move.move(delta), this.radius);
+	}
+
+	@Override
+	protected List<Coords2d> getInnerPointCircle(FacetGenerationContext context) {
+        List<Coords2d> points = new ArrayList<>();
+
+        int numSlices = context.calculateNumberOfSlices(radius);
+        for (int i = numSlices; i > 0; i--) {
+        	double alpha = Math.PI*2*i/numSlices;
+            points.add(new Coords2d(Math.sin(alpha)*radius, Math.cos(alpha)*radius));
+        }
+        return points;
 	}
 
 }

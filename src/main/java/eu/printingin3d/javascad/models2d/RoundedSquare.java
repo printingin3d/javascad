@@ -1,7 +1,9 @@
 package eu.printingin3d.javascad.models2d;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
@@ -9,6 +11,7 @@ import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.utils.AssertValue;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
  * Represents a 2D rounded square - the corners of the square will be rounded by the given radius.
@@ -66,7 +69,6 @@ public class RoundedSquare extends Square {
 
 		if (numberOfItems>1) {
 			return result.prepend("union() {").append("}");
-
 		}
 		return result;
 	}
@@ -74,6 +76,22 @@ public class RoundedSquare extends Square {
 	@Override
 	public Abstract2dModel move(Coords2d delta) {
 		return new RoundedSquare(this.move.move(delta), this.size, this.radius);
+	}
+
+	@Override
+	protected List<Coords2d> getInnerPointCircle(FacetGenerationContext context) {
+        List<Coords2d> points = new ArrayList<>();
+
+        int numSlices = context.calculateNumberOfSlices(radius)*4;
+        for (int i = numSlices; i > 0; i--) {
+        	double alpha = Math.PI*2*i/numSlices;
+            double x = Math.sin(alpha)*radius;
+            x+=Math.signum(x)*(size.getX()/2-radius);
+			double y = Math.cos(alpha)*radius;
+            y+=Math.signum(y)*(size.getY()/2-radius);
+			points.add(new Coords2d(x, y));
+        }
+        return points;
 	}
 
 }
