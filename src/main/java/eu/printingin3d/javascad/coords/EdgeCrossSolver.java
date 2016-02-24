@@ -104,4 +104,18 @@ public final class EdgeCrossSolver {
 	private static boolean doubleEquals(double value1, double value2) {
 		return Math.abs(value1-value2)<1E-6;
 	}
+	
+	/**
+	 * Finds the cross point between c1-c2 and c3-c4 line segments.
+	 * @param c1 start point of the first line segment
+	 * @param c2 end point of the first line segment
+	 * @param c3 start point of the second line segment
+	 * @param c4 end point of the second line segment
+	 * @return the cross point or null if the two line segment is not crossing
+	 */
+	public static Coords2d findCross(Coords2d c1, Coords2d c2, Coords2d c3, Coords2d c4) {
+		IntersectionResult result = findIntersection(c1, c2, c3, c4);
+		return result==null ? null : new Coords2d(result.x, result.y);
+	}
+
 }

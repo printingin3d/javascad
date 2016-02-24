@@ -25,8 +25,6 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  * <p>The object doesn't have any list modification method and although it could work if the passed list
  * is modified after the construction, the advised solution is to create the final list before creating
  * this object.</p>  
- *
- * @author ivivan <ivivan@printingin3d.eu>
  */
 public class Union extends Complex3dModel {
 	protected final List<Abstract3dModel> models;

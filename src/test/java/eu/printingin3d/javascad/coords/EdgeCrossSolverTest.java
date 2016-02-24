@@ -3,6 +3,8 @@ package eu.printingin3d.javascad.coords;
 import org.junit.Assert;
 import org.junit.Test;
 
+import eu.printingin3d.javascad.coords2d.Coords2d;
+
 public class EdgeCrossSolverTest {
 	@Test
 	public void testTrivialCrossing1() {
@@ -77,4 +79,31 @@ public class EdgeCrossSolverTest {
 		
 		Assert.assertEquals(new Coords3d(-0.7092,1.87,10), intersection);
 	}*/
+	
+	@Test
+	public void testTrivial2dCross() {
+		Coords2d result = EdgeCrossSolver.findCross(new Coords2d(-5, 0), new Coords2d(5, 0), new Coords2d(0, -5), new Coords2d(0, 5));
+		
+		Assert.assertEquals(Coords2d.ZERO, result);
+	}
+	
+	@Test
+	public void test2dCross() {
+		Coords2d c1 = new Coords2d(1.87,-10.5);
+		Coords2d c2 = new Coords2d(1.87, 10.5);
+		
+		Coords2d d1 = new Coords2d(1.828,10);
+		Coords2d d2 = new Coords2d(1.9151,10);
+		
+		Coords2d result = EdgeCrossSolver.findCross(c1, c2, d1, d2);
+		
+		Assert.assertEquals(new Coords2d(1.87, 10), result);
+	}
+	
+	@Test
+	public void testParallelCross() {
+		Coords2d result = EdgeCrossSolver.findCross(new Coords2d(-5, 0), new Coords2d(5, 0), new Coords2d(-5, 5), new Coords2d(5, 5));
+		
+		Assert.assertNull(result);
+	}
 }

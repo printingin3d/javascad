@@ -25,6 +25,18 @@ public final class DoubleUtils {
 	}
 	
 	/**
+	 * Compare two doubles and returns with an integer similar to {@link Double#compare}, but with regards to
+	 * a predefined epsilon value. The epsilon value is the same as {@link #equalsEps} method. 
+	 * If the equalsEps returns with true this method will return with zero and vice versa.
+	 * @param a the first value to compare
+	 * @param b the second value to compare
+	 * @return an integer similar to {@link Double#compare}, but with regards to a predefined epsilon value
+	 */
+	public static int compareEps(double a, double b) {
+		return Long.compare(Math.round(a/EPSILON), Math.round(b/EPSILON));
+	}
+	
+	/**
 	 * <p>Create a hash value of the given double. It will satisfy the basic rule of equals and hashCode methods that if
 	 * two values are equals they have to have to same hash code value.</p> 
 	 * <p>So this class's {@link #equalsEps(double, double)} method and this method satisfies this rule: 

@@ -1,6 +1,8 @@
 package eu.printingin3d.javascad.models2d;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
@@ -50,7 +52,7 @@ public class Circle extends Abstract2dModel {
 	}
 
 	@Override
-	protected List<Coords2d> getInnerPointCircle(FacetGenerationContext context) {
+	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
         List<Coords2d> points = new ArrayList<>();
 
         int numSlices = context.calculateNumberOfSlices(radius);
@@ -58,7 +60,7 @@ public class Circle extends Abstract2dModel {
         	double alpha = Math.PI*2*i/numSlices;
             points.add(new Coords2d(Math.sin(alpha)*radius, Math.cos(alpha)*radius));
         }
-        return points;
+        return Collections.singleton(new Area2d(points));
 	}
 
 }

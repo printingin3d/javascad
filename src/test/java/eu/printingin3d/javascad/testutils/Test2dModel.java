@@ -1,12 +1,13 @@
 package eu.printingin3d.javascad.testutils;
 
-import java.util.List;
+import java.util.Collection;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.models2d.Abstract2dModel;
+import eu.printingin3d.javascad.models2d.Area2d;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 public class Test2dModel extends Abstract2dModel {
@@ -39,7 +40,7 @@ public class Test2dModel extends Abstract2dModel {
 	}
 
 	@Override
-	protected List<Coords2d> getInnerPointCircle(FacetGenerationContext context) {
+	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
 		return null;
 	}
 }

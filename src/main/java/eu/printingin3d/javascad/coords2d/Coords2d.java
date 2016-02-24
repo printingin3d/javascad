@@ -12,6 +12,16 @@ public class Coords2d extends Abstract2d {
 	 * The coordinate of the origin.
 	 */
 	public static final Coords2d ZERO = new Coords2d(0, 0); 
+	
+	/**
+	 * Calculates the midpoint of the ab segment.
+	 * @param a first point
+	 * @param b second point
+	 * @return the coordinate of the midpoint of the ab segment
+	 */
+	public static Coords2d midPoint(Coords2d a, Coords2d b) {
+		return new Coords2d((a.x+b.x)/2.0, (a.y+b.y)/2.0);
+	}
 
 	/**
 	 * Instantiating a new coordinate with the given coordinates.

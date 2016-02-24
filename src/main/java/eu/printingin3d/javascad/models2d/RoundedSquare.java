@@ -2,6 +2,8 @@ package eu.printingin3d.javascad.models2d;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,7 +81,7 @@ public class RoundedSquare extends Square {
 	}
 
 	@Override
-	protected List<Coords2d> getInnerPointCircle(FacetGenerationContext context) {
+	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
         List<Coords2d> points = new ArrayList<>();
 
         int numSlices = context.calculateNumberOfSlices(radius)*4;
@@ -91,7 +93,7 @@ public class RoundedSquare extends Square {
             y+=Math.signum(y)*(size.getY()/2-radius);
 			points.add(new Coords2d(x, y));
         }
-        return points;
+        return Collections.singleton(new Area2d(points));
 	}
 
 }

@@ -1,5 +1,9 @@
 package eu.printingin3d.javascad.models;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.junit.Test;
 
 import eu.printingin3d.javascad.context.ColorHandlingContext;
@@ -8,8 +12,15 @@ import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
+import eu.printingin3d.javascad.coords2d.Coords2d;
+import eu.printingin3d.javascad.models2d.Abstract2dModel;
+import eu.printingin3d.javascad.models2d.Circle;
 import eu.printingin3d.javascad.testutils.AssertEx;
 import eu.printingin3d.javascad.testutils.Test2dModel;
+import eu.printingin3d.javascad.tranzitions2d.Union;
+import eu.printingin3d.javascad.utils.SaveScadFiles;
+import eu.printingin3d.javascad.vrl.FacetGenerationContext;
+import eu.printingin3d.javascad.vrl.export.FileExporterFactory;
 
 public class LinearExtrudeTest {
 	@Test
@@ -34,5 +45,27 @@ public class LinearExtrudeTest {
 				new Boundaries2d(new Boundary(-5, 0), new Boundary(-10, 5))), 30, 20, 2);
 		Boundaries3dTest.assertBoundariesEquals(
 				new Boundaries3d(new Coords3d(-10, -10, -15), new Coords3d(10, 10, 15)), testSubject.getBoundaries());
+	}
+	
+	@Test
+	public void test() throws IOException {
+		Abstract2dModel union = new Union(Arrays.asList(
+				new Circle(5).move(Coords2d.xOnly(-5)),
+				new Circle(5), 
+				new Circle(5).move(Coords2d.xOnly(5))));
+		Abstract3dModel test = new LinearExtrude(union, 10, 0)
+//				.addModelTo(Side.TOP, new Cube(10))
+//				.addModelTo(Side.LEFT, new Cube(10))
+				;
+		
+		new SaveScadFiles(new File("C:/temp"))
+			.addModel("test.scad", test)
+			.saveScadFiles();
+		
+		FacetGenerationContext context = new FacetGenerationContext(null, null, 0);
+		context.setFsAndFa(1, 12);
+		
+		FileExporterFactory.createExporter(new File("C:/temp/test.stl"))
+			.writeToFile(test.toCSG(context).toFacets());
 	}
 }

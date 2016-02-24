@@ -92,6 +92,8 @@ public final class Polygon {
      * @return a new polygon that consists of the specified vertices
      */
     public static Polygon fromPolygons(List<Coords3d> vertices, Color color) {
+    	AssertValue.isTrue(vertices.size()>=3, "The coordinate list should contain at least 3 points.");
+    	
     	Coords3d a = vertices.get(0);
     	Coords3d b = vertices.get(1);
     	Coords3d c = vertices.get(2);

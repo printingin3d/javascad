@@ -1,5 +1,9 @@
 package eu.printingin3d.javascad.coords2d;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import eu.printingin3d.javascad.coords.Boundary;
 
 
@@ -12,7 +16,25 @@ import eu.printingin3d.javascad.coords.Boundary;
 public class Boundaries2d {
 	private final Boundary x;
 	private final Boundary y;
-	
+
+	/**
+	 * Calculate the including cuboid so the result of this method is an interval representing a cuboid
+	 * that all of the parameter cuboids are inside in this cuboid.
+	 * @param boundaries the intervals considered during the calculation
+	 * @return a new object representing the including cuboid
+	 */
+	public static Boundaries2d combine(Collection<Boundaries2d> boundaries) {
+		List<Boundary> collectX = new ArrayList<>();
+		List<Boundary> collectY = new ArrayList<>();
+		for (Boundaries2d b : boundaries) {
+			collectX.add(b.x);
+			collectY.add(b.y);
+		}
+		return new Boundaries2d(
+				Boundary.combine(collectX), 
+				Boundary.combine(collectY));
+	}
+
 	/**
 	 * Constructs a new object with the given X, Y and Z boundary.
 	 * @param x the boundary on the X plane

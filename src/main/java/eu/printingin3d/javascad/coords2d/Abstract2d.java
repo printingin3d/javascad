@@ -63,6 +63,17 @@ public class Abstract2d {
 		return y;
 	}
 
+    /**
+     * Returns the dot product of this vector and the specified vector.
+     *
+     * @param a the second vector
+     *
+     * @return the dot product of this vector and the specified vector
+     */
+    public double dot(Abstract2d a) {
+        return this.x * a.x + this.y * a.y;
+    }
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
