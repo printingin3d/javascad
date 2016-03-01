@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.coords2d.Coords2d;
+import eu.printingin3d.javascad.coords2d.LineSegment2d;
 
 public class EdgeCrossSolverTest {
 	@Test
@@ -82,7 +83,10 @@ public class EdgeCrossSolverTest {
 	
 	@Test
 	public void testTrivial2dCross() {
-		Coords2d result = EdgeCrossSolver.findCross(new Coords2d(-5, 0), new Coords2d(5, 0), new Coords2d(0, -5), new Coords2d(0, 5));
+		Coords2d result = EdgeCrossSolver.findCross(
+				new LineSegment2d(new Coords2d(-5, 0), new Coords2d(5, 0)), 
+				new LineSegment2d(new Coords2d(0, -5), new Coords2d(0, 5))
+			);
 		
 		Assert.assertEquals(Coords2d.ZERO, result);
 	}
@@ -95,14 +99,20 @@ public class EdgeCrossSolverTest {
 		Coords2d d1 = new Coords2d(1.828,10);
 		Coords2d d2 = new Coords2d(1.9151,10);
 		
-		Coords2d result = EdgeCrossSolver.findCross(c1, c2, d1, d2);
+		Coords2d result = EdgeCrossSolver.findCross(
+				new LineSegment2d(c1, c2), 
+				new LineSegment2d(d1, d2)
+			);
 		
 		Assert.assertEquals(new Coords2d(1.87, 10), result);
 	}
 	
 	@Test
 	public void testParallelCross() {
-		Coords2d result = EdgeCrossSolver.findCross(new Coords2d(-5, 0), new Coords2d(5, 0), new Coords2d(-5, 5), new Coords2d(5, 5));
+		Coords2d result = EdgeCrossSolver.findCross(
+				new LineSegment2d(new Coords2d(-5, 0), new Coords2d(5, 0)), 
+				new LineSegment2d(new Coords2d(-5, 5), new Coords2d(5, 5))
+			);
 		
 		Assert.assertNull(result);
 	}

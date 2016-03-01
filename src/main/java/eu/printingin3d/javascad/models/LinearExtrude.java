@@ -11,6 +11,7 @@ import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
+import eu.printingin3d.javascad.coords2d.LineSegment2d;
 import eu.printingin3d.javascad.enums.PointRelation;
 import eu.printingin3d.javascad.models2d.Abstract2dModel;
 import eu.printingin3d.javascad.models2d.Area2d;
@@ -97,18 +98,22 @@ public class LinearExtrude extends Atomic3dModel {
 		List<Area2d> result = new ArrayList<>();
 		Area2d coords = area;
 	
-/*		for (int i=0;i<area.size();i++) {
+		for (int i=0;i<area.size();i++) {
 			if (coords.size()<=2) {
 				break;
+			}
+/*		while (coords.size()>2) {
+			if (coords.size()==3) {
+				result.add(coords);
+				break;
 			}*/
-		while (coords.size()>2) {
 			Coords2d p = coords.get(0);
 			Coords2d prev = p;
 			int count = 0;
 			for (Coords2d c : coords) {
 				count++;
 				if (c!=p && 
-						(area.findCrossing(c, p, false)!=null || 
+						(!area.findCrossing(new LineSegment2d(c, p), false).isEmpty() || 
 							area.calculatePointRelation(Coords2d.midPoint(c, p))==PointRelation.OUTSIDE)) {
 					break;
 				}
@@ -166,7 +171,7 @@ public class LinearExtrude extends Atomic3dModel {
 				y1 = y2;
 				alpha1 = alpha2;
 			}
-			for (Area2d lc : generateCover(points.rotate(alpha1+twist))) {
+			for (Area2d lc : generateCover(points.rotate(alpha1))) {
 				polygons.add(Polygon.fromPolygons(lc.withZ(y1), color));
 			}
 		}

@@ -10,7 +10,7 @@ import eu.printingin3d.javascad.enums.PointRelation;
 import eu.printingin3d.javascad.tranzitions2d.Union;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
-public class ListOfCoords2dTest {
+public class Area2dTest {
 	@Test
 	public void twoSeparateCirclesShouldBeDistinct() {
 		for (Area2d lc1 : new Circle(4).getPointCircle(FacetGenerationContext.DEFAULT)) {
@@ -49,5 +49,54 @@ public class ListOfCoords2dTest {
 		for (Area2d lc : union.getPointCircle(context)) {
 			Assert.assertEquals(PointRelation.INSIDE, lc.calculatePointRelation(new Coords2d(4.99999999999999, -8.881784197001252E-16)));
 		}
+	}
+	
+	@Test
+	public void testIsInsideWithYEqualsBorder() {
+		Area2d area = new Area2d(Arrays.asList(
+				new Coords2d(-1.5, -1.5),
+				new Coords2d(+1.5, -1.5),
+				new Coords2d(+1.5, +8.5),
+				new Coords2d(-1.5, +8.5)
+			));
+		
+		Assert.assertEquals(PointRelation.OUTSIDE, area.calculatePointRelation(new Coords2d(5, -1.5)));
+	}
+	
+	@Test
+	public void testIsInsideWithOnBorderPoint() {
+		Area2d area = new Area2d(Arrays.asList(
+				new Coords2d(-1.5, -1.5),
+				new Coords2d(+1.5, -1.5),
+				new Coords2d(+1.5, +8.5),
+				new Coords2d(-1.5, +8.5)
+				));
+		
+		Assert.assertEquals(PointRelation.BORDER, area.calculatePointRelation(new Coords2d(1, -1.5)));
+	}
+	
+	@Test
+	public void ifFirstAndLastPointsAreTheSameLastShouldBeOmitted() {
+		Area2d area = new Area2d(Arrays.asList(
+				new Coords2d(-1.5, -1.5),
+				new Coords2d(+1.5, -1.5),
+				new Coords2d(+1.5, +8.5),
+				new Coords2d(-1.5, +8.5),
+				new Coords2d(-1.5, -1.5)
+				));
+		Assert.assertEquals(4, area.size());
+	}
+	
+	@Test
+	public void inLinePointsShouldBeOmitted() {
+		Area2d area = new Area2d(Arrays.asList(
+				new Coords2d(-1.5, -1.5),
+				new Coords2d(+1.5, -1.5),
+				new Coords2d(+1.5, +1.5),
+				new Coords2d(+1.5, +5.5),
+				new Coords2d(+1.5, +8.5),
+				new Coords2d(-1.5, +8.5)
+				));
+		Assert.assertEquals(4, area.size());
 	}
 }

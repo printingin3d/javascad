@@ -14,6 +14,7 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
+import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
 import eu.printingin3d.javascad.models.Cylinder;
@@ -22,6 +23,8 @@ import eu.printingin3d.javascad.models.Polyhedron;
 import eu.printingin3d.javascad.models.Sphere;
 import eu.printingin3d.javascad.models.Support;
 import eu.printingin3d.javascad.models2d.Circle;
+import eu.printingin3d.javascad.models2d.Square;
+import eu.printingin3d.javascad.tranzitions2d.Union;
 
 @RunWith(Parameterized.class)
 public class CsgGenerationWithinBoundariesTest {
@@ -63,7 +66,8 @@ public class CsgGenerationWithinBoundariesTest {
 					new Support(new Dims3d(50, 23, 3), 0.1),
 					new Support(new Dims3d(12, 33, 3), 0.1).move(new Coords3d(34, 3, 10)),
 					new Polyhedron(triangles),
-					new LinearExtrude(new Circle(5), 5, 0)
+					new LinearExtrude(new Circle(5), 5, 0),
+					new LinearExtrude(new Union(Arrays.asList(new Circle(3), new Square(new Dims2d(3, 5)))), 10, 0)
 				));
 		return result;
 	}

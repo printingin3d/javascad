@@ -18,6 +18,8 @@ import eu.printingin3d.javascad.coords.Abstract3dTest.TestAbstract3d;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords2d.Abstract2dTest.TestAbstract2d;
+import eu.printingin3d.javascad.coords2d.Coords2d;
+import eu.printingin3d.javascad.coords2d.LineSegment2d;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 import eu.printingin3d.javascad.vrl.Vertex;
@@ -101,7 +103,13 @@ public class EqualsAndHashCodeBatchTest {
 				new TestCase<Vertex>(
 						new Vertex(c, Color.BLACK), 
 						new Vertex(c, Color.BLACK), 
-						new Vertex(c, Color.WHITE), new Vertex(c, null))
+						new Vertex(c, Color.WHITE), new Vertex(c, null)),
+				new TestCase<LineSegment2d>(
+						new LineSegment2d(new Coords2d(20, 30), new Coords2d(-10, 25)),
+						new LineSegment2d(new Coords2d(-10, 25), new Coords2d(20, 30)),
+							new LineSegment2d(new Coords2d(0, 25), new Coords2d(20, 30)), 
+							new LineSegment2d(new Coords2d(2, 30), new Coords2d(-10, 25))
+						)
 			);
 	}
 	

@@ -73,6 +73,17 @@ public class Abstract2d {
     public double dot(Abstract2d a) {
         return this.x * a.x + this.y * a.y;
     }
+    
+    /**
+     * Returns the square distance of the two point.
+     * @param p the other point
+     * @return the square distance of the two point
+     */
+    public double squareDist(Abstract2d p) {
+		double dx = x-p.getX();
+		double dy = y-p.getY();
+		return dx*dx+dy*dy;
+    }
 
 	@Override
 	public int hashCode() {

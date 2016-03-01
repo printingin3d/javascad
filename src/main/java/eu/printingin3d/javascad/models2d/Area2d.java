@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.models2d;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,14 +12,17 @@ import java.util.TreeSet;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.EdgeCrossSolver;
 import eu.printingin3d.javascad.coords2d.Coords2d;
+import eu.printingin3d.javascad.coords2d.LineSegment2d;
 import eu.printingin3d.javascad.enums.PointRelation;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
+import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.DoubleUtils;
+import eu.printingin3d.javascad.utils.Pair;
 
 /**
  * Represents a list of 2D points.
  */
-public class Area2d implements Iterable<Coords2d> {
+public class Area2d extends AbstractCollection<Coords2d> {
 	private final List<Coords2d> coords;
 
 	/**
@@ -26,12 +30,7 @@ public class Area2d implements Iterable<Coords2d> {
 	 * @param coords the coordinates to be used
 	 */
 	public Area2d(List<Coords2d> coords) {
-		if (coords.get(0).equals(coords.get(coords.size()-1))) {
-			this.coords = new ArrayList<>(coords.subList(0, coords.size()-1));
-		}
-		else {
-			this.coords = new ArrayList<>(coords);
-		}
+		this.coords = compact(coords);
 	}
 	
 	/**
@@ -88,17 +87,27 @@ public class Area2d implements Iterable<Coords2d> {
 	/**
 	 * Iterates over a list of 2D coordinates. Used internally by the union function.
 	 */
-	private static class LCIterator {
+	private static class Area2dIterator {
 		private final List<Coords2d> coords;
 		private int current;
 		private int returned = 0;
 		
-		public LCIterator(int start, List<Coords2d> coords) {
+		Area2dIterator(int start, List<Coords2d> coords) {
 			this.current = start;
 			this.coords = coords;
 		}
 		public boolean hasNext() {
 			return returned<coords.size();
+		}
+		public Coords2d peekPrevious() {
+			return coords.get(Math.floorMod(current-1, coords.size()));
+		}
+		public Coords2d peekNext() {
+			return coords.get(Math.floorMod(current, coords.size()));
+		}
+		public void reuseLast() {
+			current = Math.floorMod(current-1, coords.size());
+			returned--;
 		}
 		public Coords2d next() {
 			Coords2d result = coords.get(current);
@@ -107,69 +116,78 @@ public class Area2d implements Iterable<Coords2d> {
 			return result;
 		}
 		public Coords2d skipTillOutside(Area2d c1) {
-			Coords2d c, prev = coords.get(current);
-			while (null!=(c = next())) {
+			LineSegment2d curr = LineSegment2d.startLineSegmentSeries(coords.get(current));
+			for (int i=coords.size();i>0;i--) {
+				Coords2d c = next();
+				curr = curr.next(c);
 				if (c1.calculatePointRelation(c)!=PointRelation.INSIDE) {
-					return c1.findCrossing(c, prev, true);
+					return findClosest(c1.findCrossing(curr, true), curr.getStart());
 				}
-				prev = c;
 			}
-			return null;
+			throw new IllegalValueException("There is no point outside of the given area in this area.");
 		}
 	}
 	
-	private LCIterator getIteratorOutside(Area2d other) {
-		boolean foundInside = false;
-		
+	private Area2dIterator getIteratorOutside(Area2d other) {
 		for (int i=0;i<coords.size();i++) {
-			if (other.calculatePointRelation(coords.get(i))!=PointRelation.OUTSIDE) {
-				foundInside = true;
-			} else {
-				if (foundInside) {
-					return new LCIterator(i, coords);
-				}
+			if (other.calculatePointRelation(coords.get(i))==PointRelation.OUTSIDE) {
+				return new Area2dIterator(i, coords);
 			}
 		}
 		throw new RuntimeException("Unexpected");
 	}
 	
-	/**
-	 * Simple store for two values.
-	 */
-	private static class Pair<T, U> {
-		private final T value1;
-		private final U value2;
-		public Pair(T value1, U value2) {
-			this.value1 = value1;
-			this.value2 = value2;
-		}
-		public T getValue1() {
-			return value1;
-		}
-		public U getValue2() {
-			return value2;
-		}
-	}
-	
-	private Pair<Coords2d, LCIterator> getIteratorCrossing(Coords2d c1, Coords2d c2) {
-		Coords2d prev = coords.get(coords.size()-1);
-		if (c1.equals(prev) || c2.equals(prev)) {
-			return new Pair<Coords2d, LCIterator>(prev, new LCIterator(0, coords));
-		}
+	private Pair<Coords2d, Area2dIterator> getIteratorCrossing(final LineSegment2d segment) {
+		Set<Pair<Coords2d, Area2dIterator>> closest = new TreeSet<>(new Comparator<Pair<Coords2d, Area2dIterator>>() {
+			@Override
+			public int compare(Pair<Coords2d, Area2dIterator> o1,
+					Pair<Coords2d, Area2dIterator> o2) {
+				return Double.compare(
+						o1.getValue1().squareDist(segment.getEnd()), 
+						o2.getValue1().squareDist(segment.getEnd()));
+			}
+		});
+		
 		int i=0;
-		for (Coords2d c : coords) {
-			if (c1.equals(c) || c2.equals(c)) {
-				return new Pair<Coords2d, LCIterator>(c, new LCIterator(i, coords));
+/*		List<LineSegment2d> segments = LineSegment2d.lineSegmentSeries(coords);
+		System.out.println(segments.getClass().getCanonicalName());
+		System.out.println(segments.size());
+		System.out.println(segments.iterator());
+		System.out.println("--------");
+		for (int index=0;index<segments.size();index++) {
+			new Exception().printStackTrace();
+			System.out.println("haho");
+			System.out.println(segments.getClass().getCanonicalName());
+			System.out.println(segments.size());
+			LineSegment2d current = segments.get(index);*/
+		for (LineSegment2d current : LineSegment2d.lineSegmentSeries(coords)) {
+			if (current.hasCommon(segment)) {
+				closest.add(new Pair<Coords2d, Area2dIterator>(current.getEnd(), new Area2dIterator(i, coords)));
 			} else {
-				Coords2d cross = EdgeCrossSolver.findCross(c1, c2, c, prev);
+				Coords2d cross = EdgeCrossSolver.findCross(segment, current);
 				if (cross!=null) {
-					return new Pair<Coords2d, LCIterator>(cross, new LCIterator(i, coords));
+					closest.add(new Pair<Coords2d, Area2dIterator>(cross, new Area2dIterator(i, coords)));
 				}
 			}
-			prev = c;
 			i++;
 		}
-		throw new RuntimeException("There is no cross for "+c1+" and "+c2+" in this area.");
+		if (closest.isEmpty()) {
+			throw new RuntimeException("There is no cross for "+segment+" in this area.");
+		}
+		return closest.iterator().next();
+	}
+	
+	private static Coords2d findClosest(List<Coords2d> list, Coords2d p) {
+		Coords2d closest = null;
+		double minDist = Double.MAX_VALUE;
+		for (Coords2d c : list) {
+			double d = c.squareDist(p);
+			if (d<minDist) {
+				minDist = d;
+				closest = c;
+			}
+		}
+		return closest;
 	}
 	
 	/**
@@ -178,10 +196,7 @@ public class Area2d implements Iterable<Coords2d> {
 	 * @return a new object which holds the union of the two areas
 	 */
 	public Area2d union(Area2d other) {
-		if (isDistinct(other)) {
-			throw new IllegalValueException("Cannot create a union of two distinct area!");
-		}
-		
+		AssertValue.isFalse(isDistinct(other), "Cannot create a union of two distinct areas!");
 		if (isAllInside(other)) {
 			return this;
 		}
@@ -190,72 +205,114 @@ public class Area2d implements Iterable<Coords2d> {
 		}
 		
 		List<Coords2d> result = new ArrayList<>();
+		Pair<Area2dIterator, Area2dIterator> iterators = new Pair<>(getIteratorOutside(other), null);
+		Pair<Area2d, Area2d> areas = new Pair<>(this, other);
 		
-		LCIterator i1 = getIteratorOutside(other);
-		LCIterator i2 = null;
+		Coords2d prev = iterators.getValue1().peekPrevious();
+		Coords2d c = iterators.getValue1().next();
+		List<Coords2d> crosses = areas.getValue2().findCrossing(new LineSegment2d(c, prev), false);
+		if (!crosses.isEmpty()) {
+			result.add(findClosest(crosses, c));
+		}
+		prev = c;
+		result.add(c);
 		
-		Area2d c1 = this;
-		Area2d c2 = other;
-		
-		Coords2d prev = null;
-		boolean include = false;
-		while (i1.hasNext()) {
-			Coords2d c = i1.next();
-			if (include || c2.calculatePointRelation(c)!=PointRelation.INSIDE) {
+		while (iterators.getValue1().hasNext() || iterators.getValue2().hasNext()) {
+			c = iterators.getValue1().next();
+			LineSegment2d current = new LineSegment2d(c, prev);
+			
+			crosses = areas.getValue2().findCrossing(current, false);
+			crosses.remove(result.get(result.size()-1));
+			if (!crosses.isEmpty()) {
+				Coords2d cross = findClosest(crosses, prev);
+				result.add(cross);
+				prev = cross;
+				if (areas.getValue2().calculatePointRelation(c)==PointRelation.OUTSIDE) {
+					iterators.getValue1().reuseLast();
+				}
+				if (iterators.getValue2()==null) {
+					Pair<Coords2d, Area2dIterator> pair = 
+							areas.getValue2().getIteratorCrossing(current);
+					iterators = new Pair<>(pair.getValue2(), iterators.getValue1());
+				} else {
+					iterators = iterators.reverse();
+				}
+				areas = areas.reverse();
+			} else if (areas.getValue2().calculatePointRelation(c)!=PointRelation.INSIDE) {
 				result.add(c);
 				prev = c;
-				include = false;
-			} else if (prev!=null) {
+			} else {
+				if (areas.getValue2().calculatePointRelation(c)==PointRelation.OUTSIDE) {
+					iterators.getValue1().reuseLast();
+				}
 				Coords2d cross;
-				if (i2==null) {
-					i2 = i1;
-					Pair<Coords2d, LCIterator> pair = c2.getIteratorCrossing(c, prev);
-					i1 = pair.getValue2();
+				if (iterators.getValue2()==null) {
+					Pair<Coords2d, Area2dIterator> pair = 
+							areas.getValue2().getIteratorCrossing(current);
 					cross = pair.getValue1();
+					iterators = new Pair<>(pair.getValue2(), iterators.getValue1());
 				} else {
-					cross = i2.skipTillOutside(c1);
-
-					LCIterator tmp = i2;
-					i2 = i1;
-					i1 = tmp;
+					cross = iterators.getValue2().skipTillOutside(areas.getValue1());
+					iterators = iterators.reverse();
 				}
 				if (cross!=null) {
 					result.add(cross);
 				}
-				include = true;
-				Area2d tmp = c2;
-				c2 = c1;
-				c1 = tmp;
+				areas = areas.reverse();
+			}
+		}
+		return new Area2d(result);
+	}
+	
+	private static List<Coords2d> compact(List<Coords2d> coords) {
+		List<Coords2d> result = new ArrayList<>();
+		Area2dIterator iterator = new Area2dIterator(0, coords);
+		while (iterator.hasNext()) {
+			if (result.isEmpty()) {
+				Coords2d current = iterator.next();
+				result.add(current);
+			} else {
+				Coords2d prev = result.get(result.size()-1);
+				Coords2d current = iterator.next();
+				Coords2d next = iterator.peekNext();
+				
+				if (!new LineSegment2d(prev, next).isOnLineSegment(current)) {
+					result.add(current);
+				}
 			}
 		}
 		
-		return new Area2d(result);
+		return result;
 	}
 	
 	/**
 	 * Checks if the given line segment has crossing with this geometric form.
-	 * @param c1 the begin of the line segment
-	 * @param c2 the end of the line segment
+	 * @param segment the line segment
 	 * @param includeEndPoints if the cross point is one of the two given end points this method 
 	 * 				will return null if this parameter is false
 	 * @return true if and only if the given line segment crosses any line segment of area.
 	 */
-	public Coords2d findCrossing(Coords2d c1, Coords2d c2, boolean includeEndPoints) {
-		Coords2d prev = coords.get(coords.size()-1);
-		for (Coords2d c : coords) {
-			if (c1.equals(c) || c2.equals(c) || c1.equals(prev) || c2.equals(prev)) {
+	public List<Coords2d> findCrossing(LineSegment2d segment, boolean includeEndPoints) {
+		List<Coords2d> result = new ArrayList<>();
+		for (LineSegment2d current : LineSegment2d.lineSegmentSeries(coords)) {
+			if (current.hasCommon(segment)) {
 				if (includeEndPoints) {
-					return c;
+					result.add(current.getEnd());
 				}
 			} else {
-				Coords2d cross = EdgeCrossSolver.findCross(c1, c2, c, prev);
-				if (cross!=null) {
-					return cross;
+				LineSegment2d common = current.common(segment);
+				if (common!=null) {
+					result.add(common.getStart());
+					result.add(common.getEnd());
+				} else {
+					Coords2d cross = EdgeCrossSolver.findCross(segment, current);
+					if (cross!=null && (includeEndPoints || !segment.contains(cross))) {
+						result.add(cross);
+					}
 				}
 			}
-			prev = c;
 		}
-		return null;
+		return result;
 	}
 
 	/**
@@ -264,8 +321,8 @@ public class Area2d implements Iterable<Coords2d> {
 	 * @return true if and only if the two list of coordinates are distinct
 	 */
 	public boolean isDistinct(Area2d other) {
-    	for (Coords2d p : other.coords) {
-    		if (calculatePointRelation(p)!=PointRelation.OUTSIDE) {
+		for (LineSegment2d current : LineSegment2d.lineSegmentSeries(other.coords)) {
+    		if (!findCrossing(current, true).isEmpty()) {
 				return false;
 			}
 		}
@@ -289,10 +346,12 @@ public class Area2d implements Iterable<Coords2d> {
 	 *         returns with <b>BORDER</b> if the point is on the border of this area.
 	 */
 	public PointRelation calculatePointRelation(Coords2d p) {
-		Coords2d c1 = new Coords2d(-Double.MAX_VALUE, p.getY());
-		Coords2d c2 = new Coords2d(+Double.MAX_VALUE, p.getY());
+		LineSegment2d horizontal = new LineSegment2d(
+					new Coords2d(-1E10, p.getY()),
+					new Coords2d(+1E10, p.getY())
+				);
 		
-		Coords2d prev = coords.get(coords.size()-1);
+		LineSegment2d current = new LineSegment2d(null, coords.get(coords.size()-1));
 		Set<Coords2d> crosses = new TreeSet<>(new Comparator<Coords2d>() {
 			@Override
 			public int compare(Coords2d o1, Coords2d o2) {
@@ -301,28 +360,35 @@ public class Area2d implements Iterable<Coords2d> {
 		});
 		int i = 0;
 		for (Coords2d c : coords) {
-			Coords2d cross = EdgeCrossSolver.findCross(c1, c2, c, prev);
-			if (cross!=null) {
-				if (cross.equals(p)) {
-					return PointRelation.BORDER;
-				}
-				
-				if (cross.equals(prev)) {
-					Coords2d prevv = coords.get(Math.floorMod(i-2, coords.size()));
-					if (EdgeCrossSolver.findCross(c1, c2, c, prevv)!=null) {
+			current = current.next(c);
+
+			if (current.isOnLineSegment(p)) {
+				return PointRelation.BORDER;
+			}
+			
+			LineSegment2d common = horizontal.common(current);
+			if (common!=null) {
+				crosses.add(common.getStart());
+				crosses.add(common.getEnd());
+			} else {
+				Coords2d cross = EdgeCrossSolver.findCross(horizontal, current);
+				if (cross!=null) {
+					if (cross.equals(current.getStart())) {
+						Coords2d prevv = coords.get(Math.floorMod(i-2, coords.size()));
+						if (EdgeCrossSolver.findCross(horizontal, new LineSegment2d(c, prevv))!=null) {
+							crosses.add(cross);
+						}
+						
+					} else if (cross.equals(c)) {
+						Coords2d next = coords.get(Math.floorMod(i+1, coords.size()));
+						if (EdgeCrossSolver.findCross(horizontal, new LineSegment2d(next, current.getStart()))!=null) {
+							crosses.add(cross);
+						}
+					} else {
 						crosses.add(cross);
 					}
-					
-				} else if (cross.equals(c)) {
-					Coords2d next = coords.get(Math.floorMod(i+1, coords.size()));
-					if (EdgeCrossSolver.findCross(c1, c2, next, prev)!=null) {
-						crosses.add(cross);
-					}
-				} else {
-					crosses.add(cross);
 				}
 			}
-			prev = c;
 			i++;
 		}
 		
@@ -359,6 +425,7 @@ public class Area2d implements Iterable<Coords2d> {
 	 * Returns with the number of points this area consists.
 	 * @return the number of points
 	 */
+	@Override
 	public int size() {
 		return coords.size();
 	}

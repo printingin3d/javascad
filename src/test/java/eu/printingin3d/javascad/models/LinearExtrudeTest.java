@@ -13,8 +13,9 @@ import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
+import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models2d.Abstract2dModel;
-import eu.printingin3d.javascad.models2d.Circle;
+import eu.printingin3d.javascad.models2d.Square;
 import eu.printingin3d.javascad.testutils.AssertEx;
 import eu.printingin3d.javascad.testutils.Test2dModel;
 import eu.printingin3d.javascad.tranzitions2d.Union;
@@ -49,11 +50,15 @@ public class LinearExtrudeTest {
 	
 	@Test
 	public void test() throws IOException {
-		Abstract2dModel union = new Union(Arrays.asList(
+		Abstract2dModel union = new Union(Arrays.<Abstract2dModel>asList(
+				new Square(new Dims2d(10, 3)),
+				new Square(new Dims2d(3, 10)).move(Coords2d.yOnly(3.5)))
+			);
+/*		Abstract2dModel union = new Union(Arrays.asList(
 				new Circle(5).move(Coords2d.xOnly(-5)),
 				new Circle(5), 
-				new Circle(5).move(Coords2d.xOnly(5))));
-		Abstract3dModel test = new LinearExtrude(union, 10, 0)
+				new Circle(5).move(Coords2d.xOnly(5))));*/
+		Abstract3dModel test = new LinearExtrude(union, 10, 45)
 //				.addModelTo(Side.TOP, new Cube(10))
 //				.addModelTo(Side.LEFT, new Cube(10))
 				;
