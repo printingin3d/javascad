@@ -7,10 +7,10 @@ import java.util.List;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundary;
+import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.models.SCAD;
-import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
@@ -19,9 +19,9 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  *
  */
 public class Circle extends Abstract2dModel {
-	private final double radius;
+	private final Radius radius;
 
-	private Circle(Coords2d move, double radius) {
+	private Circle(Coords2d move, Radius radius) {
 		super(move);
 		this.radius = radius;
 	}
@@ -30,20 +30,30 @@ public class Circle extends Abstract2dModel {
 	 * Constructs the object using the given radius.
 	 * @param radius the radius of the circle
 	 */
-	public Circle(double radius) {
+	public Circle(Radius radius) {
 		this(Coords2d.ZERO, radius);
+	}
+	
+	/**
+	 * Constructs the object using the given radius.
+	 * @param radius the radius of the circle
+	 * @deprecated use the constructor with Radius parameters instead of doubles 
+	 */
+	@Deprecated
+	public Circle(double radius) {
+		this(Radius.fromRadius(radius));
 	}
 
 	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
-		return new SCAD("circle(r="+DoubleUtils.formatDouble(radius)+", center=true);\n");
+		return new SCAD("circle(r="+radius+", center=true);\n");
 	}
 
 	@Override
 	protected Boundaries2d getModelBoundaries() {
 		return new Boundaries2d(
-				Boundary.createSymmetricBoundary(radius), 
-				Boundary.createSymmetricBoundary(radius));
+				Boundary.createSymmetricBoundary(radius.getRadius()), 
+				Boundary.createSymmetricBoundary(radius.getRadius()));
 	}
 
 	@Override
@@ -55,10 +65,10 @@ public class Circle extends Abstract2dModel {
 	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
         List<Coords2d> points = new ArrayList<>();
 
-        int numSlices = context.calculateNumberOfSlices(radius);
+        int numSlices = context.calculateNumberOfSlices(radius.getRadius());
         for (int i = numSlices; i > 0; i--) {
         	double alpha = Math.PI*2*i/numSlices;
-            points.add(new Coords2d(Math.sin(alpha)*radius, Math.cos(alpha)*radius));
+            points.add(radius.toCoordinate(alpha));
         }
         return Collections.singleton(new Area2d(points));
 	}

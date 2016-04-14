@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
+import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 
 public class CylinderTest {
@@ -15,46 +16,31 @@ public class CylinderTest {
 
 	@Test
 	public void testCylinder() {
-		Cylinder cylinder = new Cylinder(10.0, 20.0);
+		Cylinder cylinder = new Cylinder(10.0, Radius.fromRadius(20.0));
 		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", 
 				cylinder.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 
 	@Test(expected = IllegalValueException.class)
 	public void negativeLengthShouldThrowException1() {
-		new Cylinder(-10.0, 5.0);
+		new Cylinder(-10.0, Radius.fromRadius(5.0));
 	}
 	
 	@Test(expected = IllegalValueException.class)
 	public void negativeLengthShouldThrowException2() {
-		new Cylinder(-10.0, 5.0, 7.0);
-	}
-	
-	@Test(expected = IllegalValueException.class)
-	public void negativeRadiusShouldThrowException() {
-		new Cylinder(10.0, -5.0);
-	}
-	
-	@Test(expected = IllegalValueException.class)
-	public void negativeRadius1ShouldThrowException() {
-		new Cylinder(10.0, -5.0, 5.0);
-	}
-	
-	@Test(expected = IllegalValueException.class)
-	public void negativeRadius2ShouldThrowException() {
-		new Cylinder(10.0, 5.0, -5.0);
+		new Cylinder(-10.0, Radius.fromRadius(5.0), Radius.fromRadius(7.0));
 	}
 	
 	@Test
 	public void testCylinderWhenTheTwoRadiusesAreTheSame() {
-		Cylinder cylinder = new Cylinder(10.0, 20.0, 20.0);
+		Cylinder cylinder = new Cylinder(10.0, Radius.fromRadius(20.0), Radius.fromRadius(20.0));
 		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r=20, center=true);", 
 				cylinder.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	@Test
 	public void testCone() {
-		Cylinder cylinder = new Cylinder(10.0, 20.0, 5.0);
+		Cylinder cylinder = new Cylinder(10.0, Radius.fromRadius(20.0), Radius.fromRadius(5.0));
 		assertEqualsWithoutWhiteSpaces("cylinder(h=10, r1=20, r2=5, center=true);", 
 				cylinder.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
@@ -62,7 +48,7 @@ public class CylinderTest {
 	@Test
 	public void testSomeTautologiesRegardingBoundariesOnRandomCylinders() {
 		for (int i=0;i<10;i++) {
-			Cylinder cylinder = new Cylinder(getRandomDouble(0, 1000.0), getRandomDouble(0, 1000.0));
+			Cylinder cylinder = new Cylinder(getRandomDouble(0, 1000.0), Radius.fromRadius(getRandomDouble(0, 1000.0)));
 			Boundaries3d boundaries = cylinder.getBoundaries();
 			// every cube should be in the origo
 			Assert.assertEquals(0.0, boundaries.getX().getMiddle(), EPSILON);
@@ -77,14 +63,14 @@ public class CylinderTest {
 	
 	@Test
 	public void verticalBoundaryShouldBeHalfOfTheHeightOfTheCylinder() {
-		Cylinder cylinder = new Cylinder(50.0, 10.0);
+		Cylinder cylinder = new Cylinder(50.0, Radius.fromRadius(10.0));
 		
 		Assert.assertEquals(25.0, cylinder.getBoundaries().getZ().getMax(), EPSILON);
 	}
 	
 	@Test
 	public void horizontalAndDepthBoundaryShouldBeTheRadiusOfTheCylinder() {
-		Cylinder cylinder = new Cylinder(50.0, 10.0);
+		Cylinder cylinder = new Cylinder(50.0, Radius.fromRadius(10.0));
 		
 		Assert.assertEquals(10.0, cylinder.getBoundaries().getX().getMax(), EPSILON);
 		Assert.assertEquals(10.0, cylinder.getBoundaries().getY().getMax(), EPSILON);
@@ -92,12 +78,12 @@ public class CylinderTest {
 	
 	@Test
 	public void horizontalAndDepthBoundaryShouldBeTheBiggerRadiusOfTheCylinderIfTheyAreDifferent() {
-		Cylinder cylinder = new Cylinder(50.0, 10.0, 33.3);
+		Cylinder cylinder = new Cylinder(50.0, Radius.fromRadius(10.0), Radius.fromRadius(33.3));
 		
 		Assert.assertEquals(33.3, cylinder.getBoundaries().getX().getMax(), EPSILON);
 		Assert.assertEquals(33.3, cylinder.getBoundaries().getY().getMax(), EPSILON);
 		
-		cylinder = new Cylinder(50.0, 15.0, 3.3);
+		cylinder = new Cylinder(50.0, Radius.fromRadius(15.0), Radius.fromRadius(3.3));
 		
 		Assert.assertEquals(15.0, cylinder.getBoundaries().getX().getMax(), EPSILON);
 		Assert.assertEquals(15.0, cylinder.getBoundaries().getY().getMax(), EPSILON);		

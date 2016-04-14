@@ -2,7 +2,6 @@ package eu.printingin3d.javascad.coords;
 
 import java.util.Collection;
 
-import eu.printingin3d.javascad.enums.AlignType;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.AssertValue;
 
@@ -144,23 +143,6 @@ public class Boundary {
 		return max-min;
 	}
 
-	/**
-	 * Returns with the side of this boundary queried by the parameter.
-	 * @param align the side we want to get
-	 * @return the minimum, maximum or middle value of this boundary - or zero if the alignment is NONE
-	 */
-	public double getAlignedValue(AlignType align) {
-		switch (align) {
-		case MIN:
-			return getMin();
-		case MAX:
-			return getMax();
-		case CENTER:
-			return getMiddle();
-		default:
-			return 0.0;
-		}
-	}
 	/**
 	 * Adding the given value to the interval and creates a new Boundary object with the new values.
 	 * @param delta the value to move this interval

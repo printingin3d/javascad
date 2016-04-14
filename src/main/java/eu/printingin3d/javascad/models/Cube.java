@@ -35,7 +35,7 @@ public class Cube extends Atomic3dModel {
 				maxCorner.getX()-minCorner.getX(), 
 				maxCorner.getY()-minCorner.getY(), 
 				maxCorner.getZ()-minCorner.getZ()));
-		return result.align(new Side(AlignType.MIN, AlignType.MIN, AlignType.MIN), minCorner);
+		return result.align(new Side(AlignType.MIN_IN, AlignType.MIN_IN, AlignType.MIN_IN), minCorner);
 	}
 	
 	/**

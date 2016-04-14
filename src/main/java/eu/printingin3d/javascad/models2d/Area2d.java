@@ -149,17 +149,6 @@ public class Area2d extends AbstractCollection<Coords2d> {
 		});
 		
 		int i=0;
-/*		List<LineSegment2d> segments = LineSegment2d.lineSegmentSeries(coords);
-		System.out.println(segments.getClass().getCanonicalName());
-		System.out.println(segments.size());
-		System.out.println(segments.iterator());
-		System.out.println("--------");
-		for (int index=0;index<segments.size();index++) {
-			new Exception().printStackTrace();
-			System.out.println("haho");
-			System.out.println(segments.getClass().getCanonicalName());
-			System.out.println(segments.size());
-			LineSegment2d current = segments.get(index);*/
 		for (LineSegment2d current : LineSegment2d.lineSegmentSeries(coords)) {
 			if (current.hasCommon(segment)) {
 				closest.add(new Pair<Coords2d, Area2dIterator>(current.getEnd(), new Area2dIterator(i, coords)));

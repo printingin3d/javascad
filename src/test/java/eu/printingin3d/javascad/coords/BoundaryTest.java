@@ -9,7 +9,6 @@ import java.util.Collections;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.enums.AlignType;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 
 public class BoundaryTest {
@@ -134,30 +133,6 @@ public class BoundaryTest {
 		Boundary b = new Boundary(MIN, MAX).negate(false);
 		assertDoubleEquals(MIN, b.getMin());
 		assertDoubleEquals(MAX, b.getMax());
-	}
-	
-	@Test
-	public void alignValueShouldReturnMinValueForMinAlignment() {
-		Boundary b = new Boundary(MIN, MAX);
-		assertDoubleEquals(MIN, b.getAlignedValue(AlignType.MIN));
-	}
-	
-	@Test
-	public void alignValueShouldReturnMaxValueForMaxAlignment() {
-		Boundary b = new Boundary(MIN, MAX);
-		assertDoubleEquals(MAX, b.getAlignedValue(AlignType.MAX));
-	}
-	
-	@Test
-	public void alignValueShouldReturnMiddleValueForCenterAlignment() {
-		Boundary b = new Boundary(MIN, MAX);
-		assertDoubleEquals((MIN+MAX)/2.0, b.getAlignedValue(AlignType.CENTER));
-	}
-	
-	@Test
-	public void alignValueShouldReturnZeroValueForNoneAlignment() {
-		Boundary b = new Boundary(MIN, MAX);
-		assertDoubleEquals(0.0, b.getAlignedValue(AlignType.NONE));
 	}
 	
 	@Test

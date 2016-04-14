@@ -21,17 +21,8 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
+import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords2d.Dims2d;
-import eu.printingin3d.javascad.models.Abstract3dModel;
-import eu.printingin3d.javascad.models.BoundedModel;
-import eu.printingin3d.javascad.models.Cube;
-import eu.printingin3d.javascad.models.Cylinder;
-import eu.printingin3d.javascad.models.LinearExtrude;
-import eu.printingin3d.javascad.models.Polyhedron;
-import eu.printingin3d.javascad.models.Prism;
-import eu.printingin3d.javascad.models.Ring;
-import eu.printingin3d.javascad.models.SCAD;
-import eu.printingin3d.javascad.models.Sphere;
 import eu.printingin3d.javascad.models2d.Circle;
 import eu.printingin3d.javascad.models2d.Square;
 import eu.printingin3d.javascad.testutils.RandomUtils;
@@ -67,12 +58,12 @@ public class CloneModelTest {
 
 	public static Collection<TestCase> createTestSubjects() {
 		Abstract3dModel cube = new Cube(new Dims3d(67.0, 32.3, 98.3));
-		Abstract3dModel cylinder = new Cylinder(32.2, 9.3, 11.1);
+		Abstract3dModel cylinder = new Cylinder(32.2, Radius.fromRadius(9.3), Radius.fromRadius(11.1));
 		return Arrays.<TestCase>asList(
 				new TestCase(cube.cloneModel()),
 				new TestCase(cylinder.cloneModel()),
-				new TestCase(new Prism(78.2, 10.1, 32.2, 5)),
-				new TestCase(new Prism(78.2, 10.1, 5)),
+				new TestCase(new Prism(78.2, Radius.fromRadius(10.1), Radius.fromRadius(32.2), 5)),
+				new TestCase(new Prism(78.2, Radius.fromRadius(10.1), 5)),
 				new TestCase(new Intersection()),
 				new TestCase(new Intersection(cube.cloneModel())),
 				new TestCase(new Intersection(cube.cloneModel(), cylinder.cloneModel())),
@@ -88,8 +79,8 @@ public class CloneModelTest {
 				new TestCase(new Translate(cube, new Coords3d(-23, 33.2, 7.3))),
 				new TestCase(new BoundedModel(cube, RandomUtils.getRandomBoundaries())),
 				new TestCase(new Union()),
-				new TestCase(new LinearExtrude(new Circle(10), 30, 55)),
-				new TestCase(new LinearExtrude(new Circle(10), 30, 55, 2.5)),
+				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, 55)),
+				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, 55, 2.5)),
 				new TestCase(new Union(cube, cylinder).rotate(new Angles3d(40, 42, -55))),
 				new TestCase(cube.cloneModel().background()),
 				new TestCase(cube.cloneModel().debug()),

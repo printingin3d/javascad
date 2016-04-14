@@ -185,8 +185,8 @@ public class Boundaries3d {
 	 */
 	public Coords3d getAlignedValue(Side side) {
 		return new Coords3d(
-				x.getAlignedValue(side.getAlignX()),
-				y.getAlignedValue(side.getAlignY()),
-				z.getAlignedValue(side.getAlignZ()));
+				side.getAlignX().getAlignedValue(x),
+				side.getAlignY().getAlignedValue(y),
+				side.getAlignZ().getAlignedValue(z));
 	}
 }

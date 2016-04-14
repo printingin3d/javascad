@@ -286,9 +286,22 @@ public abstract class Abstract3dModel implements IModel {
 	 * @param model the model used as a reference point
 	 * @param inside controls which side of the aligned model will be aligned 
 	 * @return the new object created
+	 * @deprecated Use {@link #align(Side, Abstract3dModel)} instead.
 	 */
+	@Deprecated
 	public Abstract3dModel align(Side place, Abstract3dModel model, boolean inside) {
 		return move(place.calculateCoords(getBoundaries(), model.getBoundaries(), inside));
+	}
+	
+	/**
+	 * <p>Moves this model to the position relative to the given model. The position is controlled by
+	 * the place - see {@link Side} - and inside parameters.</p>
+	 * @param place where to move this model
+	 * @param model the model used as a reference point
+	 * @return the new object created
+	 */
+	public Abstract3dModel align(Side place, Abstract3dModel model) {
+		return move(place.calculateCoords(getBoundaries(), model.getBoundaries()));
 	}
 	
 	/**
@@ -378,7 +391,7 @@ public abstract class Abstract3dModel implements IModel {
 	 * @return a new model which contains the union of this object and the given object
 	 */
 	public Abstract3dModel addModelTo(Side side, Abstract3dModel model) {
-		return addModel(model.align(side, this, false));
+		return addModel(model.align(side, this));
 	}
 	
 	/**

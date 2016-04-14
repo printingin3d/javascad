@@ -109,7 +109,7 @@ public class Support extends Atomic3dModel {
 		double y = thickness;
 		while (x<dims.getX() && y<dims.getY()) {
 			slices.add(new Cube(sliceSize)
-					.align(new Side(AlignType.MIN, AlignType.MIN, AlignType.CENTER), base, true)
+					.align(new Side(AlignType.MIN_IN, AlignType.MIN_IN, AlignType.CENTER), base)
 					.move(new Coords3d(x, y, 0.0))
 				);
 			

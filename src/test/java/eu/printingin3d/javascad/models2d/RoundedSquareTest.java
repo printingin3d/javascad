@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.context.ColorHandlingContext;
+import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 
@@ -17,7 +18,7 @@ public class RoundedSquareTest {
 	
 	@Test
 	public void testToScad() {
-		RoundedSquare square = new RoundedSquare(new Dims2d(3, 3), 0.5);
+		RoundedSquare square = new RoundedSquare(new Dims2d(3, 3), Radius.fromRadius(0.5));
 		
 		String actual = square.toScad(ColorHandlingContext.DEFAULT).getScad();
 		
@@ -35,7 +36,7 @@ public class RoundedSquareTest {
 	
 	@Test
 	public void testToScadWithNoStraightX() {
-		RoundedSquare square = new RoundedSquare(new Dims2d(1, 3), 0.5);
+		RoundedSquare square = new RoundedSquare(new Dims2d(1, 3), Radius.fromRadius(0.5));
 		
 		String actual = square.toScad(ColorHandlingContext.DEFAULT).getScad();
 		
@@ -50,7 +51,7 @@ public class RoundedSquareTest {
 	
 	@Test
 	public void testToScadWithNoStraightY() {
-		RoundedSquare square = new RoundedSquare(new Dims2d(3, 1), 0.5);
+		RoundedSquare square = new RoundedSquare(new Dims2d(3, 1), Radius.fromRadius(0.5));
 		
 		String actual = square.toScad(ColorHandlingContext.DEFAULT).getScad();
 		
@@ -65,7 +66,7 @@ public class RoundedSquareTest {
 	
 	@Test
 	public void testToScadWithNoStraightXY() {
-		RoundedSquare square = new RoundedSquare(new Dims2d(1, 1), 0.5);
+		RoundedSquare square = new RoundedSquare(new Dims2d(1, 1), Radius.fromRadius(0.5));
 		
 		String actual = square.toScad(ColorHandlingContext.DEFAULT).getScad();
 		
@@ -74,7 +75,7 @@ public class RoundedSquareTest {
 	
 	@Test
 	public void toScadShouldBeRounded() {
-		RoundedSquare square = new RoundedSquare(new Dims2d(Math.PI*10.0, 20.0), Math.PI);
+		RoundedSquare square = new RoundedSquare(new Dims2d(Math.PI*10.0, 20.0), Radius.fromRadius(Math.PI));
 		
 		String actual = square.toScad(ColorHandlingContext.DEFAULT).getScad();
 		assertMatchToExpressionWithoutWhiteSpaces("union\\(\\) \\{.*\\}", actual);
@@ -91,7 +92,7 @@ public class RoundedSquareTest {
 	
 	@Test
 	public void boundariesShouldContainsXAndYBoundary() {
-		RoundedSquare square = new RoundedSquare(new Dims2d(10, 20.0), 4.0);
+		RoundedSquare square = new RoundedSquare(new Dims2d(10, 20.0), Radius.fromRadius(4.0));
 		Boundaries2d boundaries2d = square.getBoundaries2d();
 		Assert.assertNotNull(boundaries2d);
 		

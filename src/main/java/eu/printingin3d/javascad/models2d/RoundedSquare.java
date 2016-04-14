@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
+import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models.SCAD;
@@ -20,14 +21,14 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  * @author ivivan <ivivan@printingin3d.eu>
  */
 public class RoundedSquare extends Square {
-	private final double radius;
+	private final Radius radius;
 
-	private RoundedSquare(Coords2d move, Dims2d size, double radius) {
+	private RoundedSquare(Coords2d move, Dims2d size, Radius radius) {
 		super(move, size);
-		AssertValue.isNotNegative(size.getX()-radius*2.0, "The X size should be at least the double of the radius, "
-				+ "but X size was "+size.getX()+" and radius was "+radius);
-		AssertValue.isNotNegative(size.getY()-radius*2.0, "The Y size should be at least the double of the radius, "
-				+ "but Y size was "+size.getY()+" and radius was "+radius);
+		AssertValue.isNotNegative(size.getX()-radius.getRadius()*2.0, "The X size should be at least the double "
+				+ "of the radius, but X size was "+size.getX()+" and radius was "+radius);
+		AssertValue.isNotNegative(size.getY()-radius.getRadius()*2.0, "The Y size should be at least the double "
+				+ "of the radius, but Y size was "+size.getY()+" and radius was "+radius);
 		this.radius = radius;
 	}
 
@@ -38,17 +39,30 @@ public class RoundedSquare extends Square {
 	 * @throws eu.printingin3d.javascad.exceptions.IllegalValueException 
 	 * 			if either dimension is less the double the radius
 	 */
-	public RoundedSquare(Dims2d size, double radius) {
+	public RoundedSquare(Dims2d size, Radius radius) {
 		this(Coords2d.ZERO, size, radius);
 	}
 	
+	/**
+	 * Create a 2D rounded square.
+	 * @param size the size of the object including the rounding
+	 * @param radius the radius of the rounding
+	 * @throws eu.printingin3d.javascad.exceptions.IllegalValueException 
+	 * 			if either dimension is less the double the radius
+	 * @deprecated use the constructor with Radius parameters instead of doubles 
+	 */
+	@Deprecated
+	public RoundedSquare(Dims2d size, double radius) {
+		this(size, Radius.fromRadius(radius));
+	}
+		
 	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
 		SCAD result = SCAD.EMPTY;
 		
 		int numberOfItems = 0;
-		double straightX = size.getX()-radius*2.0;
-		double straightY = size.getY()-radius*2.0;
+		double straightX = size.getX()-radius.getDiameter();
+		double straightY = size.getY()-radius.getDiameter();
 		if (straightX>0.0) {
 			result = result.append(new Square(new Dims2d(straightX, size.getY())).toScad(context));
 			numberOfItems++;
@@ -84,13 +98,12 @@ public class RoundedSquare extends Square {
 	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
         List<Coords2d> points = new ArrayList<>();
 
-        int numSlices = context.calculateNumberOfSlices(radius)*4;
+        int numSlices = context.calculateNumberOfSlices(radius.getRadius())*4;
         for (int i = numSlices; i > 0; i--) {
         	double alpha = Math.PI*2*i/numSlices;
-            double x = Math.sin(alpha)*radius;
-            x+=Math.signum(x)*(size.getX()/2-radius);
-			double y = Math.cos(alpha)*radius;
-            y+=Math.signum(y)*(size.getY()/2-radius);
+        	Coords2d base = radius.toCoordinate(alpha);
+            double x = base.getX() + Math.signum(base.getX())*(size.getX()/2-radius.getRadius());
+			double y = base.getY() + Math.signum(base.getY())*(size.getY()/2-radius.getRadius());
 			points.add(new Coords2d(x, y));
         }
         return Collections.singleton(new Area2d(points));

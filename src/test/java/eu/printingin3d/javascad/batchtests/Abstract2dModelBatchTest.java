@@ -11,12 +11,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import eu.printingin3d.javascad.coords.Coords3d;
+import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models2d.Abstract2dModel;
-import eu.printingin3d.javascad.models2d.Circle;
 import eu.printingin3d.javascad.models2d.Area2d;
+import eu.printingin3d.javascad.models2d.Circle;
 import eu.printingin3d.javascad.models2d.Polygon;
 import eu.printingin3d.javascad.models2d.RoundedSquare;
 import eu.printingin3d.javascad.models2d.Square;
@@ -34,11 +35,11 @@ public class Abstract2dModelBatchTest {
 	}
 	public static Collection<Abstract2dModel> createTestSubjects() {
 		return Arrays.<Abstract2dModel>asList(
-				new Circle(5.0),
+				new Circle(Radius.fromRadius(5.0)),
 				new Square(new Dims2d(5, 10)),
-				new RoundedSquare(new Dims2d(3, 2), 1),
+				new RoundedSquare(new Dims2d(3, 2), Radius.fromRadius(1)),
 				new Polygon(Arrays.asList(new Coords2d(10, 10), new Coords2d(5, 5), new Coords2d(10, 5))),
-				new Translate(new Circle(2.5), new Coords2d(10, 12))
+				new Translate(new Circle(Radius.fromRadius(2.5)), new Coords2d(10, 12))
 			);
 	}
 	

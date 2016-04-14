@@ -14,73 +14,36 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.enums.AlignType;
-import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 
 @RunWith(Parameterized.class)
 public class Boundaries3dAlignTest {
-
-	private static class TestCase {
-		private final AlignType x;
-		private final AlignType y;
-		private final AlignType z;
-		@Override
-		public String toString() {
-			return x + ", " + y + ", " + z;
-		}
-		public TestCase(AlignType x, AlignType y, AlignType z) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
-		public AlignType getX() {
-			return x;
-		}
-		public AlignType getY() {
-			return y;
-		}
-		public AlignType getZ() {
-			return z;
-		}
-		public Side getSide() {
-			return new Side(x, y, z);
-		}
-	}
-
-	private final TestCase testCase;
+	private final AlignTestCase testCase;
 	
-	public Boundaries3dAlignTest(TestCase testCase) {
+	public Boundaries3dAlignTest(AlignTestCase testCase) {
 		this.testCase = testCase;
 	}
 
 	@Parameterized.Parameters(name="{0}")
 	public static Collection<Object[]> testCases() {
 		List<Object[]> result = new ArrayList<Object[]>();
-		for (TestCase testCase : createTestSubjects()) {
+		for (AlignTestCase testCase : AlignTestCase.createTestSubjects()) {
 			result.add(new Object[] {testCase});
 		}
 		return result;
 	}
 
-	public static Collection<TestCase> createTestSubjects() {
-		List<TestCase> result = new ArrayList<>();
-		
-		for (AlignType x : AlignType.values()) {
-			for (AlignType y : AlignType.values()) {
-				for (AlignType z : AlignType.values()) {
-					result.add(new TestCase(x, y, z));
-				}
-			}
-		}
-		return result;
-	}
-
+	@SuppressWarnings("deprecation")
 	private static void assertOneAxis(AlignType align, double coordinate, Boundary boundary) {
 		switch (align) {
 		case MIN:
+		case MIN_IN:
+		case MIN_OUT:
 			assertDoubleEquals(boundary.getMin(), coordinate);
 			break;
 		case MAX:
+		case MAX_IN:
+		case MAX_OUT:
 			assertDoubleEquals(boundary.getMax(), coordinate);
 			break;
 		case CENTER:

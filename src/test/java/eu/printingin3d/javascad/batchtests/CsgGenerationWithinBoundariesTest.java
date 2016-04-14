@@ -13,6 +13,7 @@ import org.junit.runners.Parameterized;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
+import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords.Triangle3d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
@@ -60,14 +61,15 @@ public class CsgGenerationWithinBoundariesTest {
 		
 		List<Abstract3dModel> result = new ArrayList<>(Arrays.<Abstract3dModel>asList(
 					new Cube(new Dims3d(10, 20, Math.PI)),
-					new Cylinder(12, 54),
-					new Cylinder(3, 500).move(new Coords3d(10, 20, 50)),
+					new Cylinder(12, Radius.fromRadius(54)),
+					new Cylinder(3, Radius.fromRadius(500)).move(new Coords3d(10, 20, 50)),
 					new Sphere(12),
 					new Support(new Dims3d(50, 23, 3), 0.1),
 					new Support(new Dims3d(12, 33, 3), 0.1).move(new Coords3d(34, 3, 10)),
 					new Polyhedron(triangles),
-					new LinearExtrude(new Circle(5), 5, 0),
-					new LinearExtrude(new Union(Arrays.asList(new Circle(3), new Square(new Dims2d(3, 5)))), 10, 0)
+					new LinearExtrude(new Circle(Radius.fromRadius(5)), 5, 0),
+					new LinearExtrude(new Union(Arrays.asList(
+							new Circle(Radius.fromRadius(3)), new Square(new Dims2d(3, 5)))), 10, 0)
 				));
 		return result;
 	}

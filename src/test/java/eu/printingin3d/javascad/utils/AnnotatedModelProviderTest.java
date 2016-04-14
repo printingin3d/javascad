@@ -12,6 +12,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import eu.printingin3d.javascad.annotations.ModelPart;
+import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
@@ -29,7 +30,7 @@ public class AnnotatedModelProviderTest {
 			
 			@ModelPart
 			public Abstract3dModel cylinder() {
-				return new Cylinder(10, 10);
+				return new Cylinder(10, Radius.fromRadius(10));
 			}
 			
 			@Override

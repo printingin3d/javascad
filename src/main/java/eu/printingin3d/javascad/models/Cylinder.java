@@ -1,6 +1,7 @@
 package eu.printingin3d.javascad.models;
 
 import static eu.printingin3d.javascad.utils.AssertValue.isNotNegative;
+import static eu.printingin3d.javascad.utils.AssertValue.isNotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
+import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.vrl.CSG;
@@ -24,8 +26,8 @@ import eu.printingin3d.javascad.vrl.Polygon;
  */
 public class Cylinder extends Atomic3dModel {
 	protected final double length;
-	protected final double bottomRadius;
-	protected final double topRadius;
+	protected final Radius bottomRadius;
+	protected final Radius topRadius;
 	
 	/**
 	 * Creates a truncated cone. If one of the two radiuses is zero the result is a cone. 
@@ -35,12 +37,12 @@ public class Cylinder extends Atomic3dModel {
 	 * @param topRadius the top radius of the cylinder
 	 * @throws IllegalValueException if the length or any any of the two radius parameter is negative 
 	 */
-	public Cylinder(double length, double bottomRadius, double topRadius) throws IllegalValueException {
+	public Cylinder(double length, Radius bottomRadius, Radius topRadius) throws IllegalValueException {
 		super();
 		isNotNegative(length, "The length should be positive, but "+length);
-		isNotNegative(bottomRadius, "Both radius should be positive, but bottom radius is "+bottomRadius);
-		isNotNegative(topRadius, "Both radius should be positive, but top radius is "+topRadius);
-		
+		isNotNull(bottomRadius, "Both radius should be given, but bottomRadius was null");
+		isNotNull(topRadius, "Both radius should be given, but topRadius was null");
+
 		this.length = length;
 		this.bottomRadius = bottomRadius;
 		this.topRadius = topRadius;
@@ -52,35 +54,61 @@ public class Cylinder extends Atomic3dModel {
 	 * @param r the radius of the cylinder
 	 * @throws IllegalValueException if the length or the radius parameter is negative 
 	 */
-	public Cylinder(double length, double r) throws IllegalValueException {
+	public Cylinder(double length, Radius r) throws IllegalValueException {
 		super();
 		isNotNegative(length, "The length should be positive, but "+length);
-		isNotNegative(r, "The radius should be positive, but r1 is "+r);
+		isNotNull(r, "The radius should be given, but was null");
 		
 		this.length = length;
 		this.bottomRadius = r;
 		this.topRadius = r;
 	}
 
+	/**
+	 * Creates a truncated cone. If one of the two radiuses is zero the result is a cone. 
+	 * If the two radiuses are the same the result is a cylinder.
+	 * @param length the length of the cylinder
+	 * @param bottomRadius the bottom radius of the cylinder
+	 * @param topRadius the top radius of the cylinder
+	 * @throws IllegalValueException if the length or any any of the two radius parameter is negative
+	 * @deprecated use the constructor with Radius parameters instead of doubles 
+	 */
+	@Deprecated
+	public Cylinder(double length, double bottomRadius, double topRadius) throws IllegalValueException {
+		this(length, Radius.fromRadius(bottomRadius), Radius.fromRadius(topRadius));
+	}
+	
+	/**
+	 * Creates a cylinder with a given length and radius.
+	 * @param length the length of the cylinder
+	 * @param r the radius of the cylinder
+	 * @throws IllegalValueException if the length or the radius parameter is negative
+	 * @deprecated use the constructor with Radius parameters instead of doubles 
+	 */
+	@Deprecated
+	public Cylinder(double length, double r) throws IllegalValueException {
+		this(length, Radius.fromRadius(r));
+	}
+
 	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
-		if (DoubleUtils.equalsEps(bottomRadius, topRadius)) {
+		if (bottomRadius.equals(topRadius)) {
 			return new SCAD("cylinder(h="+DoubleUtils.formatDouble(length)+
-						", r="+DoubleUtils.formatDouble(bottomRadius)+", center=true);\n");
+						", r="+bottomRadius+", center=true);\n");
 		}
 		return new SCAD("cylinder(h="+DoubleUtils.formatDouble(length)+
-					", r1="+DoubleUtils.formatDouble(bottomRadius)+
-					", r2="+DoubleUtils.formatDouble(topRadius)+", center=true);\n");
+					", r1="+bottomRadius+
+					", r2="+topRadius+", center=true);\n");
 	}
 
 	@Override
 	protected Boundaries3d getModelBoundaries() {
-		double r = Math.max(bottomRadius, topRadius);
+		double r = Math.max(bottomRadius.getRadius(), topRadius.getRadius());
 		double z = length/2.0;
 		return new Boundaries3d(
-				new Boundary(-r, r), 
-				new Boundary(-r, r),
-				new Boundary(-z, z));
+				Boundary.createSymmetricBoundary(r), 
+				Boundary.createSymmetricBoundary(r),
+				Boundary.createSymmetricBoundary(z));
 	}
 
 	@Override
@@ -96,7 +124,7 @@ public class Cylinder extends Atomic3dModel {
 		Coords3d endV = Coords3d.zOnly(-z);
         List<Polygon> polygons = new ArrayList<>();
 
-        int numSlices = context.calculateNumberOfSlices(Math.min(topRadius, bottomRadius));
+        int numSlices = context.calculateNumberOfSlices(Math.min(topRadius.getRadius(), bottomRadius.getRadius()));
         for (int i = 0; i < numSlices; i++) {
             double t0 = i / (double) numSlices;
             double t1 = (i + 1) / (double) numSlices;
@@ -125,9 +153,8 @@ public class Cylinder extends Atomic3dModel {
         return new CSG(polygons);
 	}
 
-    private Coords3d cylPoint(double z, double r, double slice) {
+    private Coords3d cylPoint(double z, Radius r, double slice) {
         double angle = slice * Math.PI * 2;
-        Coords3d out = new Coords3d(Math.cos(angle), Math.sin(angle), 0.0);
-        return out.mul(r).add(Coords3d.zOnly(z));
+        return r.toCoordinate(angle).withZ(z);
     }
 }
