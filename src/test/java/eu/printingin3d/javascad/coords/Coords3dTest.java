@@ -4,7 +4,13 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertDoubleEquals;
 import static eu.printingin3d.javascad.testutils.RandomUtils.getRandomAngle;
 import static eu.printingin3d.javascad.testutils.RandomUtils.getRandomCoords;
 import static eu.printingin3d.javascad.testutils.RandomUtils.getRandomDouble;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 import org.junit.Test;
 
@@ -121,5 +127,35 @@ public class Coords3dTest {
 		assertDoubleEquals((a.x+b.x)/2.0, midPoint.x);
 		assertDoubleEquals((a.y+b.y)/2.0, midPoint.y);
 		assertDoubleEquals((a.z+b.z)/2.0, midPoint.z);
+	}
+	
+	@Test
+	public void variancesShouldBeSingleElementForZero() {
+		assertEquals(Collections.singleton(Coords3d.ZERO), Coords3d.ZERO.createVariances());
+	}
+	
+	@Test
+	public void variancesShouldBeTwoElementsForEveryCoordinateWhichHasOnlyOneNonZeroElement() {
+		Collection<Coords3d> variances = Coords3d.X.createVariances();
+		assertEquals(new HashSet<>(Arrays.asList(Coords3d.X, Coords3d.X.inverse())), variances);
+		
+		variances = Coords3d.Y.createVariances();
+		assertEquals(new HashSet<>(Arrays.asList(Coords3d.Y, Coords3d.Y.inverse())), variances);
+		
+		variances = Coords3d.Z.createVariances();
+		assertEquals(new HashSet<>(Arrays.asList(Coords3d.Z, Coords3d.Z.inverse())), variances);
+	}
+	
+	@Test
+	public void variancesShouldBeEightElementsForThreeElementsCoordinates() {
+		Collection<Coords3d> variances = new Coords3d(1,1,1).createVariances();
+		assertEquals(
+				new HashSet<>(Arrays.asList(
+						new Coords3d(+1,+1,+1), new Coords3d(+1,+1,-1),
+						new Coords3d(+1,-1,+1), new Coords3d(+1,-1,-1),
+						new Coords3d(-1,+1,+1), new Coords3d(-1,+1,-1),
+						new Coords3d(-1,-1,+1), new Coords3d(-1,-1,-1)
+					)), 
+				variances);
 	}
 }

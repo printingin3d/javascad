@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.EdgeCrossSolver;
 import eu.printingin3d.javascad.coords2d.Coords2d;
@@ -53,14 +54,12 @@ public class Area2d extends AbstractCollection<Coords2d> {
 	 * @param angle the angle in degree to rotate with 
 	 * @return a new object with the new coordinates
 	 */
-	public Area2d rotate(double angle) {
-		double rad = Math.toRadians(angle);
-		
+	public Area2d rotate(Angle angle) {
 		List<Coords2d> result = new ArrayList<>();
 		for (Coords2d c : coords) {
 			result.add(new Coords2d(
-					Math.cos(rad)*c.getX()-Math.sin(rad)*c.getY(), 
-					Math.sin(rad)*c.getX()+Math.cos(rad)*c.getY()));
+					angle.cos()*c.getX()-angle.sin()*c.getY(), 
+					angle.sin()*c.getX()+angle.cos()*c.getY()));
 		}
 
 		return new Area2d(result);

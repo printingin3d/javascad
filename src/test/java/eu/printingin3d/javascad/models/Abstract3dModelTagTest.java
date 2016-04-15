@@ -26,7 +26,7 @@ public class Abstract3dModelTagTest {
 
 	@Test
 	public void testDefault() {
-		assertEqualsWithoutWhiteSpaces("(empty)", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("(empty)", testSubject);
 	}
 	
 	@Test

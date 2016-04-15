@@ -5,9 +5,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import eu.printingin3d.javascad.basic.Angle;
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundary;
-import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.models.SCAD;
@@ -66,9 +67,9 @@ public class Circle extends Abstract2dModel {
         List<Coords2d> points = new ArrayList<>();
 
         int numSlices = context.calculateNumberOfSlices(radius.getRadius());
+        Angle oneSlice = Angle.A360.divide(numSlices);
         for (int i = numSlices; i > 0; i--) {
-        	double alpha = Math.PI*2*i/numSlices;
-            points.add(radius.toCoordinate(alpha));
+            points.add(radius.toCoordinate(oneSlice.mul(i)));
         }
         return Collections.singleton(new Area2d(points));
 	}

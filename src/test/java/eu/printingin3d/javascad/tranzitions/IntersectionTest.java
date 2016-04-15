@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -19,20 +18,19 @@ public class IntersectionTest {
 	@Test
 	public void testToScad() {
 		Intersection intersection = new Intersection(new Test3dModel("(model1)"), new Test3dModel("(model2)"));
-		assertEqualsWithoutWhiteSpaces("intersection() {(model1) (model2)}", 
-				intersection.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("intersection() {(model1) (model2)}", intersection);
 	}
 	
 	@Test
 	public void testToScadWithOnlyOneModel() {
 		Intersection intersection = new Intersection(new Test3dModel("(model1)"));
-		assertEqualsWithoutWhiteSpaces("(model1)", intersection.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", intersection);
 	}
 	
 	@Test
 	public void testToScadWithNoModel() {
 		Intersection intersection = new Intersection();
-		assertEqualsWithoutWhiteSpaces("", intersection.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", intersection);
 	}
 
 	
@@ -65,7 +63,7 @@ public class IntersectionTest {
 				);
 		
 		assertEqualsWithoutWhiteSpaces("(model12)", 
-				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()));
 	}
 	
 	@Test
@@ -76,7 +74,7 @@ public class IntersectionTest {
 				);
 		
 		assertEqualsWithoutWhiteSpaces("(model12)", 
-				testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
 	}
 
 	@Test
@@ -94,6 +92,6 @@ public class IntersectionTest {
 				testSubject.subModel(new ScadGenerationContextFactory()
 						.include(1)
 						.exclude(12)
-						.create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+						.create()));
 	}
 }

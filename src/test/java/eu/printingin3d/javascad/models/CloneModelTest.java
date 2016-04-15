@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import eu.printingin3d.javascad.basic.Angle;
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Angles3d;
@@ -21,7 +23,6 @@ import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
-import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models2d.Circle;
 import eu.printingin3d.javascad.models2d.Square;
@@ -79,8 +80,8 @@ public class CloneModelTest {
 				new TestCase(new Translate(cube, new Coords3d(-23, 33.2, 7.3))),
 				new TestCase(new BoundedModel(cube, RandomUtils.getRandomBoundaries())),
 				new TestCase(new Union()),
-				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, 55)),
-				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, 55, 2.5)),
+				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, Angle.ofDegree(55))),
+				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, Angle.ofDegree(55), 2.5)),
 				new TestCase(new Union(cube, cylinder).rotate(new Angles3d(40, 42, -55))),
 				new TestCase(cube.cloneModel().background()),
 				new TestCase(cube.cloneModel().debug()),

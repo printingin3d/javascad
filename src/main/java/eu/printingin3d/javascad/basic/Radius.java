@@ -1,4 +1,4 @@
-package eu.printingin3d.javascad.coords;
+package eu.printingin3d.javascad.basic;
 
 import static eu.printingin3d.javascad.utils.AssertValue.isNotNegative;
 import eu.printingin3d.javascad.coords2d.Coords2d;
@@ -7,7 +7,12 @@ import eu.printingin3d.javascad.utils.DoubleUtils;
 /**
  * An immutable representation of a radius of a circle, cylinder or sphere.
  */
-public final class Radius {
+public final class Radius extends BasicFunc<Radius> {
+	/**
+	 * The ZERO Radius object.
+	 */
+	public static final Radius ZERO = new Radius(0);
+	
 	/**
 	 * Creates a Radius object based on the given radius.
 	 * @param radius the radius to be used
@@ -26,11 +31,9 @@ public final class Radius {
 		return new Radius(diameter*0.5);
 	}
 	
-	private final double radius;
-
 	private Radius(double radius) {
+		super(radius);
 		isNotNegative(radius, "Radius should be positive, but bottom radius is "+radius);
-		this.radius = radius;
 	}
 
 	/**
@@ -38,7 +41,7 @@ public final class Radius {
 	 * @return the radius
 	 */
 	public double getRadius() {
-		return radius;
+		return value;
 	}
 	
 	/**
@@ -46,7 +49,7 @@ public final class Radius {
 	 * @return the diameter
 	 */
 	public double getDiameter() {
-		return radius*2.0;
+		return value*2.0;
 	}
 	
 	/**
@@ -54,8 +57,8 @@ public final class Radius {
 	 * @param alpha the angle
 	 * @return the coordinate
 	 */
-	public Coords2d toCoordinate(double alpha) {
-		return new Coords2d(Math.sin(alpha)*radius, Math.cos(alpha)*radius);
+	public Coords2d toCoordinate(Angle alpha) {
+		return new Coords2d(alpha.sin()*value, alpha.cos()*value);
 	}
 	
 	/**
@@ -64,7 +67,7 @@ public final class Radius {
 	 * @return the new object
 	 */
 	public Radius plusRadius(double delta) {
-		return new Radius(radius+delta);
+		return new Radius(value+delta);
 	}
 	
 	/**
@@ -73,31 +76,16 @@ public final class Radius {
 	 * @return the new object
 	 */
 	public Radius plusDiameter(double delta) {
-		return new Radius(radius+delta*0.5);
+		return new Radius(value+delta*0.5);
 	}
 	
 	@Override
 	public String toString() {
-		return DoubleUtils.formatDouble(radius);
+		return DoubleUtils.formatDouble(value);
 	}
 
 	@Override
-	public int hashCode() {
-		return DoubleUtils.hashCodeEps(radius);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		Radius other = (Radius) obj;
-		return DoubleUtils.equalsEps(radius, other.radius);
+	protected Radius create(double value) {
+		return new Radius(value);
 	}
 }

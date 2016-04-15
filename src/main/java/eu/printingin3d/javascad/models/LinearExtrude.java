@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -27,7 +28,7 @@ import eu.printingin3d.javascad.vrl.Polygon;
 public class LinearExtrude extends Atomic3dModel {
 	private final Abstract2dModel model;
 	private final double height;
-	private final double twist;
+	private final Angle twist;
 	private final double scale;
 
 	/**
@@ -37,7 +38,7 @@ public class LinearExtrude extends Atomic3dModel {
 	 * @param twist the rotation of the 2D model during the extrusion in degrees
 	 * @param scale the scaling of the 2D model during the extrusion. 1.0 means no change.
 	 */
-	public LinearExtrude(Abstract2dModel model, double height, double twist, double scale) {
+	public LinearExtrude(Abstract2dModel model, double height, Angle twist, double scale) {
 		this.model = model;
 		this.height = height;
 		this.twist = twist;
@@ -51,7 +52,7 @@ public class LinearExtrude extends Atomic3dModel {
 	 * @param height the length of the extrusion. That will be the height of the resulted 3D model
 	 * @param twist the rotation of the 2D model during the extrusion in degrees
 	 */
-	public LinearExtrude(Abstract2dModel model, double height, double twist) {
+	public LinearExtrude(Abstract2dModel model, double height, Angle twist) {
 		this(model, height, twist, 1.0);
 	}
 
@@ -64,7 +65,7 @@ public class LinearExtrude extends Atomic3dModel {
 	protected SCAD innerToScad(IColorGenerationContext context) {
 		return new SCAD("linear_extrude(height="+DoubleUtils.formatDouble(height)
 					+ ", center=true, convexity=10, "
-					+ "twist="+DoubleUtils.formatDouble(twist)
+					+ "twist="+twist
 					+ ",scale="+DoubleUtils.formatDouble(scale)+")")
 				.append(model.toScad(context));
 	}
@@ -74,7 +75,7 @@ public class LinearExtrude extends Atomic3dModel {
 		Boundaries2d boundaries2d = model.getBoundaries2d();
 		Boundary boundaryX;
 		Boundary boundaryY;
-		if (DoubleUtils.isZero(twist)) {
+		if (twist.isZero()) {
 			boundaryX = boundaries2d.getX();
 			boundaryY = boundaries2d.getY();
 		}
@@ -136,10 +137,10 @@ public class LinearExtrude extends Atomic3dModel {
 		List<Polygon> polygons = new ArrayList<>();
 		
 		for (Area2d points : model.getPointCircle(context)) {
-			int numOfSteps = DoubleUtils.equalsEps(twist, 0.0) ? 1 : context.calculateNumberOfSlices(height);
+			int numOfSteps = twist.isZero() ? 1 : context.calculateNumberOfSlices(height);
 	
 			double y1=-height/2;
-			double alpha1 = 0;
+			Angle alpha1 = Angle.ZERO;
 			List<Coords3d> c1 = points.rotate(alpha1).withZ(y1);
 	
 			for (Area2d lc : generateCover(points.rotate(alpha1).reverse())) {
@@ -148,7 +149,7 @@ public class LinearExtrude extends Atomic3dModel {
 			
 			for (int i=1;i<=numOfSteps;i++) {
 				double y2 = i*height/numOfSteps-height/2;
-				double alpha2 = i*twist/numOfSteps;
+				Angle alpha2 = twist.mul(i).divide(numOfSteps);
 				
 				List<Coords3d> c2 = points.rotate(alpha2).withZ(y2);
 				

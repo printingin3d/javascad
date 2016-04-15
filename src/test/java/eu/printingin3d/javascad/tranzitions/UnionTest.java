@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
@@ -24,21 +23,21 @@ public class UnionTest {
 	public void testUnion1() {
 		Union union = new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)"));
 		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2)}", 
-				union.toScad(ColorHandlingContext.DEFAULT).getScad());
+				union);
 	}
 	
 	@Test
 	public void testUnion2() {
 		Union union = new Union(Arrays.<Abstract3dModel>asList(new Test3dModel("(model1)"), new Test3dModel("(model2)")));
 		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2)}", 
-				union.toScad(ColorHandlingContext.DEFAULT).getScad());
+				union);
 	}
 	
 	@Test
 	public void testUnionWithNullList() {
 		List<Abstract3dModel> models = null;
 		Union union = new Union(models);
-		assertEqualsWithoutWhiteSpaces("", union.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", union);
 	}
 	
 	@Test
@@ -47,25 +46,25 @@ public class UnionTest {
 				new Test3dModel("(model1)"), 
 				null, 
 				new Test3dModel("(model2)")));
-		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2)}", union.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2)}", union);
 	}
 	
 	@Test
 	public void testUnionWithOnlyOneModel() {
 		Union union = new Union(Arrays.<Abstract3dModel>asList(new Test3dModel("(model1)")));
-		assertEqualsWithoutWhiteSpaces("(model1)", union.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("(model1)", union);
 	}
 	
 	@Test
 	public void testUnionWithEmptyList() {
 		Union union = new Union(Collections.<Abstract3dModel>emptyList());
-		assertEqualsWithoutWhiteSpaces("", union.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", union);
 	}
 	
 	@Test
 	public void testUnionWithDoubleEmptyList() {
 		Union union = new Union(new Union(Collections.<Abstract3dModel>emptyList()), new Union(Collections.<Abstract3dModel>emptyList()));
-		assertEqualsWithoutWhiteSpaces("", union.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", union);
 	}
 
 	@Test
@@ -101,7 +100,7 @@ public class UnionTest {
 	public void addModelShouldReturnWithMoreUnion() {
 		assertEqualsWithoutWhiteSpaces("union() {(model1) (model2) (model3)}", 
 				new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)")).addModel(new Test3dModel("(model3)"))
-						.toScad(ColorHandlingContext.DEFAULT).getScad());
+						);
 	}
 	
 	@Test
@@ -110,7 +109,7 @@ public class UnionTest {
 				new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)"))
 						.move(new Coords3d(10, 20, 30))
 						.addModel(new Test3dModel("(model3)"))
-				.toScad(ColorHandlingContext.DEFAULT).getScad());
+				);
 	}
 	
 	@Test
@@ -119,7 +118,7 @@ public class UnionTest {
 				new Union(new Test3dModel("(model1)"), new Test3dModel("(model2)"))
 						.rotate(new Angles3d(10, 20, 30))
 						.addModel(new Test3dModel("(model3)"))
-				.toScad(ColorHandlingContext.DEFAULT).getScad());
+				);
 	}
 	
 	@Test
@@ -130,7 +129,7 @@ public class UnionTest {
 				);
 		
 		assertEqualsWithoutWhiteSpaces("(model12)", 
-				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()));
 	}
 	
 	@Test
@@ -141,7 +140,7 @@ public class UnionTest {
 				);
 		
 		assertEqualsWithoutWhiteSpaces("(model12)", 
-				testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
 	}
 
 	@Test
@@ -159,6 +158,6 @@ public class UnionTest {
 				testSubject.subModel(new ScadGenerationContextFactory()
 						.include(1)
 						.exclude(12)
-						.create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+						.create()));
 	}
 }

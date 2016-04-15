@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -57,48 +58,44 @@ public class Sphere extends Atomic3dModel {
 
         int numSlices = context.calculateNumberOfSlices(r);
         int numStacks = numSlices/2;
+        
+        Angle oneSlice = Angle.A360.divide(numSlices);
         for (int i = 0; i < numSlices; i++) {
             for (int j = 0; j < numStacks; j++) {
-                List<Coords3d> vertices = getVertices(numSlices, numStacks, i, j);
+                List<Coords3d> vertices = getVertices(oneSlice, numStacks, i, j);
                 polygons.add(Polygon.fromPolygons(vertices, context.getColor()));
             }
         }
         return new CSG(polygons);
 	}
 
-	private List<Coords3d> getVertices(int numSlices, int numStacks, int i, int j) {
+	private List<Coords3d> getVertices(Angle oneSlice, int numStacks, int i, int j) {
 		List<Coords3d> vertices = new ArrayList<>();
 
 		vertices.add(
-		        sphereVertex(r, i / (double) numSlices,
-		                j / (double) numStacks)
+		        sphereVertex(r, oneSlice.mul(i), oneSlice.mul(j))
 		);
 		if (j > 0) {
 		    vertices.add(
-		            sphereVertex(r, (i + 1) / (double) numSlices,
-		                    j / (double) numStacks)
+		            sphereVertex(r, oneSlice.mul(i + 1), oneSlice.mul(j))
 		    );
 		}
 		if (j < numStacks - 1) {
 		    vertices.add(
-		            sphereVertex(r, (i + 1) / (double) numSlices,
-		                    (j + 1) / (double) numStacks)
+		            sphereVertex(r, oneSlice.mul(i + 1), oneSlice.mul(j + 1))
 		    );
 		}
 		vertices.add(
-		        sphereVertex(r, i / (double) numSlices,
-		                (j + 1) / (double) numStacks)
+		        sphereVertex(r, oneSlice.mul(i), oneSlice.mul(j + 1))
 		);
 		return vertices;
 	}
 
-    private Coords3d sphereVertex(double r, double theta, double phi) {
-        theta *= Math.PI * 2;
-        phi *= Math.PI;
+    private Coords3d sphereVertex(double r, Angle theta, Angle phi) {
         Coords3d dir = new Coords3d(
-                Math.cos(theta) * Math.sin(phi),
-                Math.cos(phi),
-                Math.sin(theta) * Math.sin(phi)
+                theta.cos() * phi.sin(),
+                phi.cos(),
+                theta.sin() * phi.sin()
         );
         return dir.mul(r);
     }

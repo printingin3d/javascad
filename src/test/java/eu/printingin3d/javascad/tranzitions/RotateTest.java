@@ -5,7 +5,6 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
@@ -26,7 +25,7 @@ public class RotateTest {
 	public void testToScad() {
 		assertEqualsWithoutWhiteSpaces("rotate([5,100,50]) (model)", 
 				new Rotate(new Test3dModel("(model)"), 
-						new Angles3d(5, 100, 50)).toScad(ColorHandlingContext.DEFAULT).getScad());
+						new Angles3d(5, 100, 50)));
 	}
 	
 	@Test
@@ -55,7 +54,7 @@ public class RotateTest {
 				).withTag(12);
 		
 		assertEqualsWithoutWhiteSpaces("rotate([-90,0,0]) (model11)",  
-				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()));
 	}
 	
 	@Test
@@ -66,7 +65,7 @@ public class RotateTest {
 				).withTag(12);
 		
 		assertEqualsWithoutWhiteSpaces("rotate([-90,0,0]) (model11)",  
-				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()));
 	}
 	
 	@Test

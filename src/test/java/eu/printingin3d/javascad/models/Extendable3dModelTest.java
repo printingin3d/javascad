@@ -38,7 +38,7 @@ public class Extendable3dModelTest {
 	@Test
 	public void toScadShouldReturnWithTheSameAsTheBaseModel() {
 		AssertEx.assertEqualsWithoutWhiteSpaces(baseModel.toScad(ColorHandlingContext.DEFAULT).getScad(), 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject);
 	}
 
 	@Test

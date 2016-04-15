@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
@@ -186,16 +187,16 @@ public class Angles3d extends Basic3dFunc<Angles3d> {
 				". Please send a bug report to the developer.");
 	}
 	
-	protected double getXRad() {
-		return Math.toRadians(x);
+	protected Angle getXAngle() {
+		return Angle.ofDegree(x);
 	}
 	
-	protected double getYRad() {
-		return Math.toRadians(y);
+	protected Angle getYAngle() {
+		return Angle.ofDegree(y);
 	}
 	
-	protected double getZRad() {
-		return Math.toRadians(z);
+	protected Angle getZAngle() {
+		return Angle.ofDegree(z);
 	}
 	
 	private static double normalize(double a) {

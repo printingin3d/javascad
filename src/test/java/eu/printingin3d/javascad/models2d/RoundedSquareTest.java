@@ -9,8 +9,8 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertMatchToExpressio
 import org.junit.Assert;
 import org.junit.Test;
 
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.context.ColorHandlingContext;
-import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 

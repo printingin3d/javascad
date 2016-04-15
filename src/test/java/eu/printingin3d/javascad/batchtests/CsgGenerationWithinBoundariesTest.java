@@ -10,10 +10,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import eu.printingin3d.javascad.basic.Angle;
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
-import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords.Triangle3d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models.Abstract3dModel;
@@ -67,9 +68,9 @@ public class CsgGenerationWithinBoundariesTest {
 					new Support(new Dims3d(50, 23, 3), 0.1),
 					new Support(new Dims3d(12, 33, 3), 0.1).move(new Coords3d(34, 3, 10)),
 					new Polyhedron(triangles),
-					new LinearExtrude(new Circle(Radius.fromRadius(5)), 5, 0),
+					new LinearExtrude(new Circle(Radius.fromRadius(5)), 5, Angle.ZERO),
 					new LinearExtrude(new Union(Arrays.asList(
-							new Circle(Radius.fromRadius(3)), new Square(new Dims2d(3, 5)))), 10, 0)
+							new Circle(Radius.fromRadius(3)), new Square(new Dims2d(3, 5)))), 10, Angle.ZERO)
 				));
 		return result;
 	}

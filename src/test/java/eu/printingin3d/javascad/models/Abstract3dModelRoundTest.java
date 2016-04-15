@@ -6,7 +6,6 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.BoundaryTest;
 import eu.printingin3d.javascad.enums.Plane;
@@ -27,8 +26,7 @@ public class Abstract3dModelRoundTest {
 	public void roundShouldRenderWithMinkowskiXY() {
 		Abstract3dModel testSubject = new Test3dModel("(base)")
 				.round(Plane.XY, 2.0);
-		assertEqualsWithoutWhiteSpaces("minkowski() {(base) cylinder(r=2, h=0.00001, center=true);}", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("minkowski() {(base) cylinder(r=2, h=0.00001, center=true);}", testSubject);
 	}
 	
 	@Test
@@ -36,7 +34,7 @@ public class Abstract3dModelRoundTest {
 		Abstract3dModel testSubject = new Test3dModel("(base)")
 				.round(Plane.YZ, 3.0);
 		assertEqualsWithoutWhiteSpaces("minkowski() {(base) rotate([0,90,0]) cylinder(r=3, h=0.00001, center=true);}", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject);
 	}
 	
 	@Test
@@ -44,15 +42,14 @@ public class Abstract3dModelRoundTest {
 		Abstract3dModel testSubject = new Test3dModel("(base)")
 				.round(Plane.XZ, 1.5);
 		assertEqualsWithoutWhiteSpaces("minkowski() {(base) rotate([90,0,0]) cylinder(r=1.5, h=0.00001, center=true);}", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject);
 	}
 	
 	@Test
 	public void roundShouldRenderWithMinkowskiAll() {
 		Abstract3dModel testSubject = new Test3dModel("(base)")
 				.round(Plane.ALL, 3.3);
-		assertEqualsWithoutWhiteSpaces("minkowski() {(base) sphere(r=3.3);}", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("minkowski() {(base) sphere(r=3.3);}", testSubject);
 	}
 	
 	@Test
@@ -115,8 +112,7 @@ public class Abstract3dModelRoundTest {
 	public void roundShouldIncreaseTheSizeAll() {
 		Abstract3dModel testSubject = new Test3dModel("(base)")
 				.round(Plane.ALL, 3.3);
-		assertEqualsWithoutWhiteSpaces("minkowski() {(base) sphere(r=3.3);}", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("minkowski() {(base) sphere(r=3.3);}", testSubject);
 	}
 
 	@Test(expected = IllegalValueException.class)

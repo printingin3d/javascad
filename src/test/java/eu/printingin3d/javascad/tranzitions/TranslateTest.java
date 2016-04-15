@@ -5,7 +5,6 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -30,13 +29,13 @@ public class TranslateTest {
 	@Test
 	public void testToScad() {
 		Translate translate = new Translate(new Test3dModel("(model)"), new Coords3d(30, 20, 10));
-		assertEqualsWithoutWhiteSpaces("translate([30,20,10]) (model)", translate.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("translate([30,20,10]) (model)", translate);
 	}
 	
 	@Test
 	public void toScadWithZeroMoveShouldDoNothing() {
 		Translate translate = new Translate(new Test3dModel("(model)"), Coords3d.ZERO);
-		assertEqualsWithoutWhiteSpaces("(model)", translate.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("(model)", translate);
 	}
 	
 	@Test
@@ -91,7 +90,7 @@ public class TranslateTest {
 				).withTag(12);
 		
 		assertEqualsWithoutWhiteSpaces("translate([10,20,30]) (model11)",  
-				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()));
 	}
 	
 	@Test
@@ -102,7 +101,7 @@ public class TranslateTest {
 				).withTag(12);
 		
 		assertEqualsWithoutWhiteSpaces("translate([10,20,30]) (model11)",  
-				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()));
 	}
 	
 	@Test

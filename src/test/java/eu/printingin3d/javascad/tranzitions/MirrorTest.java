@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ScadGenerationContextFactory;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -40,19 +39,19 @@ public class MirrorTest {
 	@Test
 	public void testMirrorX() {
 		assertEqualsWithoutWhiteSpaces("mirror([1,0,0]) (model)", 
-				Mirror.mirrorX(TEST_MODEL).toScad(ColorHandlingContext.DEFAULT).getScad());
+				Mirror.mirrorX(TEST_MODEL));
 	}
 
 	@Test
 	public void testMirrorY() {
 		assertEqualsWithoutWhiteSpaces("mirror([0,1,0]) (model)", 
-				Mirror.mirrorY(TEST_MODEL).toScad(ColorHandlingContext.DEFAULT).getScad());
+				Mirror.mirrorY(TEST_MODEL));
 	}
 
 	@Test
 	public void testMirrorZ() {
 		assertEqualsWithoutWhiteSpaces("mirror([0,0,1]) (model)", 
-				Mirror.mirrorZ(TEST_MODEL).toScad(ColorHandlingContext.DEFAULT).getScad());
+				Mirror.mirrorZ(TEST_MODEL));
 	}
 
 	@Test
@@ -95,7 +94,7 @@ public class MirrorTest {
 				).withTag(12);
 		
 		assertEqualsWithoutWhiteSpaces("mirror([1,0,0]) (model11)",  
-				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()));
 	}
 	
 	@Test
@@ -105,7 +104,7 @@ public class MirrorTest {
 				).withTag(12);
 		
 		assertEqualsWithoutWhiteSpaces("mirror([0,1,0]) (model11)",  
-				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()));
 	}
 	
 	@Test

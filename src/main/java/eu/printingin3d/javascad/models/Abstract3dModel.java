@@ -60,6 +60,9 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	public Abstract3dModel moves(Collection<Coords3d> delta) {
 		if (!delta.isEmpty()) {
+			if (delta.size()==1) {
+				return move(delta.iterator().next());
+			}
 			List<Abstract3dModel> newModels = new ArrayList<>();
 			for (Coords3d c : delta) {
 				newModels.add(this.move(c));

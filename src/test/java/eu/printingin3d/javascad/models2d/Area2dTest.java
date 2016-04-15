@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.coords.Radius;
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.enums.PointRelation;
 import eu.printingin3d.javascad.tranzitions2d.Union;

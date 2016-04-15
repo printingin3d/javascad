@@ -1,7 +1,7 @@
 package eu.printingin3d.javascad.models;
 
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.context.IColorGenerationContext;
-import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.AssertValue;
 import eu.printingin3d.javascad.utils.DoubleUtils;

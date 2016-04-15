@@ -45,8 +45,7 @@ public class BoundedModelTest {
 	public void testMove() {
 		Abstract3dModel baseModel = new Test3dModel("(model)").move(new Coords3d(10.0, 20.0, 30.0));
 		BoundedModel testSubject = new BoundedModel(baseModel, RandomUtils.getRandomBoundaries());
-		assertEqualsWithoutWhiteSpaces("translate([10,20,30])(model)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("translate([10,20,30])(model)", testSubject);
 	}
 	
 	@Test
@@ -57,7 +56,7 @@ public class BoundedModelTest {
 				).withTag(12);
 		
 		assertEqualsWithoutWhiteSpaces("(model11)",  
-				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()));
 	}
 	
 	@Test
@@ -68,7 +67,7 @@ public class BoundedModelTest {
 				).withTag(12);
 		
 		assertEqualsWithoutWhiteSpaces("(model11)",  
-				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()));
 	}
 	
 	@Test

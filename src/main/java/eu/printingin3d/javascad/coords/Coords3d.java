@@ -1,5 +1,11 @@
 package eu.printingin3d.javascad.coords;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import eu.printingin3d.javascad.basic.Angle;
+
 /**
  * Immutable representation of a 3D coordinate with useful helper methods.
  *
@@ -23,6 +29,17 @@ public class Coords3d extends Basic3dFunc<Coords3d> {
 	 * Represents the (0,0,0) coordinate.
 	 */
 	public static final Coords3d ZERO = new Coords3d(0.0, 0.0, 0.0);
+	
+	/**
+	 * Can be used to move the object that tiny bit that will solve the different annoying manifold issues
+	 * and CSG rendering problems. 
+	 */
+	public static final Coords3d TINY = new Coords3d(0.001, 0.001, 0.001);
+	/**
+	 * Can be used to move the object that tiny bit that will solve the different annoying manifold issues
+	 * and CSG rendering problems. 
+	 */
+	public static final Coords3d MINUS_TINY = TINY.inverse();
 	
 	/**
 	 * Creates a coordinate where the Y and Z fields are zero.
@@ -80,21 +97,24 @@ public class Coords3d extends Basic3dFunc<Coords3d> {
 	public Coords3d rotate(Angles3d angles) {
 		Coords3d result = this;
 		if (!angles.isXZero()) {
+			Angle xAngle = angles.getXAngle();
 			result = new Coords3d(
-					result.x, 
-					Math.cos(angles.getXRad())*result.y-Math.sin(angles.getXRad())*result.z, 
-					Math.sin(angles.getXRad())*result.y+Math.cos(angles.getXRad())*result.z);
+					result.x,
+					xAngle.cos()*result.y-xAngle.sin()*result.z, 
+					xAngle.sin()*result.y+xAngle.cos()*result.z);
 		}
 		if (!angles.isYZero()) {
+			Angle yAngle = angles.getYAngle();
 			result = new Coords3d(
-					Math.cos(angles.getYRad())*result.x+Math.sin(angles.getYRad())*result.z, 
+					yAngle.cos()*result.x+yAngle.sin()*result.z, 
 					result.y, 
-					-Math.sin(angles.getYRad())*result.x +Math.cos(angles.getYRad())*result.z);
+					-yAngle.sin()*result.x +yAngle.cos()*result.z);
 		}
 		if (!angles.isZZero()) {
+			Angle zAngle = angles.getZAngle();
 			result = new Coords3d(
-					Math.cos(angles.getZRad())*result.x -Math.sin(angles.getZRad())*result.y, 
-					Math.sin(angles.getZRad())*result.x+Math.cos(angles.getZRad())*result.y, 
+					zAngle.cos()*result.x -zAngle.sin()*result.y, 
+					zAngle.sin()*result.x +zAngle.cos()*result.y, 
 					result.z);
 		}
 		return result;
@@ -113,6 +133,22 @@ public class Coords3d extends Basic3dFunc<Coords3d> {
                 this.z * a.x - this.x * a.z,
                 this.x * a.y - this.y * a.x
         );
+    }
+    
+    /**
+     * Creates a collection of coordinates which contains all variances of this coordinates and 
+     * their negated pair. The result contains at least one element (for ZERO) and up to eight elements.
+     * @return a collection of coordinates which contains all variances
+     */
+    public Collection<Coords3d> createVariances() {
+    	Set<Coords3d> result = new HashSet<>();
+    	for (int i=0;i<8;i++) {
+    		result.add(new Coords3d(
+    				x*((i&0b001)==0 ? -1 : +1), 
+    				y*((i&0b010)==0 ? -1 : +1), 
+    				z*((i&0b100)==0 ? -1 : +1)));
+    	}
+    	return result;
     }
 
     /**

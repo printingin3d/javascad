@@ -5,7 +5,6 @@ import static eu.printingin3d.javascad.testutils.AssertEx.assertEqualsWithoutWhi
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -30,56 +29,56 @@ public class Abstract3dModelEmptyTest {
 	
 	@Test
 	public void testDefault() {
-		assertEqualsWithoutWhiteSpaces("", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", testSubject);
 	}
 	
 	@Test
 	public void testMove() {
 		testSubject.move(new Coords3d(10.0, 20.0, 30.0));
-		assertEqualsWithoutWhiteSpaces("", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", testSubject);
 	}
 	
 	@Test
 	public void testMoves() {
 		testSubject.moves(new Coords3d(10.0, 20.0, 30.0), new Coords3d(30.0, 10.0, 20.0));
-		assertEqualsWithoutWhiteSpaces("", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", testSubject);
 	}
 
 	@Test
 	public void testRotate() {
 		testSubject.rotate(new Angles3d(10.0, 20.0, 30.0));
-		assertEqualsWithoutWhiteSpaces("", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", testSubject);
 	}
 	
 	@Test
 	public void testDefaultWithDebug() {
 		testSubject.debug();
-		assertEqualsWithoutWhiteSpaces("", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", testSubject);
 	}
 	
 	@Test
 	public void testDefaultWithBackground() {
 		testSubject.background();
-		assertEqualsWithoutWhiteSpaces("", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", testSubject);
 	}
 	
 	@Test
 	public void testDefaultWithDebugAndBackground() {
 		testSubject.background().debug();
-		assertEqualsWithoutWhiteSpaces("", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", testSubject);
 	}
 	
 	@Test
 	public void testMoveAndRotate() {
 		testSubject.rotate(new Angles3d(10.0, 20.0, 30.0));
 		testSubject.move(new Coords3d(30.0, 10.0, 20.0));
-		assertEqualsWithoutWhiteSpaces("", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		assertEqualsWithoutWhiteSpaces("", testSubject);
 	}
 	
 	@Test
 	public void testAlignLeft() {
 		Cube cube1 = new Cube(30.0);
-		testSubject.align(Side.LEFT, cube1, false);
-		assertEqualsWithoutWhiteSpaces("", testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+		testSubject.align(Side.LEFT_OUT, cube1);
+		assertEqualsWithoutWhiteSpaces("", testSubject);
 	}
 }

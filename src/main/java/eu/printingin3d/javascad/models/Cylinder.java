@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import eu.printingin3d.javascad.basic.Angle;
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.vrl.CSG;
@@ -154,7 +155,6 @@ public class Cylinder extends Atomic3dModel {
 	}
 
     private Coords3d cylPoint(double z, Radius r, double slice) {
-        double angle = slice * Math.PI * 2;
-        return r.toCoordinate(angle).withZ(z);
+        return r.toCoordinate(Angle.A360.mul(slice)).withZ(z);
     }
 }

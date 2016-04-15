@@ -4,7 +4,6 @@ package eu.printingin3d.javascad.coords;
  * Basic 3D functions.
  * 
  * @param <T> just a test
- * @author ivivan <ivivan@printingin3d.eu>
  */
 public abstract class Basic3dFunc <T extends Basic3dFunc<T>> extends Abstract3d {
 
@@ -66,4 +65,30 @@ public abstract class Basic3dFunc <T extends Basic3dFunc<T>> extends Abstract3d 
     	return this.add(d.inverse()).magnitude();
     }
 
+    /**
+     * Replaces the X coordinate with the given value and returns with the newly created object.
+     * @param x the new X value
+     * @return the newly created object.
+     */
+    public T withX(double x) {
+    	return create(x, y, z);
+    }
+    
+    /**
+     * Replaces the Y coordinate with the given value and returns with the newly created object.
+     * @param y the new Y value
+     * @return the newly created object.
+     */
+    public T withY(double y) {
+    	return create(x, y, z);
+    }
+    
+    /**
+     * Replaces the Z coordinate with the given value and returns with the newly created object.
+     * @param z the new Z value
+     * @return the newly created object.
+     */
+    public T withZ(double z) {
+    	return create(x, y, z);
+    }
 }

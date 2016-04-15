@@ -14,10 +14,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import eu.printingin3d.javascad.basic.Angle;
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.coords.Abstract3dTest.TestAbstract3d;
 import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Coords3d;
-import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords2d.Abstract2dTest.TestAbstract2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.coords2d.LineSegment2d;
@@ -115,6 +116,11 @@ public class EqualsAndHashCodeBatchTest {
 						Radius.fromDiameter(10),
 						Radius.fromRadius(5),
 						Radius.fromRadius(15), Radius.fromRadius(50)
+						),
+				new TestCase<Angle>(
+						Angle.ofDegree(45),
+						Angle.A45,
+						Angle.ZERO, Angle.ofRadian(Math.PI)
 						)
 			);
 	}

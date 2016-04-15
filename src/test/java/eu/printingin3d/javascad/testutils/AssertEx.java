@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 
 import org.hamcrest.CustomTypeSafeMatcher;
 
+import eu.printingin3d.javascad.context.ColorHandlingContext;
+import eu.printingin3d.javascad.models.Abstract3dModel;
+
 public class AssertEx {
 	private static final double EPSILON = 0.0001;
 	
@@ -19,6 +22,10 @@ public class AssertEx {
 				return item.replaceAll("\\s", "").equals(expected.replaceAll("\\s", ""));
 			}
 		});
+	}
+	
+	public static void assertEqualsWithoutWhiteSpaces(final String expected, Abstract3dModel model) {
+		assertEqualsWithoutWhiteSpaces(expected, model.toScad(ColorHandlingContext.DEFAULT).getScad());
 	}
 	
 	public static void assertMatchToExpressionWithoutWhiteSpaces(final String regex, String actual) {

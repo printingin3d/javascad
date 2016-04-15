@@ -8,8 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import eu.printingin3d.javascad.basic.Angle;
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.context.IColorGenerationContext;
-import eu.printingin3d.javascad.coords.Radius;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
 import eu.printingin3d.javascad.models.SCAD;
@@ -99,9 +100,9 @@ public class RoundedSquare extends Square {
         List<Coords2d> points = new ArrayList<>();
 
         int numSlices = context.calculateNumberOfSlices(radius.getRadius())*4;
+        Angle oneSlice = Angle.A360.divide(numSlices);
         for (int i = numSlices; i > 0; i--) {
-        	double alpha = Math.PI*2*i/numSlices;
-        	Coords2d base = radius.toCoordinate(alpha);
+        	Coords2d base = radius.toCoordinate(oneSlice.mul(i));
             double x = base.getX() + Math.signum(base.getX())*(size.getX()/2-radius.getRadius());
 			double y = base.getY() + Math.signum(base.getY())*(size.getY()/2-radius.getRadius());
 			points.add(new Coords2d(x, y));

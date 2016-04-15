@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import eu.printingin3d.javascad.context.ColorHandlingContext;
+import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -27,15 +27,15 @@ public class LinearExtrudeTest {
 	@Test
 	public void testToScad() {
 		Abstract3dModel testSubject = new LinearExtrude(new Test2dModel("(model)", 
-				new Boundaries2d(new Boundary(-5, 5), new Boundary(-5, 5))), 10, 20, 2);
+				new Boundaries2d(new Boundary(-5, 5), new Boundary(-5, 5))), 10, Angle.ofDegree(20), 2);
 		AssertEx.assertEqualsWithoutWhiteSpaces("linear_extrude(height=10, center=true, convexity=10, twist=20, scale=2) (model)", 
-				testSubject.toScad(ColorHandlingContext.DEFAULT).getScad());
+				testSubject);
 	}
 	
 	@Test
 	public void testBoundariesWithZeroTwist() {
 		Abstract3dModel testSubject = new LinearExtrude(new Test2dModel("(model)", 
-				new Boundaries2d(new Boundary(-5, 0), new Boundary(-10, 5))), 30, 0, 2);
+				new Boundaries2d(new Boundary(-5, 0), new Boundary(-10, 5))), 30, Angle.ZERO, 2);
 		Boundaries3dTest.assertBoundariesEquals(
 				new Boundaries3d(new Coords3d(-5, -10, -15), new Coords3d(0, 5, 15)), testSubject.getBoundaries());
 	}
@@ -43,7 +43,7 @@ public class LinearExtrudeTest {
 	@Test
 	public void testBoundariesWithNonZeroTwist() {
 		Abstract3dModel testSubject = new LinearExtrude(new Test2dModel("(model)", 
-				new Boundaries2d(new Boundary(-5, 0), new Boundary(-10, 5))), 30, 20, 2);
+				new Boundaries2d(new Boundary(-5, 0), new Boundary(-10, 5))), 30, Angle.ofDegree(20), 2);
 		Boundaries3dTest.assertBoundariesEquals(
 				new Boundaries3d(new Coords3d(-10, -10, -15), new Coords3d(10, 10, 15)), testSubject.getBoundaries());
 	}
@@ -58,7 +58,7 @@ public class LinearExtrudeTest {
 				new Circle(5).move(Coords2d.xOnly(-5)),
 				new Circle(5), 
 				new Circle(5).move(Coords2d.xOnly(5))));*/
-		Abstract3dModel test = new LinearExtrude(union, 10, 45)
+		Abstract3dModel test = new LinearExtrude(union, 10, Angle.A45)
 //				.addModelTo(Side.TOP, new Cube(10))
 //				.addModelTo(Side.LEFT, new Cube(10))
 				;

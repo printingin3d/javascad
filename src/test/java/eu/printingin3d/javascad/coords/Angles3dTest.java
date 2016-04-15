@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
+import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.testutils.RandomUtils;
 
 public class Angles3dTest {
@@ -53,9 +54,9 @@ public class Angles3dTest {
 
 	@Test
 	public void testRad() {
-		Angles3d testSubject = new Angles3d(45.0, 30.0, 90.0);
-		assertEquals(Math.PI/4.0, testSubject.getXRad(), EPSILON);
-		assertEquals(Math.PI/6.0, testSubject.getYRad(), EPSILON);
-		assertEquals(Math.PI/2.0, testSubject.getZRad(), EPSILON);
+		Angles3d testSubject = new Angles3d(45.0, 180.0, 90.0);
+		assertEquals(Angle.A45, testSubject.getXAngle());
+		assertEquals(Angle.A180, testSubject.getYAngle());
+		assertEquals(Angle.A90, testSubject.getZAngle());
 	}
 }
