@@ -1,5 +1,9 @@
 package eu.printingin3d.javascad.coords;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+
 /**
  * Basic 3D functions.
  * 
@@ -90,5 +94,19 @@ public abstract class Basic3dFunc <T extends Basic3dFunc<T>> extends Abstract3d 
      */
     public T withZ(double z) {
     	return create(x, y, z);
+    }
+    
+    /**
+     * Creates a collection of values which contains all variances of this coordinates and 
+     * their negated pair. The result contains at least one element (for ZERO) and up to eight elements.
+     * @return a collection of coordinates which contains all variances
+     */
+    public Collection<T> createVariances() {
+    	return new HashSet<T>(Arrays.asList(
+    			create(+x, +y, +z), create(-x, +y, +z),
+    			create(+x, -y, +z), create(-x, -y, +z),
+    			create(+x, +y, -z), create(-x, +y, -z),
+    			create(+x, -y, -z), create(-x, -y, -z)
+    		));
     }
 }

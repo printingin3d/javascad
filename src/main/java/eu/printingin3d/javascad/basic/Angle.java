@@ -26,7 +26,7 @@ public final class Angle extends BasicFunc<Angle> {
 	 * Constant for the full circle angle - 360 degrees.
 	 */
 	public static final Angle A360 = new Angle(Math.PI*2.0);
-	
+
 	private Angle(double radian) {
 		super(radian);
 	}
@@ -37,7 +37,7 @@ public final class Angle extends BasicFunc<Angle> {
 	 * @return an Angle object which represents the given angle
 	 */
 	public static Angle ofRadian(double radian) {
-		return new Angle(radian);
+		return DoubleUtils.isZero(radian) ? ZERO : new Angle(radian);
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public final class Angle extends BasicFunc<Angle> {
 	 * @return an Angle object which represents the given angle
 	 */
 	public static Angle ofDegree(double degree) {
-		return new Angle(Math.toRadians(degree));
+		return ofRadian(Math.toRadians(degree));
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public final class Angle extends BasicFunc<Angle> {
 	}
 	
 	/**
-	 * Normalize this angle to be within 0 and the 360 degree.
+	 * Normalize this angle to be within -180 and the 180 degree.
 	 * @return a new object representing the normalized angle.
 	 */
 	public Angle normalize() {
@@ -107,6 +107,6 @@ public final class Angle extends BasicFunc<Angle> {
 
 	@Override
 	protected Angle create(double value) {
-		return new Angle(value);
+		return ofRadian(value);
 	}
 }

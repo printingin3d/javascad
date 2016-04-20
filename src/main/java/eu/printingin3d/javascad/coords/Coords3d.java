@@ -1,9 +1,5 @@
 package eu.printingin3d.javascad.coords;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import eu.printingin3d.javascad.basic.Angle;
 
 /**
@@ -133,22 +129,6 @@ public class Coords3d extends Basic3dFunc<Coords3d> {
                 this.z * a.x - this.x * a.z,
                 this.x * a.y - this.y * a.x
         );
-    }
-    
-    /**
-     * Creates a collection of coordinates which contains all variances of this coordinates and 
-     * their negated pair. The result contains at least one element (for ZERO) and up to eight elements.
-     * @return a collection of coordinates which contains all variances
-     */
-    public Collection<Coords3d> createVariances() {
-    	Set<Coords3d> result = new HashSet<>();
-    	for (int i=0;i<8;i++) {
-    		result.add(new Coords3d(
-    				x*((i&0b001)==0 ? -1 : +1), 
-    				y*((i&0b010)==0 ? -1 : +1), 
-    				z*((i&0b100)==0 ? -1 : +1)));
-    	}
-    	return result;
     }
 
     /**

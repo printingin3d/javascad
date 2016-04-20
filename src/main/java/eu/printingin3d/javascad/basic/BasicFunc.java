@@ -35,16 +35,6 @@ public abstract class BasicFunc <T extends BasicFunc<T>> {
 	}
 	
 	/**
-	 * Multiplies this object with the given value and returns with a new angle 
-	 * representing the new value.
-	 * @param value the value to be used
-	 * @return a new object which represents the multiplied value
-	 */
-	public T mul(T value) {
-		return create(this.value * value.value);
-	}
-	
-	/**
 	 * Divides this object with the given value and returns with a new object 
 	 * representing the new value.
 	 * @param value the value to be used
@@ -72,6 +62,14 @@ public abstract class BasicFunc <T extends BasicFunc<T>> {
 		return create(this.value + value.value);
 	}
 	
+	/**
+	 * Creates the inverse of this object.
+	 * @return a new object representing the inverse of this object
+	 */
+	public T inverse() {
+		return create(-value);
+	}
+
 	@Override
 	public int hashCode() {
 		return DoubleUtils.hashCodeEps(value);
