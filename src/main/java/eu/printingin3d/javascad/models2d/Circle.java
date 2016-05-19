@@ -66,7 +66,7 @@ public class Circle extends Abstract2dModel {
 	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
         List<Coords2d> points = new ArrayList<>();
 
-        int numSlices = context.calculateNumberOfSlices(radius.getRadius());
+        int numSlices = context.calculateNumberOfSlices(radius);
         Angle oneSlice = Angle.A360.divide(numSlices);
         for (int i = numSlices; i > 0; i--) {
             points.add(radius.toCoordinate(oneSlice.mul(i)));

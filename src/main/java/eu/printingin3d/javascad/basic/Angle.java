@@ -109,4 +109,9 @@ public final class Angle extends BasicFunc<Angle> {
 	protected Angle create(double value) {
 		return ofRadian(value);
 	}
+
+	@Override
+	protected Angle thisOne() {
+		return this;
+	}
 }

@@ -2,6 +2,7 @@ package eu.printingin3d.javascad.vrl;
 
 import java.awt.Color;
 
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.context.ColorHandlingContext;
 import eu.printingin3d.javascad.context.ITagColors;
 
@@ -52,9 +53,9 @@ public class FacetGenerationContext extends ColorHandlingContext {
 	 * @param r the radius of the object
 	 * @return the number of slices required
 	 */
-	public int calculateNumberOfSlices(double r) {
+	public int calculateNumberOfSlices(Radius r) {
 		if (parentFacet==null) {
-			return Math.min(360/fa, (int) Math.ceil(2.0*r*Math.PI/fs));
+			return Math.min(360/fa, (int) Math.ceil(r.getDiameter()*Math.PI/fs));
 		}
 		else {
 			return parentFacet.calculateNumberOfSlices(r);

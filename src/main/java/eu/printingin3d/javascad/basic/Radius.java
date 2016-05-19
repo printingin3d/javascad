@@ -88,4 +88,9 @@ public final class Radius extends BasicFunc<Radius> {
 	protected Radius create(double value) {
 		return new Radius(value);
 	}
+
+	@Override
+	protected Radius thisOne() {
+		return this;
+	}
 }

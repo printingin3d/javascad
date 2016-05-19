@@ -15,6 +15,7 @@ public abstract class BasicFunc <T extends BasicFunc<T>> {
 	}
 	
 	protected abstract T create(double value);
+	protected abstract T thisOne();
 	
 	/**
 	 * Checks if this object represents the zero angle.
@@ -68,6 +69,24 @@ public abstract class BasicFunc <T extends BasicFunc<T>> {
 	 */
 	public T inverse() {
 		return create(-value);
+	}
+	
+	/**
+	 * Returns with the bigger object of this object and the given object.
+	 * @param b second object to compare
+	 * @return the bigger object of the two objects 
+	 */
+	public T max(T b) {
+		return this.value>b.value ? thisOne() : b;
+	}
+	
+	/**
+	 * Returns with the smaller object of this object and the given object.
+	 * @param b second object to compare
+	 * @return the smaller object of the two objects 
+	 */
+	public T min(T b) {
+		return this.value<b.value ? thisOne() : b;
 	}
 
 	@Override

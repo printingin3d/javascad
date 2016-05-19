@@ -125,7 +125,7 @@ public class Cylinder extends Atomic3dModel {
 		Coords3d endV = Coords3d.zOnly(-z);
         List<Polygon> polygons = new ArrayList<>();
 
-        int numSlices = context.calculateNumberOfSlices(Math.min(topRadius.getRadius(), bottomRadius.getRadius()));
+        int numSlices = context.calculateNumberOfSlices(topRadius.min(bottomRadius));
         for (int i = 0; i < numSlices; i++) {
             double t0 = i / (double) numSlices;
             double t1 = (i + 1) / (double) numSlices;

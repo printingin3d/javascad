@@ -4,7 +4,7 @@
 
     <groupId>eu.printingin3d.javascad</groupId>
     <artifactId>javascad</artifactId>
-    <version>0.9.0.8</version>
+    <version>0.9.0.9</version>
     <packaging>jar</packaging>
     <name>JavaSCAD</name>
     <url>http://www.printingin3d.eu/javascad</url>

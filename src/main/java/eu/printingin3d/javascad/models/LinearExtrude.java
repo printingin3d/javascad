@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import eu.printingin3d.javascad.basic.Angle;
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -137,7 +138,7 @@ public class LinearExtrude extends Atomic3dModel {
 		List<Polygon> polygons = new ArrayList<>();
 		
 		for (Area2d points : model.getPointCircle(context)) {
-			int numOfSteps = twist.isZero() ? 1 : context.calculateNumberOfSlices(height);
+			int numOfSteps = twist.isZero() ? 1 : context.calculateNumberOfSlices(Radius.fromRadius(height));
 	
 			double y1=-height/2;
 			Angle alpha1 = Angle.ZERO;

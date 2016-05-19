@@ -99,7 +99,7 @@ public class RoundedSquare extends Square {
 	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
         List<Coords2d> points = new ArrayList<>();
 
-        int numSlices = context.calculateNumberOfSlices(radius.getRadius())*4;
+        int numSlices = context.calculateNumberOfSlices(radius)*4;
         Angle oneSlice = Angle.A360.divide(numSlices);
         for (int i = numSlices; i > 0; i--) {
         	Coords2d base = radius.toCoordinate(oneSlice.mul(i));
