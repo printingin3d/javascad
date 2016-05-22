@@ -52,6 +52,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.6</version>
                 <configuration>
                     <rulesets>
                         <ruleset>/rulesets/java/braces.xml</ruleset>
@@ -97,6 +98,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.17</version>
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
                     <failOnViolation>true</failOnViolation>
@@ -219,7 +221,7 @@
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
                             <manifestEntries>
-                                <Implementation-Build>${version}</Implementation-Build>
+                                <Implementation-Build>${project.version}</Implementation-Build>
                             </manifestEntries>
                         </archive>
                     </configuration>
