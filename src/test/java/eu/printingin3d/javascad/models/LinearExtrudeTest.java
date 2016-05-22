@@ -24,6 +24,8 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 import eu.printingin3d.javascad.vrl.export.FileExporterFactory;
 
 public class LinearExtrudeTest {
+    public static final File mavenTargetPath = new File(System.getProperty("basedir"), "target");
+    
 	@Test
 	public void testToScad() {
 		Abstract3dModel testSubject = new LinearExtrude(new Test2dModel("(model)", 
@@ -63,14 +65,14 @@ public class LinearExtrudeTest {
 //				.addModelTo(Side.LEFT, new Cube(10))
 				;
 		
-		new SaveScadFiles(new File("C:/temp"))
+		new SaveScadFiles(mavenTargetPath)
 			.addModel("test.scad", test)
 			.saveScadFiles();
 		
 		FacetGenerationContext context = new FacetGenerationContext(null, null, 0);
 		context.setFsAndFa(1, 12);
 		
-		FileExporterFactory.createExporter(new File("C:/temp/test.stl"))
+		FileExporterFactory.createExporter(new File(mavenTargetPath, "test.stl"))
 			.writeToFile(test.toCSG(context).toFacets());
 	}
 }
