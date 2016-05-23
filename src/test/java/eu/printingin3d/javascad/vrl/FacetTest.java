@@ -30,4 +30,5 @@ public class FacetTest {
 		
 		assertEquals(expectedVertices, new HashSet<Vertex>(facet.getVertexes())); 
 	}
+
 }

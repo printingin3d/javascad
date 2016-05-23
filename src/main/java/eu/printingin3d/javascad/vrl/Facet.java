@@ -42,6 +42,14 @@ public class Facet {
 		}
 		return vertexes;
 	}
+	
+	/**
+	 * Returns the triangle within this facet. Added for testing purposes.
+	 * @return the triangle within this facet.
+	 */
+	public Triangle3d getTriangle() {
+		return triangle;
+	}
 
 	/**
 	 * Returns the normal of this facet.
