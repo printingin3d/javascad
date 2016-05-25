@@ -7,8 +7,9 @@
     <version>0.9.0.10</version>
     <packaging>jar</packaging>
     <name>JavaSCAD</name>
+    <description>Our little model generator framework.</description>
     <url>http://www.printingin3d.eu/javascad</url>
-
+	
     <properties>
         <targetJdk>1.7</targetJdk>
         <easymock.version>3.2</easymock.version>
@@ -19,6 +20,28 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <licenses>
+        <license>
+            <name>GNU General Public License, version 2</name>
+            <url>http://www.gnu.org/licenses/gpl-2.0.html</url>
+        </license>
+    </licenses>
+  
+    <scm>
+        <connection>scm:git:git@github.com:printingin3d/javascad.git</connection>
+        <developerConnection>scm:git:git@github.com:printingin3d/javascad.git</developerConnection>
+        <url>git@github.com:printingin3d/javascad.git</url>
+    </scm>
+  
+    <developers>
+        <developer>
+            <name>Ivan Suller</name>
+            <email>ivivan@printingin3d.eu</email>
+            <organization>Printing In 3D</organization>
+            <organizationUrl>https://www.printingin3d.eu</organizationUrl>
+        </developer>
+    </developers>
+  
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
@@ -142,6 +165,7 @@
                                 <property name="revision.number" value="${DSTAMP}"/>
 
                                 <copy file="target/${project.artifactId}-${project.version}-javadoc.jar" tofile="jar/JavaScad.rev${revision.number}-javadoc.jar" />
+                                <copy file="target/${project.artifactId}-${project.version}-sources.jar" tofile="jar/JavaScad.rev${revision.number}-sources.jar" />
                                 <copy file="target/${project.artifactId}-${project.version}.jar" tofile="jar/JavaScad.rev${revision.number}.jar" />
                                 <zip destfile="jar/dist.rev${revision.number}.zip" basedir="jar"
       includes="JavaScad.rev${revision.number}-javadoc.jar, JavaScad.rev${revision.number}.jar" />
@@ -156,6 +180,19 @@
                     </execution>
                 </executions>
             </plugin>                
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.0</version>
+			    <executions>
+			        <execution>
+				        <id>attach-sources</id>
+				        <goals>
+					        <goal>jar</goal>
+				        </goals>
+			        </execution>
+		        </executions>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
