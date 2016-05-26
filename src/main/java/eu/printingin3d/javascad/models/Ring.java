@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.models;
 
+import eu.printingin3d.javascad.basic.Radius;
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -17,7 +18,19 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  */
 public class Ring extends Atomic3dModel {
 	private final Abstract2dModel model;
-	private final double radius;
+	private final Radius radius;
+	
+	/**
+	 * Creates the ring with the given parameters. The ready object will be the 2D model extruded into a ring
+	 * with the given radius between the origin and the origin of the 2D model.
+	 * @param radius the radius of the extrusion
+	 * @param model the model to be rotated
+	 * @deprecated use the constructor with the Radius parameter instead
+	 */
+	@Deprecated
+	public Ring(double radius, Abstract2dModel model) {
+		this(Radius.fromRadius(radius), model);
+	}
 	
 	/**
 	 * Creates the ring with the given parameters. The ready object will be the 2D model extruded into a ring
@@ -25,7 +38,7 @@ public class Ring extends Atomic3dModel {
 	 * @param radius the radius of the extrusion
 	 * @param model the model to be rotated
 	 */
-	public Ring(double radius, Abstract2dModel model) {
+	public Ring(Radius radius, Abstract2dModel model) {
 		this.model = model;
 		this.radius = radius;
 	}
@@ -38,14 +51,14 @@ public class Ring extends Atomic3dModel {
 	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
 		return new SCAD("rotate_extrude() "+
-					Translate.getTranslate(Coords3d.xOnly(radius))).append(model.toScad(context)).append(";");
+			Translate.getTranslate(Coords3d.xOnly(radius.getRadius()))).append(model.toScad(context)).append(";");
 	}
 
 	@Override
 	protected Boundaries3d getModelBoundaries() {
 		Boundaries2d modelBoundaries = model.getBoundaries2d();
 		Boundary z = modelBoundaries.getY();
-		Boundary xy = Boundary.createSymmetricBoundary(modelBoundaries.getX().getMax()+radius);
+		Boundary xy = Boundary.createSymmetricBoundary(modelBoundaries.getX().getMax()+radius.getRadius());
 		return new Boundaries3d(xy, xy, z);
 	}
 
