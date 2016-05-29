@@ -4,7 +4,7 @@
 
 	<groupId>eu.printingin3d.javascad</groupId>
 	<artifactId>javascad</artifactId>
-	<version>0.9.0.11</version>
+	<version>0.9.0.12</version>
 	<packaging>jar</packaging>
 	<name>JavaSCAD</name>
 	<description>Our little model generator framework.</description>
@@ -150,18 +150,9 @@
 						<phase>install</phase>
 						<configuration>
 							<target>
-								<tstamp/>
-
-								<property name="revision.number" value="${DSTAMP}"/>
-
-								<copy file="target/${project.artifactId}-${project.version}-javadoc.jar" tofile="jar/JavaScad.rev${revision.number}-javadoc.jar" failonerror="false"/>
-								<copy file="target/${project.artifactId}-${project.version}-sources.jar" tofile="jar/JavaScad.rev${revision.number}-sources.jar" failonerror="false"/>
-								<copy file="target/${project.artifactId}-${project.version}.jar" tofile="jar/JavaScad.rev${revision.number}.jar" />
-								<zip destfile="jar/dist.rev${revision.number}.zip" basedir="jar"
-      includes="JavaScad.rev${revision.number}-javadoc.jar, JavaScad.rev${revision.number}.jar" />
-								<delete file="jar/JavaScad.rev${revision.number}-javadoc.jar" failonerror="false"/>
-								<delete file="jar/JavaScad.rev${revision.number}.jar"/>
-								<echo file="jar/version.text" append="false">${revision.number}</echo>
+								<zip destfile="jar/dist.v${project.version}.zip" basedir="target"
+      includes="${project.artifactId}-${project.version}-javadoc.jar, ${project.artifactId}-${project.version}-sources.jar, ${project.artifactId}-${project.version}.jar" />
+								<echo file="jar/version.text" append="false">${project.version}</echo>
 							</target>
 						</configuration>
 						<goals>
@@ -312,11 +303,10 @@
 			</build>
 		</profile>
 		<profile>
-			<id>release-sign-artifacts</id>
+			<id>local-release</id>
 			<activation>
 				<property>
-					<name>performRelease</name>
-					<value>true</value>
+					<name>release</name>
 				</property>
 			</activation>
 			<build>
@@ -343,10 +333,36 @@
 					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.0.0</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>maven-release</id>
+			<activation>
+				<property>
+					<name>release</name>
+					<value>maven</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
 						<version>1.6</version>
 						<configuration>
-							<javadoc>javascad-0.9.0.11-javadoc.jar</javadoc>
+							<javadoc>${project.artifactId}-${project.version}-javadoc.jar</javadoc>
 						</configuration>
 						<executions>
 							<execution>
@@ -368,19 +384,6 @@
 							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 							<autoReleaseAfterClose>true</autoReleaseAfterClose>
 						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<version>3.0.0</version>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
 					</plugin>
 				</plugins>
 			</build>
