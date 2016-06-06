@@ -47,7 +47,8 @@ public abstract class Abstract2dModel {
 	 * @return the generated OpenSCAD code
 	 */
 	public SCAD toScad(IColorGenerationContext context) {
-		return innerToScad(context).prepend(Translate.getTranslate(move));
+		SCAD scad = innerToScad(context);
+		return scad.isEmpty() ? scad : scad.prepend(Translate.getTranslate(move));
 	}
 
 	/**

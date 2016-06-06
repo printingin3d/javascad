@@ -49,15 +49,14 @@ public class RoundProperties {
 	 * @return the calculated increase of the rounding
 	 */
 	public Boundaries3d getRoundingSize() {
-		Boundary zero = new Boundary(0.0);
-		Boundary b = new Boundary(-radius, radius);
+		Boundary b = Boundary.createSymmetricBoundary(radius);
 		switch (plane) {
 		case XY:
-			return new Boundaries3d(b, b, zero);
+			return new Boundaries3d(b, b, Boundary.EMPTY);
 		case YZ:
-			return new Boundaries3d(zero, b, b);
+			return new Boundaries3d(Boundary.EMPTY, b, b);
 		case XZ:
-			return new Boundaries3d(b, zero, b);
+			return new Boundaries3d(b, Boundary.EMPTY, b);
 		case ALL:
 			return new Boundaries3d(b, b, b);
 		default:

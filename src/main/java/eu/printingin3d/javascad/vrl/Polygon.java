@@ -227,10 +227,7 @@ public final class Polygon {
 		    Coords3d vj = polygon.vertices.get(j);
 		    classifyAndSplitVertex(vi, vj, f, b);
 		}
-		AssertValue.isTrue(f.size() >= 3, "The front list shouldn't have less than 3 values!");
 		front.add(fromPolygons(f, polygon.color));
-	    
-		AssertValue.isTrue(b.size() >= 3, "The back list shouldn't have less than 3 values!");
 		back.add(fromPolygons(b, polygon.color));
 	}
 

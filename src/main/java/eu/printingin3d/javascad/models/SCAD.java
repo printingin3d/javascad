@@ -96,4 +96,9 @@ public class SCAD {
 		}
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return scad;
+	}
 }

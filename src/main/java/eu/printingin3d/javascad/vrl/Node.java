@@ -55,11 +55,11 @@ public final class Node {
     /**
      * Polygons in front of the plane.
      */
-    private Node front;
+    private final Node front;
     /**
      * Polygons in back of the plane.
      */
-    private Node back;
+    private final Node back;
 
     private Node(List<Polygon> polygons, Node front, Node back) {
     	AssertValue.isNotEmpty(polygons, 
@@ -94,20 +94,14 @@ public final class Node {
     	List<Polygon> newPolygons = new ArrayList<>();
         List<Polygon> frontP = new ArrayList<>();
         List<Polygon> backP = new ArrayList<>();
-        
-        Node newFront = null;
-        Node newBack = null;
 
         for (Polygon polygon : polygons) {
         	newPlane.splitPolygon(
                     polygon, newPolygons, newPolygons, frontP, backP);
         }
-        if (!frontP.isEmpty()) {
-        	newFront = fromPoligons(frontP);
-        }
-        if (!backP.isEmpty()) {
-        	newBack = fromPoligons(backP);
-        }
+        
+        Node newFront = frontP.isEmpty() ? null : fromPoligons(frontP); 
+        Node newBack = backP.isEmpty() ? null : fromPoligons(backP);
         return new Node(newPolygons, newFront, newBack);
     }
 
@@ -200,8 +194,20 @@ public final class Node {
         return localPolygons;
     }
 
+	private static Node combinePoligons(Node node, List<Polygon> polygons) {
+        Node result = node;
+        if (!polygons.isEmpty()) {
+            if (result == null) {
+            	result = fromPoligons(polygons);
+            } else {
+            	result = result.build(polygons);
+			}
+        }
+        return result;
+	}
+	
 	/**
-	 * Build a new node adding the given polygons - splitting the polygons in necessary.
+	 * Build a new node adding the given polygons - splitting the polygons if necessary.
 	 * @param polygons the polygons to be added
 	 * @return a new node with the added polygons
 	 */
@@ -218,21 +224,7 @@ public final class Node {
         for (Polygon polygon : polygons) {
         	newPlane.splitPolygon(polygon, this.polygons, this.polygons, frontP, backP);
         }
-        if (!frontP.isEmpty()) {
-            if (front == null) {
-            	front = fromPoligons(frontP);
-            } else {
-            	front.build(frontP);
-			}
-        }
-        if (!backP.isEmpty()) {
-            if (back == null) {
-            	back = fromPoligons(backP);
-            } else {
-            	back.build(backP);
-			}
-        }
-        return new Node(this.polygons, front, back);
+        return new Node(this.polygons, combinePoligons(front, frontP), combinePoligons(back, backP));
     }
 	
 	private Polygon getPlane() {
