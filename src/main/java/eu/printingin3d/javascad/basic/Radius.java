@@ -1,6 +1,11 @@
 package eu.printingin3d.javascad.basic;
 
 import static eu.printingin3d.javascad.utils.AssertValue.isNotNegative;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.utils.DoubleUtils;
 
@@ -59,6 +64,23 @@ public final class Radius extends BasicFunc<Radius> {
 	 */
 	public Coords2d toCoordinate(Angle alpha) {
 		return new Coords2d(alpha.sin()*value, alpha.cos()*value);
+	}
+	
+	/**
+	 * Create moves for a circle of items with this radius.
+	 * @param numberOfItems the number of items
+	 * @param offset the offset - meaningful between 0 and 1
+	 * @param z the z value of the coordinates
+	 * @return list of moves
+	 */
+	public List<Coords3d> toCircle(int numberOfItems, double offset, double z) {
+		Angle slice = Angle.A360.divide(numberOfItems);
+		
+		List<Coords3d> moves = new ArrayList<>();
+		for (int i=0;i<numberOfItems;i++) {
+			moves.add(toCoordinate(slice.mul(i + offset)).withZ(z));
+		}
+		return moves;
 	}
 	
 	/**
