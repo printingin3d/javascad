@@ -40,6 +40,7 @@ import java.util.List;
 
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
+import eu.printingin3d.javascad.coords2d.LineSegment;
 import eu.printingin3d.javascad.tranform.ITransformation;
 import eu.printingin3d.javascad.utils.AssertValue;
 
@@ -221,11 +222,8 @@ public final class Polygon {
 	private void splitPolygon(Polygon polygon, List<Polygon> front, List<Polygon> back) {
 		List<Coords3d> f = new ArrayList<>();
 		List<Coords3d> b = new ArrayList<>();
-		for (int i = 0; i < polygon.vertices.size(); i++) {
-		    int j = (i + 1) % polygon.vertices.size();
-		    Coords3d vi = polygon.vertices.get(i);
-		    Coords3d vj = polygon.vertices.get(j);
-		    classifyAndSplitVertex(vi, vj, f, b);
+		for (LineSegment<Coords3d> ls : LineSegment.lineSegmentSeries(polygon.vertices)) {
+			classifyAndSplitVertex(ls.getStart(), ls.getEnd(), f, b);
 		}
 		front.add(fromPolygons(f, polygon.color));
 		back.add(fromPolygons(b, polygon.color));
@@ -253,8 +251,6 @@ public final class Polygon {
 		    Coords3d v = currentVertex.lerp(nextVertex, t);
 			addVertexToList(f, v);
 			addVertexToList(b, v);
-		    //f.add(v);
-		    //b.add(v);
 		}
 	}
     

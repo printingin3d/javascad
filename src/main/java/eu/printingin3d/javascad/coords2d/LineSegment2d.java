@@ -8,9 +8,7 @@ import eu.printingin3d.javascad.utils.DoubleUtils;
 /**
  * Represents a 2D line segment.
  */
-public class LineSegment2d {
-	private final Coords2d start;
-	private final Coords2d end;
+public class LineSegment2d extends LineSegment<Coords2d> {
 	
 	/**
 	 * Starts a series of line segments. You can get the next segment by calling the
@@ -28,9 +26,9 @@ public class LineSegment2d {
 	 * @param coords the list of points
 	 * @return the list of segments
 	 */
-	public static List<LineSegment2d> lineSegmentSeries(List<Coords2d> coords) {
+	public static List<LineSegment2d> lineSegmentSeries2d(List<Coords2d> coords) {
 		List<LineSegment2d> result = new ArrayList<>();
-		LineSegment2d current = new LineSegment2d(null, coords.get(coords.size()-1));
+		LineSegment2d current = startLineSegmentSeries(coords.get(coords.size()-1));
 		for (Coords2d c : coords) {
 			current = current.next(c);
 			result.add(current);
@@ -38,58 +36,18 @@ public class LineSegment2d {
 		return result;
 	}
 	
+	@Override
+	public LineSegment2d next(Coords2d c) {
+		return new LineSegment2d(end, c);
+	}
+
 	/**
 	 * Creates a new line segment using the two given end points.
 	 * @param start the starting point of the segment
 	 * @param end the end point of the segment
 	 */
 	public LineSegment2d(Coords2d start, Coords2d end) {
-		this.start = start;
-		this.end = end;
-	}
-	
-	/**
-	 * Returns with the start point of the segment.
-	 * @return the start point of the segment
-	 */
-	public Coords2d getStart() {
-		return start;
-	}
-	
-	/**
-	 * Returns with the end point of the segment.
-	 * @return the end point of the segment
-	 */
-	public Coords2d getEnd() {
-		return end;
-	}
-	
-	/**
-	 * Creates the next segment of the line segment series.
-	 * @param c the next point of the point series
-	 * @return the next segment of the line segment series
-	 */
-	public LineSegment2d next(Coords2d c) {
-		return new LineSegment2d(end, c);
-	}
-	
-	/**
-	 * Checks if the given coordinate is equals with either end point of this segment.
-	 * @param c the point to be checked
-	 * @return true if and only if either of the two end points of this segment is equals with 
-	 *     the given point 
-	 */
-	public boolean contains(Coords2d c) {
-		return c==null ? false : c.equals(start) || c.equals(end);
-	}
-	
-	/**
-	 * Checks if this segment and the given segment has a common end point.
-	 * @param ls the other segment to be checked
-	 * @return true if and only if this segment and the given segment has a common end point
-	 */
-	public boolean hasCommon(LineSegment2d ls) {
-		return contains(ls.start) || contains(ls.end);
+		super(start, end);
 	}
 	
 	/**
@@ -152,37 +110,5 @@ public class LineSegment2d {
 		}
 		
 		return lcSide==null || thisSide==null || lcSide.equals(thisSide)  ? null : new LineSegment2d(lcSide, thisSide);
-	}
-
-	@Override
-	public String toString() {
-		return start + " - " + end;
-	}
-
-	@Override
-	public int hashCode() {
-		return 31 + ((end == null) ? 0 : end.hashCode()) +
-					((start == null) ? 0 : start.hashCode());
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		LineSegment2d other = (LineSegment2d) obj;
-		
-		return extendedEquals(start, other.start) && extendedEquals(end, other.end) ||
-				extendedEquals(end, other.start) && extendedEquals(start, other.end);
-	}
-	
-	private static boolean extendedEquals(Object o1, Object o2) {
-		return o1==null ? o2==null : o1.equals(o2);
 	}
 }

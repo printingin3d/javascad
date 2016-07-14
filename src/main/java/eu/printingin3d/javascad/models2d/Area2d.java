@@ -148,7 +148,7 @@ public class Area2d extends AbstractCollection<Coords2d> {
 		});
 		
 		int i=0;
-		for (LineSegment2d current : LineSegment2d.lineSegmentSeries(coords)) {
+		for (LineSegment2d current : LineSegment2d.lineSegmentSeries2d(coords)) {
 			if (current.hasCommon(segment)) {
 				closest.add(new Pair<Coords2d, Area2dIterator>(current.getEnd(), new Area2dIterator(i, coords)));
 			} else {
@@ -282,7 +282,7 @@ public class Area2d extends AbstractCollection<Coords2d> {
 	 */
 	public List<Coords2d> findCrossing(LineSegment2d segment, boolean includeEndPoints) {
 		List<Coords2d> result = new ArrayList<>();
-		for (LineSegment2d current : LineSegment2d.lineSegmentSeries(coords)) {
+		for (LineSegment2d current : LineSegment2d.lineSegmentSeries2d(coords)) {
 			if (current.hasCommon(segment)) {
 				if (includeEndPoints) {
 					result.add(current.getEnd());
@@ -309,7 +309,7 @@ public class Area2d extends AbstractCollection<Coords2d> {
 	 * @return true if and only if the two list of coordinates are distinct
 	 */
 	public boolean isDistinct(Area2d other) {
-		for (LineSegment2d current : LineSegment2d.lineSegmentSeries(other.coords)) {
+		for (LineSegment2d current : LineSegment2d.lineSegmentSeries2d(other.coords)) {
     		if (!findCrossing(current, true).isEmpty()) {
 				return false;
 			}

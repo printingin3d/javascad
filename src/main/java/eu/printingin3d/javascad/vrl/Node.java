@@ -31,6 +31,7 @@
 package eu.printingin3d.javascad.vrl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import eu.printingin3d.javascad.utils.AssertValue;
@@ -65,7 +66,7 @@ public final class Node {
     	AssertValue.isNotEmpty(polygons, 
     			"Polygons should be provided! If it is empty use the other constructor with the basePlane.");
     	
-    	this.polygons = polygons;
+    	this.polygons = Collections.unmodifiableList(polygons);
     	this.basePlane = null;
 		this.front = front;
 		this.back = back;
@@ -74,7 +75,7 @@ public final class Node {
     private Node(Polygon basePlane, Node front, Node back) {
     	AssertValue.isNotNull(basePlane, "Baseplane should be provided if polygons is missing!");
     	
-    	this.polygons = new ArrayList<>();
+    	this.polygons = Collections.emptyList();
     	this.basePlane = basePlane;
     	this.front = front;
     	this.back = back;
@@ -87,7 +88,9 @@ public final class Node {
      * @return a new Node based on the list of polygons given
      */
     public static Node fromPoligons(List<Polygon> polygons) {
-    	AssertValue.isNotEmpty(polygons, "Cannot create a Node from an empty list!");
+    	if (polygons==null || polygons.isEmpty()) {
+			return null;
+		}
     	
     	Polygon newPlane = polygons.get(0);
 
@@ -100,8 +103,8 @@ public final class Node {
                     polygon, newPolygons, newPolygons, frontP, backP);
         }
         
-        Node newFront = frontP.isEmpty() ? null : fromPoligons(frontP); 
-        Node newBack = backP.isEmpty() ? null : fromPoligons(backP);
+        Node newFront = fromPoligons(frontP);
+        Node newBack = fromPoligons(backP);
         return new Node(newPolygons, newFront, newBack);
     }
 
@@ -134,9 +137,8 @@ public final class Node {
      * @return the cliped list of polygons
      */
 	public List<Polygon> clipPolygons(List<Polygon> polys) {
-
         if (polys.isEmpty()) {
-            return new ArrayList<>(polys);
+            return new ArrayList<>();
         }
         Polygon plane = getPlane();
 
@@ -150,12 +152,9 @@ public final class Node {
             frontP = this.front.clipPolygons(frontP);
         }
         if (this.back != null) {
-            backP = this.back.clipPolygons(backP);
-        } else {
-            backP = new ArrayList<>(0);
+        	frontP.addAll(this.back.clipPolygons(backP));
         }
 
-        frontP.addAll(backP);
         return frontP;
     }
 
@@ -195,15 +194,7 @@ public final class Node {
     }
 
 	private static Node combinePoligons(Node node, List<Polygon> polygons) {
-        Node result = node;
-        if (!polygons.isEmpty()) {
-            if (result == null) {
-            	result = fromPoligons(polygons);
-            } else {
-            	result = result.build(polygons);
-			}
-        }
-        return result;
+		return (node==null) ? fromPoligons(polygons) : node.build(polygons);
 	}
 	
 	/**
@@ -218,13 +209,14 @@ public final class Node {
     	
     	Polygon newPlane = (this.polygons.isEmpty() ? polygons : this.polygons).get(0);
 
+    	List<Polygon> newPolygons = new ArrayList<>(this.polygons);
         List<Polygon> frontP = new ArrayList<>();
         List<Polygon> backP = new ArrayList<>();
 
         for (Polygon polygon : polygons) {
-        	newPlane.splitPolygon(polygon, this.polygons, this.polygons, frontP, backP);
+        	newPlane.splitPolygon(polygon, newPolygons, newPolygons, frontP, backP);
         }
-        return new Node(this.polygons, combinePoligons(front, frontP), combinePoligons(back, backP));
+        return new Node(newPolygons, combinePoligons(front, frontP), combinePoligons(back, backP));
     }
 	
 	private Polygon getPlane() {
@@ -236,5 +228,4 @@ public final class Node {
     		new Node(newPolygons, newFront, newBack);
 
 	}
-	
 }
