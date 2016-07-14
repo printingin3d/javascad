@@ -1,12 +1,11 @@
 package eu.printingin3d.javascad.models;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
@@ -63,11 +62,7 @@ public abstract class Abstract3dModel implements IModel {
 			if (delta.size()==1) {
 				return move(delta.iterator().next());
 			}
-			List<Abstract3dModel> newModels = new ArrayList<>();
-			for (Coords3d c : delta) {
-				newModels.add(this.move(c));
-			}
-			return new Union(newModels);
+			return new Union(delta.stream().map(c -> this.move(c)).collect(Collectors.toList()));
 		}
 		return this;
 	}
@@ -102,11 +97,7 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	public Abstract3dModel rotates(Collection<Angles3d> delta) {
 		if (!delta.isEmpty()) {
-			List<Abstract3dModel> newModels = new ArrayList<>();
-			for (Angles3d c : delta) {
-				newModels.add(this.rotate(c));
-			}
-			return new Union(newModels);
+			return new Union(delta.stream().map(c -> this.rotate(c)).collect(Collectors.toList()));
 		}
 		return this;
 	}

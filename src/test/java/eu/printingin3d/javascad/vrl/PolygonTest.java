@@ -2,6 +2,7 @@ package eu.printingin3d.javascad.vrl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -96,16 +97,11 @@ public class PolygonTest {
 				new Coords3d(0, 100, 10), 
 				new Coords3d(100, 100, 10)), Color.BLACK);
 
-		List<Polygon> coplanarFront = Collections.emptyList();
-		List<Polygon> coplanarBack = Collections.emptyList();
-		List<Polygon> front = new ArrayList<>();
-		List<Polygon> back = Collections.emptyList();
-		p.splitPolygon(p1, coplanarFront, coplanarBack, front, back);
+		FrontBack<Polygon> fb = new FrontBack<>();
+		p.splitPolygon(p1, fb);
 		
-		// the list returned by Collections.emptyList() throws exception when
-		// an add operation has been call, so there's no need for asserting that
-		
-		assertEquals(Collections.singletonList(p1), front);
+		assertTrue(fb.getBack().isEmpty());
+		assertEquals(Collections.singletonList(p1), fb.getFront());
 	}
 	
 	@Test
@@ -116,16 +112,11 @@ public class PolygonTest {
 				new Coords3d(0, 100, -5), 
 				new Coords3d(100, 100, -1)), Color.BLACK);
 		
-		List<Polygon> coplanarFront = Collections.emptyList();
-		List<Polygon> coplanarBack = Collections.emptyList();
-		List<Polygon> front = Collections.emptyList();
-		List<Polygon> back = new ArrayList<>();
-		p.splitPolygon(p1, coplanarFront, coplanarBack, front, back);
+		FrontBack<Polygon> fb = new FrontBack<>();
+		p.splitPolygon(p1, fb);
 		
-		// the list returned by Collections.emptyList() throws exception when
-		// an add operation has been call, so there's no need for asserting that
-		
-		assertEquals(Collections.singletonList(p1), back);
+		assertTrue(fb.getFront().isEmpty());
+		assertEquals(Collections.singletonList(p1), fb.getBack());
 	}
 	
 	@Test
@@ -136,16 +127,13 @@ public class PolygonTest {
 				new Coords3d(100, 100, 0), 
 				new Coords3d(0, 100, 0)), Color.BLACK);
 		
-		List<Polygon> coplanarFront = new ArrayList<>();
-		List<Polygon> coplanarBack = Collections.emptyList();
-		List<Polygon> front = Collections.emptyList();
-		List<Polygon> back = Collections.emptyList();
-		p.splitPolygon(p1, coplanarFront, coplanarBack, front, back);
+		FrontBack<Polygon> fb = new FrontBack<>();
+		List<Polygon> coplanar = new ArrayList<>();
+		p.splitPolygon(p1, coplanar, fb);
 		
-		// the list returned by Collections.emptyList() throws exception when
-		// an add operation has been call, so there's no need for asserting that
-		
-		assertEquals(Collections.singletonList(p1), coplanarFront);
+		assertTrue(fb.getBack().isEmpty());
+		assertTrue(fb.getFront().isEmpty());
+		assertEquals(Collections.singletonList(p1), coplanar);
 	}
 	
 	@Test
@@ -156,16 +144,13 @@ public class PolygonTest {
 				new Coords3d(0, 100, 0), 
 				new Coords3d(100, 100, 0)), Color.BLACK);
 		
-		List<Polygon> coplanarFront = Collections.emptyList();
-		List<Polygon> coplanarBack = new ArrayList<>();
-		List<Polygon> front = Collections.emptyList();
-		List<Polygon> back = Collections.emptyList();
-		p.splitPolygon(p1, coplanarFront, coplanarBack, front, back);
+		FrontBack<Polygon> fb = new FrontBack<>();
+		List<Polygon> coplanar = new ArrayList<>();
+		p.splitPolygon(p1, coplanar, fb);
 		
-		// the list returned by Collections.emptyList() throws exception when
-		// an add operation has been call, so there's no need for asserting that
-
-		assertEquals(Collections.singletonList(p1), coplanarBack);
+		assertTrue(fb.getBack().isEmpty());
+		assertTrue(fb.getFront().isEmpty());
+		assertEquals(Collections.singletonList(p1), coplanar);
 	}
 	
 	@Test
@@ -176,17 +161,12 @@ public class PolygonTest {
 				new Coords3d(0,   0, -10), 
 				new Coords3d(0, 100, -10)), Color.BLACK);
 		
-		List<Polygon> coplanarFront = Collections.emptyList();
-		List<Polygon> coplanarBack = Collections.emptyList();
-		List<Polygon> front = new ArrayList<>();
-		List<Polygon> back = new ArrayList<>();
-		p.splitPolygon(p1, coplanarFront, coplanarBack, front, back);
+		FrontBack<Polygon> fb = new FrontBack<>();
+		List<Polygon> coplanar = Collections.emptyList();
+		p.splitPolygon(p1, coplanar, fb);
 		
-		// the list returned by Collections.emptyList() throws exception when
-		// an add operation has been call, so there's no need for asserting that
-
-		assertFalse(front.isEmpty());
-		assertFalse(back.isEmpty());
+		assertFalse(fb.getFront().isEmpty());
+		assertFalse(fb.getBack().isEmpty());
 	}
 	
 	@Test
@@ -197,16 +177,14 @@ public class PolygonTest {
 				new Coords3d(0,   0,   0), 
 				new Coords3d(0, 100, -10)), Color.BLACK);
 		
-		List<Polygon> coplanarFront = Collections.emptyList();
-		List<Polygon> coplanarBack = Collections.emptyList();
-		List<Polygon> front = new ArrayList<>();
-		List<Polygon> back = new ArrayList<>();
-		p.splitPolygon(p1, coplanarFront, coplanarBack, front, back);
+		FrontBack<Polygon> fb = new FrontBack<>();
+		List<Polygon> coplanar = Collections.emptyList();
+		p.splitPolygon(p1, coplanar, fb);
 		
 		// the list returned by Collections.emptyList() throws exception when
 		// an add operation has been call, so there's no need for asserting that
 		
-		assertFalse(front.isEmpty());
-		assertFalse(back.isEmpty());
+		assertFalse(fb.getFront().isEmpty());
+		assertFalse(fb.getBack().isEmpty());
 	}
 }

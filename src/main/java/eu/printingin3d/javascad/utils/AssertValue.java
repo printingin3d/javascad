@@ -41,12 +41,21 @@ public final class AssertValue {
 	 * Checks if the value is false - if it isn't, throws an IllegalValueException with the given message.
 	 * @param value the value to be checked
 	 * @param message the message used in the exception
-	 * @throws IllegalValueException if the value parameter is null
+	 * @throws IllegalValueException if the value parameter is true
 	 */
 	public static void isFalse(boolean value, String message) throws IllegalValueException {
 		if (value) {
-			throw new IllegalValueException(message);
+			fail(message);
 		}
+	}
+	
+	/**
+	 * Unconditioned failure. 
+	 * @param message the message used in the exception
+	 * @throws IllegalValueException always
+	 */
+	public static void fail(String message) {
+		throw new IllegalValueException(message);
 	}
 	
 	/**

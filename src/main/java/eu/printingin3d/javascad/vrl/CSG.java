@@ -155,8 +155,8 @@ public class CSG {
      * @return union of this csg and the specified csg
      */
     public CSG union(CSG csg) {
-        Node a = Node.fromPoligons(this.polygons);
-        Node b = Node.fromPoligons(csg.polygons);
+        Node a = Node.fromPoligons(this.polygons).get();
+        Node b = Node.fromPoligons(csg.polygons).get();
         a = a.clipTo(b);
         b = b.clipTo(a);
         b = b.invert();
@@ -189,8 +189,8 @@ public class CSG {
      * @return difference of this csg and the specified csg
      */
     public CSG difference(CSG csg) {
-        Node a = Node.fromPoligons(this.polygons);
-        Node b = Node.fromPoligons(csg.polygons);
+        Node a = Node.fromPoligons(this.polygons).get();
+        Node b = Node.fromPoligons(csg.polygons).get();
         a = a.invert();
         a = a.clipTo(b);
         b = b.clipTo(a);
@@ -226,8 +226,8 @@ public class CSG {
      * @return intersection of this csg and the specified csg
      */
     public CSG intersect(CSG csg) {
-        Node a = Node.fromPoligons(this.polygons);
-        Node b = Node.fromPoligons(csg.polygons);
+        Node a = Node.fromPoligons(this.polygons).get();
+        Node b = Node.fromPoligons(csg.polygons).get();
         a = a.invert();
         b = b.clipTo(a);
         b = b.invert();

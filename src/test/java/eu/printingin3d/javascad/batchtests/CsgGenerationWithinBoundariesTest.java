@@ -17,6 +17,7 @@ import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Dims3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
 import eu.printingin3d.javascad.coords2d.Dims2d;
+import eu.printingin3d.javascad.enums.Side;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Cube;
 import eu.printingin3d.javascad.models.Cylinder;
@@ -69,6 +70,8 @@ public class CsgGenerationWithinBoundariesTest {
 					new Cylinder(12, Radius.fromRadius(54)),
 					new Cylinder(3, Radius.fromRadius(500)).move(new Coords3d(10, 20, 50)),
 					new Sphere(Radius.fromRadius(12)),
+					new Cylinder(10, Radius.fromRadius(12), Radius.fromRadius(20))
+							.addModelTo(Side.TOP_OUT, new Cylinder(10, Radius.fromRadius(20), Radius.fromRadius(12))),
 					new Support(new Dims3d(50, 23, 3), 0.1),
 					new Support(new Dims3d(12, 33, 3), 0.1).move(new Coords3d(34, 3, 10)),
 					new Polyhedron(triangles),

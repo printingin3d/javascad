@@ -37,6 +37,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
@@ -75,11 +77,11 @@ public final class Polygon {
 		this.dist = dist;
 		this.color = color;
 		
-		for (Coords3d v : vertices) {
-			VertexPosition position = calculateVertexPosition(v);
-			AssertValue.isTrue(position==VertexPosition.COPLANAR, 
-					"Every vertex in a polygon must be coplanar, but was "+position+"!");
-		}
+		vertices.stream()
+			.map(v -> calculateVertexPosition(v))
+			.filter(p -> p!=VertexPosition.COPLANAR)
+			.findFirst()
+			.ifPresent(p->AssertValue.fail("Every vertex in a polygon must be coplanar, but was "+p+"!"));
 	}
 
 	/**
@@ -121,18 +123,18 @@ public final class Polygon {
      * @return a list of triangles
      */
     public List<Facet> toFacets() {
-    	List<Facet> facets = new ArrayList<>();
         if (this.vertices.size() >= 3) {
         	Coords3d firstVertex = vertices.get(0);
-	        for (int i = 0; i < this.vertices.size() - 2; i++) {
-	        	Triangle3d triangle = new Triangle3d(
+        	
+        	return IntStream.range(0, this.vertices.size()-2)
+        		.mapToObj(i -> new Triangle3d(
 	        			firstVertex, 
 	        			vertices.get(i + 1), 
-	        			vertices.get(i + 2));
-				facets.add(new Facet(triangle, normal, color));
-	        }
+	        			vertices.get(i + 2)))
+        		.map(tri -> new Facet(tri, normal, color))
+        		.collect(Collectors.toList());
         }
-        return facets;
+        return Collections.emptyList();
     }
     protected List<Coords3d> getVertices() {
     	return vertices;
@@ -150,13 +152,10 @@ public final class Polygon {
      * @return a transformed copy of this polygon
      */
     public Polygon transformed(ITransformation transform) {
-    	List<Coords3d> newVertices = new ArrayList<>();
-    	
-    	for (Coords3d v : vertices) {
-    		newVertices.add(transform.transform(v));
-    	}
-    	
-    	Polygon result = fromPolygons(newVertices, color);
+    	Polygon result = fromPolygons(
+    		vertices.stream()
+    			.map(v -> transform.transform(v))
+    			.collect(Collectors.toList()), color);
 
     	return transform.isMirror() ? result.flip() : result;
     }
@@ -175,17 +174,10 @@ public final class Polygon {
      * plane go into either {@code front} or {@code back}.
      *
      * @param polygon polygon to split
-     * @param coplanarFront "coplanar front" polygons
-     * @param coplanarBack "coplanar back" polygons
-     * @param front front polygons
-     * @param back back polgons
+     * @param coplanar coplanar polygons
+     * @param fb front and back polygons
      */
-    public void splitPolygon(
-            Polygon polygon,
-            List<Polygon> coplanarFront,
-            List<Polygon> coplanarBack,
-            List<Polygon> front,
-            List<Polygon> back) {
+    public void splitPolygon(Polygon polygon, List<Polygon> coplanar, FrontBack<Polygon> fb) {
 
         // Classify each point as well as the entire polygon into one of the four possible classes.
         VertexPosition polygonType = calculatePolygonPosition(polygon);
@@ -193,69 +185,97 @@ public final class Polygon {
         // Put the polygon in the correct list, splitting it when necessary.
         switch (polygonType) {
             case COPLANAR:
-                (this.normal.dot(polygon.normal) > 0 ? coplanarFront : coplanarBack).add(polygon);
+                coplanar.add(polygon);
                 break;
             case FRONT:
-                front.add(polygon);
+            	fb.addToFront(polygon);
                 break;
             case BACK:
-                back.add(polygon);
+            	fb.addToBack(polygon);
                 break;
             case SPANNING:
-            	splitPolygon(polygon, front, back);
+            	splitPolygonLowLevel(polygon, fb);
                 break;
 		default:
 			break;
         }
     }
     
+    /**
+     * Splits a {@link Polygon} by this plane if needed. After that it puts the
+     * polygons or the polygon fragments in the appropriate lists
+     * ({@code front}, {@code back}). Coplanar polygons go into either
+     * {@code coplanarFront}, {@code coplanarBack} depending on their
+     * orientation with respect to this plane. Polygons in front or back of this
+     * plane go into either {@code front} or {@code back}.
+     *
+     * @param polygon polygon to split
+     * @param fb front and back polygons
+     */
+    public void splitPolygon(Polygon polygon, FrontBack<Polygon> fb) {
+    	
+    	// Classify each point as well as the entire polygon into one of the four possible classes.
+    	VertexPosition polygonType = calculatePolygonPosition(polygon);
+    	
+    	// Put the polygon in the correct list, splitting it when necessary.
+    	switch (polygonType) {
+    	case COPLANAR:
+    		if (this.normal.dot(polygon.normal) > 0) {
+				fb.addToFront(polygon);
+			} else {
+				fb.addToBack(polygon);
+			}
+    		break;
+    	case FRONT:
+    		fb.addToFront(polygon);
+    		break;
+    	case BACK:
+    		fb.addToBack(polygon);
+    		break;
+    	case SPANNING:
+    		splitPolygonLowLevel(polygon, fb);
+    		break;
+    	default:
+    		break;
+    	}
+    }
+    
     // Classify the entire polygon into one of the four possible classes.
     private VertexPosition calculatePolygonPosition(Polygon polygon) {
-        VertexPosition polygonType = VertexPosition.COPLANAR;
-        for (Coords3d v : polygon.vertices) {
-            polygonType = polygonType.add(calculateVertexPosition(v));
-        }
-    	
-        return polygonType;
-    }    
+    	return polygon.vertices.stream().
+    			map(v -> calculateVertexPosition(v)).
+    			reduce(VertexPosition.COPLANAR, VertexPosition::add);
+    }
 
-	private void splitPolygon(Polygon polygon, List<Polygon> front, List<Polygon> back) {
-		List<Coords3d> f = new ArrayList<>();
-		List<Coords3d> b = new ArrayList<>();
-		for (LineSegment<Coords3d> ls : LineSegment.lineSegmentSeries(polygon.vertices)) {
-			classifyAndSplitVertex(ls.getStart(), ls.getEnd(), f, b);
-		}
-		front.add(fromPolygons(f, polygon.color));
-		back.add(fromPolygons(b, polygon.color));
+	private void splitPolygonLowLevel(Polygon polygon, FrontBack<Polygon> polyFb) {
+		FrontBack<Coords3d> fb = new FrontBack<>();
+		LineSegment.lineSegmentSeries(polygon.vertices).forEach(ls -> classifyAndSplitVertex(ls, fb));
+		fb.addTo(list -> fromPolygons(list, polygon.color), polyFb);
 	}
 
-	private void classifyAndSplitVertex(Coords3d currentVertex, Coords3d nextVertex,
-			List<Coords3d> f, List<Coords3d> b) {
-		VertexPosition position = calculateVertexPosition(currentVertex);
+	private void classifyAndSplitVertex(LineSegment<Coords3d> ls, FrontBack<Coords3d> fb) {
+		VertexPosition position = calculateVertexPosition(ls.getStart());
 		
 		switch (position) {
 		case FRONT:
-			addVertexToList(f, currentVertex);
+			fb.addToFront(ls.getStart());
 			break;
 		case BACK:
-			addVertexToList(b, currentVertex);
+			fb.addToBack(ls.getStart());
 			break;
 		default:
-			addVertexToList(f, currentVertex);
-			addVertexToList(b, currentVertex);
+			fb.addToBoth(ls.getStart());
 			break;
 		}
-		if (position.add(calculateVertexPosition(nextVertex)) == VertexPosition.SPANNING) {
-		    double t = (this.dist - this.normal.dot(currentVertex)) / 
-		    				this.normal.dot(nextVertex.add(currentVertex.inverse()));
-		    Coords3d v = currentVertex.lerp(nextVertex, t);
-			addVertexToList(f, v);
-			addVertexToList(b, v);
+		if (position.add(calculateVertexPosition(ls.getEnd())) == VertexPosition.SPANNING) {
+		    double t = (this.dist - this.normal.dot(ls.getStart())) / 
+		    				this.normal.dot(ls.getEnd().add(ls.getStart().inverse()));
+		    fb.addToBoth(ls.getStart().lerp(ls.getEnd(), t));
 		}
 	}
     
-    private void addVertexToList(List<Coords3d> list, Coords3d newVertex) {
-/*    	if (!list.isEmpty()) {
+ /*   private void addVertexToList(List<Coords3d> list, Coords3d newVertex) {
+    	if (!list.isEmpty()) {
     		Coords3d lastVertex = list.get(list.size()-1);
     		
     		Coords3d prev = vertices.get(vertices.size()-1);
@@ -268,7 +288,7 @@ public final class Polygon {
     				break;
     			}
     		}
-    	}*/
+    	}
     	list.add(newVertex);
-    }
+    }*/
 }
