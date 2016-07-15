@@ -33,10 +33,10 @@
  */
 package eu.printingin3d.javascad.vrl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.tranform.ITransformation;
@@ -121,13 +121,9 @@ public class CSG {
      * @return the points this CSG holds
      */
     public List<Coords3d> getPoints() {
-    	List<Coords3d> result = new ArrayList<>();
-    	
-    	for (Polygon p : getPolygons()) {
-			result.addAll(p.getVertices());
-    	}
-    	
-    	return result;
+    	return getPolygons().stream()
+    			.flatMap(p -> p.getVertices().stream())
+    			.collect(Collectors.toList());
     }
 
     /**
@@ -243,11 +239,7 @@ public class CSG {
      * @return all the facet this CSG object holds
      */
     public List<Facet> toFacets() {
-    	List<Facet> facets = new ArrayList<>();
-    	for (Polygon p : polygons) {
-    		facets.addAll(p.toFacets());
-    	}
-    	return facets;
+    	return polygons.stream().flatMap(p -> p.toFacets().stream()).collect(Collectors.toList());
     }
     
     /**
@@ -258,11 +250,6 @@ public class CSG {
      * @return a transformed copy of this CSG
      */
     public CSG transformed(ITransformation transform) {
-    	List<Polygon> newpolygons = new ArrayList<>();
-    	for (Polygon p : this.polygons) {
-    		newpolygons.add(p.transformed(transform));
-    	}
-
-        return new CSG(newpolygons);
+    	return new CSG(polygons.stream().map(p -> p.transformed(transform)).collect(Collectors.toList()));
     }
 }

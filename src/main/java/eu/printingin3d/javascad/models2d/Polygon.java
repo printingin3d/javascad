@@ -42,33 +42,22 @@ public class Polygon extends Abstract2dModel {
 
 	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
-		SCAD result = new SCAD("polygon([");
-		
-		boolean first = true;
-		for (Coords2d c : coords) {
-			if (first) {
-				first = false;
-			} else {
-				result = result.append(",");
-			}
-			result = result.append(c.toString());
-		}
-		return result.append("]);");
+		return new SCAD("polygon([")
+				.append(coords.stream()
+					.map(Coords2d::toString)
+					.reduce((u, v) -> u + "," + v).get())
+				.append("]);");
 	}
 
 	@Override
 	protected Boundaries2d getModelBoundaries() {
-		double[] x = new double[coords.size()];
-		double[] y = new double[coords.size()];
-
-		int i = 0;
-		for (Coords2d c : coords) {
-			x[i] = c.getX();
-			y[i] = c.getY();
-			i++;
-		}
-		
-		return new Boundaries2d(new Boundary(x), new Boundary(y));
+		return new Boundaries2d(
+			coords.stream()
+				.map(c -> new Boundary(c.getX()))
+				.reduce(Boundary::combine).get(),
+			coords.stream()
+				.map(c -> new Boundary(c.getY()))
+				.reduce(Boundary::combine).get());
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.tranzitions2d;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
@@ -40,13 +41,10 @@ public class Union extends Abstract2dModel {
 	
 	@Override
 	protected SCAD innerToScad(IColorGenerationContext context) {
-		List<SCAD> scads = new ArrayList<>();
-		for (Abstract2dModel model : models) {
-			SCAD scad = model.toScad(context);
-			if (!scad.isEmpty()) {
-				scads.add(scad);
-			}
-		}
+		List<SCAD> scads = models.stream()
+				.map(m -> m.toScad(context))
+				.filter(scad -> !scad.isEmpty())
+				.collect(Collectors.toList());
 		
 		switch (scads.size()) {
 		case 0:
@@ -54,21 +52,16 @@ public class Union extends Abstract2dModel {
 		case 1:
 			return scads.get(0);
 		default:
-			SCAD result = new SCAD("union() {\n");
-			for (SCAD scad : scads) {
-				result = result.append(scad);
-			}
-			return result.append("}\n");
-		}
+			return new SCAD("union() {\n")
+					.append(scads.stream().reduce(SCAD::append).get())
+					.append("}\n");		}
 	}
 
 	@Override
 	protected Boundaries2d getModelBoundaries() {
-		List<Boundaries2d> boundaries = new ArrayList<>();
-		for (Abstract2dModel model : models) {
-			boundaries.add(model.getBoundaries2d());
-		}
-		return Boundaries2d.combine(boundaries);
+		return Boundaries2d.combine(models.stream()
+				.map(m -> m.getBoundaries2d())
+				.collect(Collectors.toList()));
 	}
 
 	@Override

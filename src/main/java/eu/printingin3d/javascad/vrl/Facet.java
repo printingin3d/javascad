@@ -1,8 +1,8 @@
 package eu.printingin3d.javascad.vrl;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
@@ -36,11 +36,9 @@ public class Facet {
 	 * @return all the vertices this facet holds
 	 */
 	public List<Vertex> getVertexes() {
-		List<Vertex> vertexes = new ArrayList<>(3);
-		for (Coords3d c : triangle.getPoints()) {
-			vertexes.add(new Vertex(c, color));
-		}
-		return vertexes;
+		return triangle.getPoints().stream()
+				.map(c -> new Vertex(c, color))
+				.collect(Collectors.toList());
 	}
 	
 	/**

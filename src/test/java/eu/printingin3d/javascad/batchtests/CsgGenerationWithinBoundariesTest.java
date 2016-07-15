@@ -27,6 +27,7 @@ import eu.printingin3d.javascad.models.Sphere;
 import eu.printingin3d.javascad.models.Support;
 import eu.printingin3d.javascad.models2d.Circle;
 import eu.printingin3d.javascad.models2d.Square;
+import eu.printingin3d.javascad.tranzitions.Intersection;
 import eu.printingin3d.javascad.tranzitions2d.Union;
 import eu.printingin3d.javascad.vrl.Facet;
 import eu.printingin3d.javascad.vrl.VertexPosition;
@@ -72,6 +73,10 @@ public class CsgGenerationWithinBoundariesTest {
 					new Sphere(Radius.fromRadius(12)),
 					new Cylinder(10, Radius.fromRadius(12), Radius.fromRadius(20))
 							.addModelTo(Side.TOP_OUT, new Cylinder(10, Radius.fromRadius(20), Radius.fromRadius(12))),
+					new Intersection(
+							new Sphere(Radius.fromRadius(1)).move(Coords3d.xOnly(-0.2)),
+							new Sphere(Radius.fromRadius(1)).move(Coords3d.xOnly(+0.2))
+						),
 					new Support(new Dims3d(50, 23, 3), 0.1),
 					new Support(new Dims3d(12, 33, 3), 0.1).move(new Coords3d(34, 3, 10)),
 					new Polyhedron(triangles),

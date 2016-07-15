@@ -3,6 +3,8 @@ package eu.printingin3d.javascad.tranzitions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
@@ -29,7 +31,7 @@ public class Intersection extends Complex3dModel {
 	 * @param models the models used to create the intersection
 	 */
 	public Intersection(List<Abstract3dModel> models) {
-		this.models = models;
+		this.models = ListUtils.removeNulls(models);
 	}
 
 	/**
@@ -53,45 +55,38 @@ public class Intersection extends Complex3dModel {
 		case 1:
 			return models.get(0).toScad(context);
 		default:
-			SCAD result = new SCAD("intersection()");
-			
-			result = result.append("{\n");
-			for (Abstract3dModel model : models) {
-				result = result.append(model.toScad(context));
-			}
-			return result.append("}\n");
+			return new SCAD("intersection()")
+				.append("{\n")
+				.append(			
+					models.stream()
+						.map(m -> m.toScad(context))
+						.reduce(SCAD::append)
+						.get()
+					)
+				.append("}\n");
 		}
 	}
 
 	@Override
 	protected Boundaries3d getModelBoundaries() {
-		List<Boundaries3d> boundaries = new ArrayList<>();
-		for (Abstract3dModel model : models) {
-			boundaries.add(model.getBoundaries());
-		}
+		List<Boundaries3d> boundaries = models.stream()
+				.map(Abstract3dModel::getBoundaries)
+				.collect(Collectors.toList());
 		return boundaries.isEmpty() ? Boundaries3d.EMPTY : Boundaries3d.intersect(boundaries);
 	}
 
 	@Override
 	protected CSG toInnerCSG(FacetGenerationContext context) {
-		CSG csg = null;
-		for (Abstract3dModel model : models) {
-			if (csg==null) {
-				csg = model.toCSG(context);
-			}
-			else {
-				csg = csg.intersect(model.toCSG(context));
-			}
-		}
-		return csg;
+		return models.stream()
+			.map(m -> m.toCSG(context))
+			.reduce(CSG::intersect)
+			.orElse(null);
 	}
 
 	@Override
 	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
-		List<Abstract3dModel> subModels = new ArrayList<>();
-		for (Abstract3dModel model : models) {
-			subModels.add(model.subModel(context));
-		}
-		return new Intersection(ListUtils.removeNulls(subModels));
+		return new Intersection(
+				models.stream().map(m -> m.subModel(context)).filter(Objects::nonNull).collect(Collectors.toList())
+			);
 	}
 }

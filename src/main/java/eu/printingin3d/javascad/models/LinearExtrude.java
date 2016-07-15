@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.basic.Radius;
@@ -137,19 +138,22 @@ public class LinearExtrude extends Atomic3dModel {
 		Color color = context.getColor();
 		List<Polygon> polygons = new ArrayList<>();
 		
+		int numOfSteps = twist.isZero() ? 1 : context.calculateNumberOfSlices(Radius.fromRadius(height));
+		double step = height/numOfSteps;
+		double bottom = -height/2;
+		
 		for (Area2d points : model.getPointCircle(context)) {
-			int numOfSteps = twist.isZero() ? 1 : context.calculateNumberOfSlices(Radius.fromRadius(height));
-	
-			double y1=-height/2;
 			Angle alpha1 = Angle.ZERO;
-			List<Coords3d> c1 = points.rotate(alpha1).withZ(y1);
+			List<Coords3d> c1 = points.rotate(alpha1).withZ(bottom);
 	
-			for (Area2d lc : generateCover(points.rotate(alpha1).reverse())) {
-				polygons.add(Polygon.fromPolygons(lc.withZ(y1), color));
-			}
+			polygons.addAll(
+					generateCover(points.rotate(alpha1).reverse()).stream()
+					.map(lc -> Polygon.fromPolygons(lc.withZ(bottom), color))
+					.collect(Collectors.toList()));
 			
 			for (int i=1;i<=numOfSteps;i++) {
-				double y2 = i*height/numOfSteps-height/2;
+				double y1 = (i-1)*step + bottom;
+				double y2 = y1 + step;
 				Angle alpha2 = twist.mul(i).divide(numOfSteps);
 				
 				List<Coords3d> c2 = points.rotate(alpha2).withZ(y2);
@@ -170,12 +174,12 @@ public class LinearExtrude extends Atomic3dModel {
 				}
 				
 				c1 = c2;
-				y1 = y2;
 				alpha1 = alpha2;
 			}
-			for (Area2d lc : generateCover(points.rotate(alpha1))) {
-				polygons.add(Polygon.fromPolygons(lc.withZ(y1), color));
-			}
+			polygons.addAll(
+					generateCover(points.rotate(alpha1)).stream()
+					.map(lc -> Polygon.fromPolygons(lc.withZ(+height/2), color))
+					.collect(Collectors.toList()));
 		}
 		
 		return new CSG(polygons);

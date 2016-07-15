@@ -1,12 +1,13 @@
 package eu.printingin3d.javascad.models2d;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.basic.Radius;
@@ -79,10 +80,10 @@ public class RoundedSquare extends Square {
 				new Coords2d(-straightX/2.0, +straightY/2.0),
 				new Coords2d(-straightX/2.0, -straightY/2.0)
 			));
-		for (Coords2d c : coordsSet) {
-			result = result.append(new Circle(radius).move(c).toScad(context));
-			numberOfItems++;
-		}
+		numberOfItems+= coordsSet.size();
+		result = result.append(coordsSet.stream()
+				.map(c -> new Circle(radius).move(c).toScad(context))
+				.reduce(SCAD::append).get());
 
 		if (numberOfItems>1) {
 			return result.prepend("union() {").append("}");
@@ -97,16 +98,17 @@ public class RoundedSquare extends Square {
 
 	@Override
 	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
-        List<Coords2d> points = new ArrayList<>();
-
         int numSlices = context.calculateNumberOfSlices(radius)*4;
         Angle oneSlice = Angle.A360.divide(numSlices);
-        for (int i = numSlices; i > 0; i--) {
-        	Coords2d base = radius.toCoordinate(oneSlice.mul(i));
-            double x = base.getX() + Math.signum(base.getX())*(size.getX()/2-radius.getRadius());
-			double y = base.getY() + Math.signum(base.getY())*(size.getY()/2-radius.getRadius());
-			points.add(new Coords2d(x, y));
-        }
+        List<Coords2d> points = IntStream.iterate(numSlices, x -> x-1)
+        	.limit(numSlices)
+        	.mapToObj(i -> radius.toCoordinate(oneSlice.mul(i)))
+        	.map(base -> {
+                double x = base.getX() + Math.signum(base.getX())*(size.getX()/2-radius.getRadius());
+    			double y = base.getY() + Math.signum(base.getY())*(size.getY()/2-radius.getRadius());
+    			return new Coords2d(x, y);
+        	})
+        	.collect(Collectors.toList());
         return Collections.singleton(new Area2d(points));
 	}
 

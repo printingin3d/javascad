@@ -1,7 +1,8 @@
 package eu.printingin3d.javascad.models;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
@@ -77,31 +78,24 @@ public class Cube extends Atomic3dModel {
 		return new Cube(size);
 	}
 
+	private static final double P = +0.5;
+	private static final double M = -0.5;
+	
+	private static final List<List<Coords3d>> POSITIONS = Arrays.asList(
+			Arrays.asList(new Coords3d(M, M, M), new Coords3d(M, M, P), new Coords3d(M, P, P), new Coords3d(M, P, M)),
+			Arrays.asList(new Coords3d(P, M, M), new Coords3d(P, P, M), new Coords3d(P, P, P), new Coords3d(P, M, P)),
+			Arrays.asList(new Coords3d(M, M, M), new Coords3d(P, M, M), new Coords3d(P, M, P), new Coords3d(M, M, P)),
+			Arrays.asList(new Coords3d(M, P, M), new Coords3d(M, P, P), new Coords3d(P, P, P), new Coords3d(P, P, M)),
+			Arrays.asList(new Coords3d(M, M, M), new Coords3d(M, P, M), new Coords3d(P, P, M), new Coords3d(P, M, M)),
+			Arrays.asList(new Coords3d(M, M, P), new Coords3d(P, M, P), new Coords3d(P, P, P), new Coords3d(M, P, P))
+		);
+
 	@Override
 	protected CSG toInnerCSG(FacetGenerationContext context) {
-        int[][] a = {
-            // position
-            {0, 4, 6, 2},
-            {1, 3, 7, 5},
-            {0, 1, 5, 4},
-            {2, 6, 7, 3},
-            {0, 2, 3, 1},
-            {4, 5, 7, 6}
-        };
-        List<Polygon> polygons = new ArrayList<>();
-        for (int[] info : a) {
-            List<Coords3d> vertices = new ArrayList<>();
-            for (int i : info) {
-            	Coords3d pos = new Coords3d(
-                        size.getX() * (1 * Math.min(1, i & 1) - 0.5),
-                        size.getY() * (1 * Math.min(1, i & 2) - 0.5),
-                        size.getZ() * (1 * Math.min(1, i & 4) - 0.5)
-                );
-                vertices.add(pos);
-            }
-            polygons.add(Polygon.fromPolygons(vertices, context.getColor()));
-        }
-        
-		return new CSG(polygons);
+		return new CSG(POSITIONS.stream()
+				.map(info -> info.stream().map(c -> c.mul(size)).collect(Collectors.toList()))
+				.map(v -> Polygon.fromPolygons(v, context.getColor()))
+				.collect(Collectors.toList())
+			);
 	}
 }

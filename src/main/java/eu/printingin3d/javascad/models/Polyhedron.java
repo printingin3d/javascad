@@ -1,9 +1,8 @@
 package eu.printingin3d.javascad.models;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
@@ -45,32 +44,23 @@ public class Polyhedron extends Atomic3dModel {
 
 	@Override
 	protected Boundaries3d getModelBoundaries() {
-		double minX = Double.MAX_VALUE;
-		double minY = Double.MAX_VALUE;
-		double minZ = Double.MAX_VALUE;
-		double maxX = Double.MIN_VALUE;
-		double maxY = Double.MIN_VALUE;
-		double maxZ = Double.MIN_VALUE;
-
-		for (final Coords3d p : getPoints()) {
-			minX = Math.min(p.getX(), minX);
-			minY = Math.min(p.getY(), minY);
-			minZ = Math.min(p.getZ(), minZ);
-			maxX = Math.max(p.getX(), maxX);
-			maxY = Math.max(p.getY(), maxY);
-			maxZ = Math.max(p.getZ(), maxZ);
-		}
-		Coords3d minCorner = new Coords3d(minX, minY, minZ);
-		Coords3d maxCorner = new Coords3d(maxX, maxY, maxZ);
+		List<Coords3d> points = getPoints();
+		Coords3d minCorner = points.stream()
+			.reduce((a, b) -> new Coords3d(
+					Double.min(a.getX(), b.getX()), 
+					Double.min(a.getY(), b.getY()), 
+					Double.min(a.getZ(), b.getZ()))).get();
+		Coords3d maxCorner = points.stream()
+				.reduce((a, b) -> new Coords3d(
+						Double.max(a.getX(), b.getX()), 
+						Double.max(a.getY(), b.getY()), 
+						Double.max(a.getZ(), b.getZ()))).get();
 		return new Boundaries3d(minCorner, maxCorner);
 	}
 
 	private List<Coords3d> getPoints() {
-		Set<Coords3d> result = new HashSet<>();
-		for (Triangle3d triangle : triangles) {
-			result.addAll(triangle.getPoints());
-		}
-		return new ArrayList<>(result);
+		return new ArrayList<>(triangles.stream().flatMap(t -> t.getPoints().stream())
+			.collect(Collectors.toSet()));
 	}
 
 	@Override
@@ -91,41 +81,25 @@ public class Polyhedron extends Atomic3dModel {
 	}
 
 	private SCAD addPoints(SCAD b, List<Coords3d> points) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("\n  points=[");
-		boolean first = true;
-		for (Coords3d c : points) {
-			if (first) {
-				first = false;
-			} else {
-				sb.append(", ");
-			}
-			sb.append(c.toString());
-		}
-		return b.append(sb.append(']').toString());
+		return b.append("\n  points=[")
+				.append(points.stream()
+						.map(Coords3d::toString)
+						.reduce((u, v) -> u + ", " + v).get())
+				.append("]");
 	}
 
 	private SCAD addTriangles(SCAD b, List<Coords3d> points) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("\n  faces=[");
-		boolean first = true;
-		for (Triangle3d c : triangles) {
-			if (first) {
-				first = false;
-			} else {
-				sb.append(", ");
-			}
-			sb.append(c.toTriangleString(points));
-		}
-		return b.append(sb.append(']').toString());
+		return b.append("\n  faces=[")
+				.append(triangles.stream()
+					.map(c -> c.toTriangleString(points))
+					.reduce((u, v) -> u + ", " + v).get())
+				.append("]");
 	}
 
 	@Override
 	protected CSG toInnerCSG(FacetGenerationContext context) {
-		List<Polygon> polygons = new ArrayList<>();
-		for (Triangle3d c : triangles) {
-			polygons.add(Polygon.fromPolygons(c.getPoints(), context.getColor()));
-		}
-		return new CSG(polygons);
+		return new CSG(triangles.stream()
+			.map(c -> Polygon.fromPolygons(c.getPoints(), context.getColor()))
+			.collect(Collectors.toList()));
 	}
 }

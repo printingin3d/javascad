@@ -1,6 +1,7 @@
 package eu.printingin3d.javascad.coords;
 
 import java.util.Collection;
+import java.util.stream.DoubleStream;
 
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.AssertValue;
@@ -23,19 +24,41 @@ public class Boundary {
 	/**
 	 * Creates a Boundary object which will hold the minimum and maximum values
 	 * from the given collection.
+	 * @param a the first boundary to consider
+	 * @param b the second boundary to consider
+	 * @return the Boundary object which will represent the collection
+	 */
+	public static Boundary combine(Boundary a, Boundary b) {
+		return new Boundary(Double.min(a.min, b.min), Double.max(a.max, b.max));
+	}
+	
+	/**
+	 * Creates a Boundary object which will hold the minimum and maximum values
+	 * from the given collection.
 	 * @param boundaries the collections which should be considered
 	 * @return the Boundary object which will represent the collection
 	 */
 	public static Boundary combine(Collection<Boundary> boundaries) {
-		double[] values = new double[boundaries.size()*2];
-		int i=0;
-		for (Boundary b : boundaries) {
-			values[i++] = b.getMin();
-			values[i++] = b.getMax();
-		}
-		return new Boundary(values);
+		return new Boundary(
+				boundaries.stream()
+				.mapToDouble(Boundary::getMin)
+				.reduce(Double::min).orElse(0.0),
+				boundaries.stream()
+				.mapToDouble(Boundary::getMax)
+				.reduce(Double::max).orElse(0.0));
 	}
 	
+	private Boundary intersect(Boundary b) {
+		AssertValue.isTrue(min<=b.max, 
+				"The boundaries should intersect with each other, " +
+						"but there is a gap between "+min+" and "+b.max);
+		AssertValue.isTrue(max>=b.min, 
+				"The boundaries should intersect with each other, " +
+						"but there is a gap between "+max+" and "+b.min);
+		
+		return new Boundary(Double.max(min, b.min), Double.min(max, b.max));
+	}
+		
 	/**
 	 * Creates a Boundary object which will hold the minimum and maximum values
 	 * from the given collection.
@@ -46,21 +69,8 @@ public class Boundary {
 	 */
 	public static Boundary intersect(Collection<Boundary> boundaries) throws IllegalValueException {
 		AssertValue.isNotEmpty(boundaries, "The parameter should not be null or empty");
-		 
-		double minValue = -Double.MAX_VALUE;
-		double maxValue = +Double.MAX_VALUE;
-		
-		for (Boundary b : boundaries) {
-			minValue = Math.max(b.getMin(), minValue);
-			maxValue = Math.min(b.getMax(), maxValue);
-			AssertValue.isTrue(minValue<=b.getMax(), 
-					"The boundaries should intersect with each other, " +
-							"but there is a gap between "+minValue+" and "+b.getMax());
-			AssertValue.isTrue(maxValue>=b.getMin(), 
-					"The boundaries should intersect with each other, " +
-							"but there is a gap between "+maxValue+" and "+b.getMin());
-		}
-		return new Boundary(minValue, maxValue);
+		return boundaries.stream()
+				.reduce(Boundary::intersect).get();
 	}
 	
 	/**
@@ -77,25 +87,10 @@ public class Boundary {
 	 * @param values the values used by the calculation
 	 */
 	public Boundary(double... values) {
-		double min = 0.0;
-		double max = 0.0;
-		boolean first = true;
-		for (double value : values) {
-			if (first) {
-				min = max = value;
-				first = false;
-			}
-			else {
-				if (min>value) {
-					min = value;
-				}
-				if (max<value) {
-					max = value;
-				}
-			}
-		}
-		this.min = min;
-		this.max = max;
+		this.min = DoubleStream.of(values)
+			.reduce(Double::min).orElse(0.0);
+		this.max = DoubleStream.of(values)
+			.reduce(Double::max).orElse(0.0);
 	}
 	
 	/**

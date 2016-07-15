@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.coords.Coords3d;
@@ -41,11 +42,7 @@ public class Area2d extends AbstractCollection<Coords2d> {
 	 * @return a new object with the new coordinates
 	 */
 	public Area2d move(Coords2d move) {
-		List<Coords2d> result = new ArrayList<>();
-		for (Coords2d c : coords) {
-			result.add(c.move(move));
-		}
-		return new Area2d(result);
+		return new Area2d(coords.stream().map(c -> c.move(move)).collect(Collectors.toList()));
 	}
 	
 	/**
@@ -55,14 +52,12 @@ public class Area2d extends AbstractCollection<Coords2d> {
 	 * @return a new object with the new coordinates
 	 */
 	public Area2d rotate(Angle angle) {
-		List<Coords2d> result = new ArrayList<>();
-		for (Coords2d c : coords) {
-			result.add(new Coords2d(
-					angle.cos()*c.getX()-angle.sin()*c.getY(), 
-					angle.sin()*c.getX()+angle.cos()*c.getY()));
-		}
-
-		return new Area2d(result);
+		return new Area2d(
+				coords.stream()
+					.map(c -> new Coords2d(
+							angle.cos()*c.getX()-angle.sin()*c.getY(), 
+							angle.sin()*c.getX()+angle.cos()*c.getY()))
+					.collect(Collectors.toList()));
 	}
 	
 	/**
@@ -71,11 +66,7 @@ public class Area2d extends AbstractCollection<Coords2d> {
 	 * @return a list of 3D coordinates
 	 */
 	public List<Coords3d> withZ(double z) {
-		List<Coords3d> result = new ArrayList<>();
-		for (Coords2d c : coords) {
-			result.add(c.withZ(z));
-		}
-		return result;
+		return coords.stream().map(c -> c.withZ(z)).collect(Collectors.toList());
 	}
 
 	@Override
@@ -309,21 +300,13 @@ public class Area2d extends AbstractCollection<Coords2d> {
 	 * @return true if and only if the two list of coordinates are distinct
 	 */
 	public boolean isDistinct(Area2d other) {
-		for (LineSegment2d current : LineSegment2d.lineSegmentSeries2d(other.coords)) {
-    		if (!findCrossing(current, true).isEmpty()) {
-				return false;
-			}
-		}
-    	return true;
+		return LineSegment2d.lineSegmentSeries2d(other.coords).stream()
+			.allMatch(c -> findCrossing(c, true).isEmpty());
 	}
 	
 	private boolean isAllInside(Area2d other) {
-		for (Coords2d p : other.coords) {
-			if (calculatePointRelation(p)==PointRelation.OUTSIDE) {
-				return false;
-			}
-		}
-		return true;
+		return other.coords.stream()
+				.allMatch(c -> calculatePointRelation(c)!=PointRelation.OUTSIDE);
 	}
 	
 	/**

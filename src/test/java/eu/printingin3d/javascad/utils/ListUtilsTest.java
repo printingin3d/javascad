@@ -22,6 +22,11 @@ public class ListUtilsTest {
 	}
 	
 	@Test
+	public void removeNullsShouldReturnEmptyListIfTheGivenListIsNull() {
+		assertTrue(ListUtils.removeNulls(null).isEmpty());
+	}
+	
+	@Test
 	public void removeNullsShouldReturnTheSameListIfItDoesntContainNullElement() {
 		List<String> param = Arrays.asList("apple", "peas");
 		assertEquals(param, ListUtils.removeNulls(param));

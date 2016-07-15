@@ -3,9 +3,11 @@ package eu.printingin3d.javascad.models;
 import static eu.printingin3d.javascad.utils.AssertValue.isNotNegative;
 import static eu.printingin3d.javascad.utils.AssertValue.isNotNull;
 
-import java.util.ArrayList;
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.basic.Radius;
@@ -123,33 +125,35 @@ public class Cylinder extends Atomic3dModel {
 		
 		Coords3d startV = Coords3d.zOnly(+z);
 		Coords3d endV = Coords3d.zOnly(-z);
-        List<Polygon> polygons = new ArrayList<>();
-
+        
         int numSlices = context.calculateNumberOfSlices(topRadius.min(bottomRadius));
-        for (int i = 0; i < numSlices; i++) {
-            double t0 = i / (double) numSlices;
-            double t1 = (i + 1) / (double) numSlices;
-            polygons.add(Polygon.fromPolygons(Arrays.asList(
-                    startV,
-                    cylPoint(+z, topRadius, t1),
-                    cylPoint(+z, topRadius, t0)
-                ), context.getColor()
-            ));
-            polygons.add(Polygon.fromPolygons(Arrays.asList(
-                    cylPoint(+z, topRadius, t0),
-                    cylPoint(+z, topRadius, t1),
-                    cylPoint(-z, bottomRadius, t1),
-                    cylPoint(-z, bottomRadius, t0)
-                
-            ), context.getColor()));
-            polygons.add(Polygon.fromPolygons(Arrays.asList(
+        
+        Color color = context.getColor();
+        
+        double step = 1.0 / numSlices;
+        List<Polygon> polygons = DoubleStream.iterate(0, d -> d+step).limit(numSlices).boxed().flatMap(t0 -> {
+            double t1 = t0 + step;
+            return Arrays.asList(
+            		Arrays.asList(
+	                    startV,
+	                    cylPoint(+z, topRadius, t1),
+	                    cylPoint(+z, topRadius, t0)
+	                ),
+            		Arrays.asList(
+	                    cylPoint(+z, topRadius, t0),
+	                    cylPoint(+z, topRadius, t1),
+	                    cylPoint(-z, bottomRadius, t1),
+	                    cylPoint(-z, bottomRadius, t0)
+            		),
+            		Arrays.asList(
                             endV,
                             cylPoint(-z, bottomRadius, t0),
                             cylPoint(-z, bottomRadius, t1)
-            ), context.getColor())
-            
-            );
-        }
+            		))
+            		.stream();
+        })
+        .map(l -> Polygon.fromPolygons(l, color))
+        .collect(Collectors.toList());
 
         return new CSG(polygons);
 	}

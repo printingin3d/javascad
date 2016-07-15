@@ -1,6 +1,7 @@
 package eu.printingin3d.javascad.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,6 +21,9 @@ public final class ListUtils {
 	 * @return the same values except nulls
 	 */
 	public static <T> List<T> removeNulls(List<T> values) {
+		if (values==null) {
+			return Collections.emptyList();
+		}
 		List<T> result = new ArrayList<>();
 		for (T value : values) {
 			if (value!=null) {

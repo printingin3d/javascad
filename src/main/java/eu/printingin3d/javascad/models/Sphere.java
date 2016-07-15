@@ -81,22 +81,14 @@ public class Sphere extends Atomic3dModel {
 	private List<Coords3d> getVertices(Angle oneSlice, int numStacks, int i, int j) {
 		List<Coords3d> vertices = new ArrayList<>();
 
-		vertices.add(
-		        sphereVertex(oneSlice.mul(i), oneSlice.mul(j))
-		);
+		vertices.add(sphereVertex(oneSlice.mul(i), oneSlice.mul(j)));
 		if (j > 0) {
-		    vertices.add(
-		            sphereVertex(oneSlice.mul(i + 1), oneSlice.mul(j))
-		    );
+		    vertices.add(sphereVertex(oneSlice.mul(i + 1), oneSlice.mul(j)));
 		}
 		if (j < numStacks - 1) {
-		    vertices.add(
-		            sphereVertex(oneSlice.mul(i + 1), oneSlice.mul(j + 1))
-		    );
+		    vertices.add(sphereVertex(oneSlice.mul(i + 1), oneSlice.mul(j + 1)));
 		}
-		vertices.add(
-		        sphereVertex(oneSlice.mul(i), oneSlice.mul(j + 1))
-		);
+		vertices.add(sphereVertex(oneSlice.mul(i), oneSlice.mul(j + 1)));
 		return vertices;
 	}
 

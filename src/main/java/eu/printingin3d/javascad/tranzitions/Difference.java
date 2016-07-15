@@ -2,7 +2,6 @@ package eu.printingin3d.javascad.tranzitions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
@@ -42,7 +41,7 @@ public class Difference extends Complex3dModel {
 		AssertValue.isNotNull(model1, "The first parameter of the difference operation should not be null!");
 		
 		this.model1 = model1;
-		this.model2 = model2==null ? Collections.<Abstract3dModel>emptyList() : ListUtils.removeNulls(model2);
+		this.model2 = ListUtils.removeNulls(model2);
 	}
 	
 	/**
@@ -70,12 +69,12 @@ public class Difference extends Complex3dModel {
 			return baseModel;
 		}
 		
-		SCAD result = new SCAD("difference()");
-		result = result.append("{").append(baseModel);
-		for (Abstract3dModel model : model2) {
-			result = result.append(model.toScad(context));
-		}
-		return result.append("}");
+		return new SCAD("difference()")
+				.append("{").append(baseModel)
+				.append(model2.stream()
+					.map(m -> m.toScad(context))
+					.reduce(SCAD::append).get())
+				.append("}");
 	}
 
 	@Override
