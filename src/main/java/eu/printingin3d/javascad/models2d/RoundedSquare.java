@@ -1,13 +1,12 @@
 package eu.printingin3d.javascad.models2d;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.basic.Radius;
@@ -97,7 +96,7 @@ public class RoundedSquare extends Square {
 	}
 
 	@Override
-	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
+	protected Stream<Area2d> getInnerPointCircle(FacetGenerationContext context) {
         int numSlices = context.calculateNumberOfSlices(radius)*4;
         Angle oneSlice = Angle.A360.divide(numSlices);
         List<Coords2d> points = IntStream.iterate(numSlices, x -> x-1)
@@ -109,7 +108,7 @@ public class RoundedSquare extends Square {
     			return new Coords2d(x, y);
         	})
         	.collect(Collectors.toList());
-        return Collections.singleton(new Area2d(points));
+        return Stream.of(new Area2d(points));
 	}
 
 }

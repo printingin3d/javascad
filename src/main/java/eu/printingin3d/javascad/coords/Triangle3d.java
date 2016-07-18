@@ -1,8 +1,9 @@
 package eu.printingin3d.javascad.coords;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.AssertValue;
@@ -25,34 +26,18 @@ public class Triangle3d {
 	 * @return the triangles
 	 * @throws IllegalValueException if the given coords list is null or the list contains less than three coordinates
 	 */
-	public static List<Triangle3d> getTriangles(List<Coords3d> coords) {
+	public static Stream<Triangle3d> getTriangles(List<Coords3d> coords) {
 		AssertValue.isNotNull(coords, "coords should not be null");
 		AssertValue.isTrue(coords.size() >= 3, 
 				"There should be at least 3 verticies given, but was only "+coords.size());
 		
-    	List<Triangle3d> triangles = new ArrayList<>();
     	Coords3d firstVertex = coords.get(0);
-        for (int i = 0; i < coords.size() - 2; i++) {
-        	Triangle3d triangle = new Triangle3d(
+    	
+    	return IntStream.range(0, coords.size()-2)
+    		.mapToObj(i -> new Triangle3d(
         			firstVertex, 
         			coords.get(i + 1), 
-        			coords.get(i + 2));
-			triangles.add(triangle);
-        }
-        return triangles;
-	}
-	
-	/**
-	 * Creates a list of triangles which covers the polygon defined by the given list of coordinates.
-	 * The given list should contain at least three coordinates.
-	 * @param coords the list of coordinates used to generate the triangles
-	 * @return the triangles
-	 * @throws IllegalValueException if the given coords list is null or the list contains less than three coordinates
-	 */
-	public static List<Triangle3d> getTriangles(Coords3d... coords) {
-		AssertValue.isNotNull(coords, "coords should not be null");
-		
-		return getTriangles(Arrays.asList(coords));
+        			coords.get(i + 2)));
 	}
 	
 	/**

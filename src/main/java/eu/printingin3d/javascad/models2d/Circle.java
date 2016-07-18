@@ -1,9 +1,9 @@
 package eu.printingin3d.javascad.models2d;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.basic.Radius;
@@ -63,15 +63,15 @@ public class Circle extends Abstract2dModel {
 	}
 
 	@Override
-	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
-        List<Coords2d> points = new ArrayList<>();
-
+	protected Stream<Area2d> getInnerPointCircle(FacetGenerationContext context) {
         int numSlices = context.calculateNumberOfSlices(radius);
         Angle oneSlice = Angle.A360.divide(numSlices);
-        for (int i = numSlices; i > 0; i--) {
-            points.add(radius.toCoordinate(oneSlice.mul(i)));
-        }
-        return Collections.singleton(new Area2d(points));
+        
+        List<Coords2d> points = IntStream.iterate(numSlices, x -> x-1).limit(numSlices)
+        	.mapToObj(i -> radius.toCoordinate(oneSlice.mul(i)))
+        	.collect(Collectors.toList());
+        
+        return Stream.of(new Area2d(points));
 	}
 
 }

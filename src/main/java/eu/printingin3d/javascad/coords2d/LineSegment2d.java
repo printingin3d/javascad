@@ -51,17 +51,6 @@ public class LineSegment2d extends LineSegment<Coords2d> {
 	}
 	
 	/**
-	 * Checks if the two line segments are parallel.
-	 * @param ls the other line segment
-	 * @return true if and only if the two line segments are parallel
-	 */
-	public boolean isParallel(LineSegment2d ls) {
-		return DoubleUtils.equalsEps(
-				(start.getY()-end.getY())*(ls.start.getX()-ls.end.getX()), 
-				(ls.start.getY()-ls.end.getY())*(start.getX()-end.getX()));
-	}
-	
-	/**
 	 * Return true if the given point is on the segment.
 	 * @param c the point to be checked
 	 * @return true if and only if the point is on the line segment
@@ -98,17 +87,20 @@ public class LineSegment2d extends LineSegment<Coords2d> {
 			lcSide = lc.start;
 		} else if (lcEndOn) {
 			lcSide = lc.end;
-		}
+		} else {
+			return thisStartOn && thisEndOn ? this : null ;
+		} 
+		
 		
 		if (thisStartOn) {
-			if (thisEndOn) {
-				return this;
-			}
+			// we know thisEndOn is false here, because otherwise it should return in the previous statement
 			thisSide = start;
 		} else if (thisEndOn) {
 			thisSide = end;
+		} else {
+			return null;
 		}
 		
-		return lcSide==null || thisSide==null || lcSide.equals(thisSide)  ? null : new LineSegment2d(lcSide, thisSide);
+		return lcSide.equals(thisSide) ? null : new LineSegment2d(lcSide, thisSide);
 	}
 }

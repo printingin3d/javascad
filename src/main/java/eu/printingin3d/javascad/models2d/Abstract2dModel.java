@@ -1,8 +1,6 @@
 package eu.printingin3d.javascad.models2d;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
@@ -59,18 +57,15 @@ public abstract class Abstract2dModel {
 	 */
 	public abstract Abstract2dModel move(Coords2d delta);
 
-	protected abstract Collection<Area2d> getInnerPointCircle(FacetGenerationContext context);
+	protected abstract Stream<Area2d> getInnerPointCircle(FacetGenerationContext context);
 	
 	/**
 	 * Returns with a list of points which forms the shape.
 	 * @param context the context to be used for the generation
 	 * @return the list of point to form this shape
 	 */
-	public final Collection<Area2d> getPointCircle(FacetGenerationContext context) {
-		List<Area2d> result = new ArrayList<>();
-		for (Area2d lc : getInnerPointCircle(context)) {
-			result.add(lc.move(move));
-		}
-		return result;
+	public final Stream<Area2d> getPointCircle(FacetGenerationContext context) {
+		return getInnerPointCircle(context)
+				.map(lc -> lc.move(move));
 	}
 }

@@ -1,6 +1,6 @@
 package eu.printingin3d.javascad.tranzitions2d;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
@@ -64,7 +64,7 @@ public class Translate extends Abstract2dModel {
 	}
 
 	@Override
-	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
+	protected Stream<Area2d> getInnerPointCircle(FacetGenerationContext context) {
 		return model.getPointCircle(context);
 	}
 }

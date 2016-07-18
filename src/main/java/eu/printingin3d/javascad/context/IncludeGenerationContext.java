@@ -30,7 +30,7 @@ public class IncludeGenerationContext implements IScadGenerationContext {
 			return ExcludedScadGenerationContext.INSTANCE;
 		}
 		if (included.contains(Integer.valueOf(tag))) {
-			if (excluded==null) {
+			if (excluded.isEmpty()) {
 				return FullScadGenerationContext.INSTANCE;
 			}
 			return new ExcludeGenerationContext(excluded);

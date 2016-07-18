@@ -1,8 +1,7 @@
 package eu.printingin3d.javascad.models2d;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -51,8 +50,8 @@ public class Square extends Abstract2dModel {
 	}
 
 	@Override
-	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
-		return Collections.singleton(new Area2d(Arrays.asList(
+	protected Stream<Area2d> getInnerPointCircle(FacetGenerationContext context) {
+		return Stream.of(new Area2d(Arrays.asList(
 				new Coords2d(-size.getX()/2, -size.getY()/2),
 				new Coords2d(+size.getX()/2, -size.getY()/2),
 				new Coords2d(+size.getX()/2, +size.getY()/2),

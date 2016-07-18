@@ -14,8 +14,11 @@ import eu.printingin3d.javascad.context.ITagColors;
 public class FacetGenerationContext extends ColorHandlingContext {
 	/**
 	 * Default context.
+	 * @return gives back the default context 
 	 */
-	public static final FacetGenerationContext DEFAULT = new FacetGenerationContext(null, null, 0);
+	public static final FacetGenerationContext createDefault() {
+		return new FacetGenerationContext(null, null, 0);
+	}
 
 	private double fs = 0.25;
 	private int fa = 6;

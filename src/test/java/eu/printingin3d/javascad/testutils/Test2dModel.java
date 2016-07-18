@@ -1,6 +1,6 @@
 package eu.printingin3d.javascad.testutils;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
@@ -40,7 +40,7 @@ public class Test2dModel extends Abstract2dModel {
 	}
 
 	@Override
-	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
+	protected Stream<Area2d> getInnerPointCircle(FacetGenerationContext context) {
 		return null;
 	}
 }

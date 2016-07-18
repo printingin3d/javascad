@@ -157,16 +157,13 @@ public class Area2d extends AbstractCollection<Coords2d> {
 	}
 	
 	private static Coords2d findClosest(List<Coords2d> list, Coords2d p) {
-		Coords2d closest = null;
-		double minDist = Double.MAX_VALUE;
-		for (Coords2d c : list) {
-			double d = c.squareDist(p);
-			if (d<minDist) {
-				minDist = d;
-				closest = c;
-			}
-		}
-		return closest;
+		return list.stream().reduce((a, b) -> {
+					double ad = a.squareDist(p);
+					double bd = b.squareDist(p);
+					
+					return ad<bd ? a : b;
+				})
+		.orElse(null);
 	}
 	
 	/**
@@ -247,12 +244,11 @@ public class Area2d extends AbstractCollection<Coords2d> {
 		List<Coords2d> result = new ArrayList<>();
 		Area2dIterator iterator = new Area2dIterator(0, coords);
 		while (iterator.hasNext()) {
+			Coords2d current = iterator.next();
 			if (result.isEmpty()) {
-				Coords2d current = iterator.next();
 				result.add(current);
 			} else {
 				Coords2d prev = result.get(result.size()-1);
-				Coords2d current = iterator.next();
 				Coords2d next = iterator.peekNext();
 				
 				if (!new LineSegment2d(prev, next).isOnLineSegment(current)) {
@@ -438,28 +434,6 @@ public class Area2d extends AbstractCollection<Coords2d> {
 	public Area2d subList(Coords2d first, Coords2d last) {
 		return subList(findCoords(first), findCoords(last));
 	}
-/*	
-	private static boolean isInsideTriangle(Coords2d a, Coords2d b, Coords2d c, Coords2d p) {
-		// Compute vectors
-		Coords2d v0 = new Coords2d(c.getX()-a.getX(), c.getY()-a.getY());
-		Coords2d v1 = new Coords2d(b.getX()-a.getX(), b.getY()-a.getY());
-		Coords2d v2 = new Coords2d(p.getX()-a.getX(), p.getY()-a.getY());
-
-		// Compute dot products
-		double dot00 = v0.dot(v0);
-		double dot01 = v0.dot(v1);
-		double dot02 = v0.dot(v2);
-		double dot11 = v1.dot(v1);
-		double dot12 = v1.dot(v2);
-
-		// Compute barycentric coordinates
-		double invDenom = 1.0 / (dot00 * dot11 - dot01 * dot01);
-		double u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-		double v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-
-		// Check if point is in triangle
-		return u>=0 && v>=0 && u + v<=1;
-	}*/
 	
 	@Override
 	public String toString() {

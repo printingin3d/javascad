@@ -21,6 +21,7 @@ import eu.printingin3d.javascad.coords.Angles3d;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords2d.Abstract2dTest.TestAbstract2d;
 import eu.printingin3d.javascad.coords2d.Coords2d;
+import eu.printingin3d.javascad.coords2d.LineSegment;
 import eu.printingin3d.javascad.coords2d.LineSegment2d;
 import eu.printingin3d.javascad.models.SCAD;
 import eu.printingin3d.javascad.testutils.RandomUtils;
@@ -33,6 +34,7 @@ public class EqualsAndHashCodeBatchTest {
 		private final T equalObject;
 		private final List<T> nonEqualObjects;
 		
+		@SafeVarargs
 		public TestCase(T testObject, T equalObject, T... nonEqualObjects) {
 			this.testObject = testObject;
 			this.equalObject = equalObject;
@@ -50,12 +52,14 @@ public class EqualsAndHashCodeBatchTest {
 		
 		public void testEquals() {
 			assertEquals(testObject, equalObject);
+			assertEquals(equalObject, testObject);
 			assertEquals(testObject.hashCode(), equalObject.hashCode());
 		}
 		
 		public void testNonEquals() {
 			for (T v : nonEqualObjects) {
 				assertNotEquals(testObject, v);
+				assertNotEquals(v, testObject);
 				assertNotEquals(testObject.hashCode(), v.hashCode());
 			}
 		}
@@ -121,6 +125,16 @@ public class EqualsAndHashCodeBatchTest {
 						Angle.ofDegree(45),
 						Angle.A45,
 						Angle.ZERO, Angle.ofRadian(Math.PI)
+						),
+				new TestCase<LineSegment<Coords3d>>(
+						new LineSegment<Coords3d>(new Coords3d(0.0, 0.0, 0.0), new Coords3d(10, 20, 30)),
+						new LineSegment<Coords3d>(Coords3d.ZERO, new Coords3d(10, 20, 30)),
+						new LineSegment<Coords3d>(null, new Coords3d(10, 20, 30)), new LineSegment<Coords3d>(Coords3d.ZERO, new Coords3d(10, 10, 10)), new LineSegment<Coords3d>(Coords3d.ZERO, null)
+						),
+				new TestCase<LineSegment2d>(
+						new LineSegment2d(new Coords2d(0.0, 0.0), new Coords2d(10, 20)),
+						new LineSegment2d(Coords2d.ZERO, new Coords2d(10, 20)),
+						new LineSegment2d(null, new Coords2d(10, 20)), new LineSegment2d(Coords2d.ZERO, new Coords2d(10, 10)), new LineSegment2d(Coords2d.ZERO, null)
 						)
 			);
 	}

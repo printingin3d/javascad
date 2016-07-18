@@ -1,9 +1,10 @@
 package eu.printingin3d.javascad.utils;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.annotations.ModelPart;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
@@ -20,33 +21,34 @@ public abstract class AnnotatedModelProvider implements IModelProvider {
 
 	@Override
 	public final List<ModelWithPath> getModelsAndPaths() {
-		List<ModelWithPath> paths = new ArrayList<>();
-
-		for (Method m : getClass().getDeclaredMethods()) {
-			m.setAccessible(true);
-			ModelPart a = m.getAnnotation(ModelPart.class);
-			if (a!=null) {
-				AssertValue.isTrue(IModel.class.isAssignableFrom(m.getReturnType()), 
-							"The return type of the method annotated with ModelPart annotation "
-							+ "must implement the IModel interface");
-				
-				String relPath = a.value();
-				if (relPath.isEmpty()) {
-					relPath = m.getName() + ".scad";
-				}
-				try {
-					IModel model = (IModel)m.invoke(this);
-					if (model!=null) {
-						paths.add(new ModelWithPath(model, relPath));
+		return Arrays.asList(getClass().getDeclaredMethods()).stream()
+			.map(m -> {
+				ModelWithPath result = null;
+				m.setAccessible(true);
+				ModelPart a = m.getAnnotation(ModelPart.class);
+				if (a!=null) {
+					AssertValue.isTrue(IModel.class.isAssignableFrom(m.getReturnType()), 
+								"The return type of the method annotated with ModelPart annotation "
+								+ "must implement the IModel interface");
+					
+					String relPath = a.value();
+					if (relPath.isEmpty()) {
+						relPath = m.getName() + ".scad";
 					}
-				} catch (IllegalAccessException | IllegalArgumentException
-						| InvocationTargetException e) {
-					throw new IllegalValueException("Unknown exception has been thrown", e);
+					try {
+						IModel model = (IModel)m.invoke(this);
+						if (model!=null) {
+							result = new ModelWithPath(model, relPath);
+						}
+					} catch (IllegalAccessException | IllegalArgumentException
+							| InvocationTargetException e) {
+						throw new IllegalValueException("Unknown exception has been thrown", e);
+					}
 				}
-			}
-		}
-		
-		return paths;
+				return result;
+			})
+			.filter(Objects::nonNull)
+			.collect(Collectors.toList());
 	}
 
 }

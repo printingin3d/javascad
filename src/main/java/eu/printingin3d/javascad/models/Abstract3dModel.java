@@ -351,7 +351,7 @@ public abstract class Abstract3dModel implements IModel {
 	 * @return the CSG interpretation
 	 */
 	public final CSG toCSG() {
-		return toCSG(FacetGenerationContext.DEFAULT);
+		return toCSG(FacetGenerationContext.createDefault());
 	}
 
 	/**

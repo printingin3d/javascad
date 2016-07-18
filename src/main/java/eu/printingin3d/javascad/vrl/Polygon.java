@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
@@ -124,13 +123,7 @@ public final class Polygon {
      */
     public List<Facet> toFacets() {
         if (this.vertices.size() >= 3) {
-        	Coords3d firstVertex = vertices.get(0);
-        	
-        	return IntStream.range(0, this.vertices.size()-2)
-        		.mapToObj(i -> new Triangle3d(
-	        			firstVertex, 
-	        			vertices.get(i + 1), 
-	        			vertices.get(i + 2)))
+        	return Triangle3d.getTriangles(vertices)
         		.map(tri -> new Facet(tri, normal, color))
         		.collect(Collectors.toList());
         }

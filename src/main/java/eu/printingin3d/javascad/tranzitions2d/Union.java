@@ -1,9 +1,9 @@
 package eu.printingin3d.javascad.tranzitions2d;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
@@ -70,10 +70,10 @@ public class Union extends Abstract2dModel {
 	}
 
 	@Override
-	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
+	protected Stream<Area2d> getInnerPointCircle(FacetGenerationContext context) {
 		List<Area2d> result = new ArrayList<>();
 		for (Abstract2dModel m : models) {
-			for (Area2d lc : m.getPointCircle(context)) {
+			m.getPointCircle(context).forEach(lc -> {
 				boolean added = false;
 				for (int i=0;i<result.size();i++) {
 					if (!lc.isDistinct(result.get(i))) {
@@ -87,9 +87,9 @@ public class Union extends Abstract2dModel {
 				if (!added) {
 					result.add(lc);
 				}
-			}
+			});
 		}
-		return result;
+		return result.stream();
 	}
 
 }

@@ -14,27 +14,27 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 public class Area2dTest {
 	@Test
 	public void twoSeparateCirclesShouldBeDistinct() {
-		for (Area2d lc1 : new Circle(Radius.fromRadius(4)).getPointCircle(FacetGenerationContext.DEFAULT)) {
-			for (Area2d lc2 : new Circle(Radius.fromRadius(4)).move(Coords2d.xOnly(10)).getPointCircle(FacetGenerationContext.DEFAULT)) {
+		new Circle(Radius.fromRadius(4)).getPointCircle(FacetGenerationContext.createDefault()).forEach(lc1 -> {
+			new Circle(Radius.fromRadius(4)).move(Coords2d.xOnly(10)).getPointCircle(FacetGenerationContext.createDefault()).forEach(lc2 -> {
 				Assert.assertTrue(lc1.isDistinct(lc2));
-			}
-		}
+			});
+		});
 	}
 	
 	@Test
 	public void touchingCirclesShouldNotBeDistinct() {
-		for (Area2d lc1 : new Circle(Radius.fromRadius(5)).getPointCircle(FacetGenerationContext.DEFAULT)) {
-			for (Area2d lc2 : new Circle(Radius.fromRadius(5)).move(Coords2d.xOnly(10)).getPointCircle(FacetGenerationContext.DEFAULT)) {
+		new Circle(Radius.fromRadius(5)).getPointCircle(FacetGenerationContext.createDefault()).forEach(lc1 -> {
+			new Circle(Radius.fromRadius(5)).move(Coords2d.xOnly(10)).getPointCircle(FacetGenerationContext.createDefault()).forEach(lc2 -> {
 				Assert.assertFalse(lc1.isDistinct(lc2));
-			}
-		}
+			});
+		});
 	}
 	
 	@Test
 	public void trivialIsInsideTest() {
-		for (Area2d lc : new Circle(Radius.fromRadius(5)).getPointCircle(FacetGenerationContext.DEFAULT)) {
+		new Circle(Radius.fromRadius(5)).getPointCircle(FacetGenerationContext.createDefault()).forEach(lc -> {
 			Assert.assertEquals(PointRelation.INSIDE, lc.calculatePointRelation(Coords2d.ZERO));
-		}
+		});
 	}
 
 	@Test
@@ -47,9 +47,9 @@ public class Area2dTest {
 		FacetGenerationContext context = new FacetGenerationContext(null, null, 0);
 		context.setFsAndFa(2, 30);
 		
-		for (Area2d lc : union.getPointCircle(context)) {
+		union.getPointCircle(context).forEach(lc -> {
 			Assert.assertEquals(PointRelation.INSIDE, lc.calculatePointRelation(new Coords2d(4.99999999999999, -8.881784197001252E-16)));
-		}
+		});
 	}
 	
 	@Test

@@ -141,8 +141,8 @@ public class LinearExtrude extends Atomic3dModel {
 		int numOfSteps = twist.isZero() ? 1 : context.calculateNumberOfSlices(Radius.fromRadius(height));
 		double step = height/numOfSteps;
 		double bottom = -height/2;
-		
-		for (Area2d points : model.getPointCircle(context)) {
+
+		model.getPointCircle(context).forEach(points -> {
 			Angle alpha1 = Angle.ZERO;
 			List<Coords3d> c1 = points.rotate(alpha1).withZ(bottom);
 	
@@ -180,7 +180,7 @@ public class LinearExtrude extends Atomic3dModel {
 					generateCover(points.rotate(alpha1)).stream()
 					.map(lc -> Polygon.fromPolygons(lc.withZ(+height/2), color))
 					.collect(Collectors.toList()));
-		}
+		});
 		
 		return new CSG(polygons);
 	}

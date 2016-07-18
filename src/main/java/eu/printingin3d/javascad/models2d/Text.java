@@ -1,6 +1,6 @@
 package eu.printingin3d.javascad.models2d;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -57,7 +57,7 @@ public class Text extends Abstract2dModel {
 	}
 
 	@Override
-	protected Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
+	protected Stream<Area2d> getInnerPointCircle(FacetGenerationContext context) {
 		throw new NotImplementedException();
 	}
 }

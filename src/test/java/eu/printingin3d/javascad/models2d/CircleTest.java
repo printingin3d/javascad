@@ -42,23 +42,23 @@ public class CircleTest {
 	public void testPointsDistance() {
 		Circle circle = new Circle(Radius.fromRadius(10.5));
 		
-		for (Area2d lc : circle.getPointCircle(FacetGenerationContext.DEFAULT)) {
+		circle.getPointCircle(FacetGenerationContext.createDefault()).forEach(lc -> {
 			for (Coords2d c : lc) {
 				double dist = Math.sqrt(c.getX()*c.getX()+c.getY()*c.getY());
 				AssertEx.assertDoubleEquals(10.5, dist);
 			}
-		}
+		});
 	}
 	
 	@Test
 	public void testPointsDistanceEvenMoved() {
 		Abstract2dModel circle = new Circle(Radius.fromRadius(10.5)).move(new Coords2d(10, 20));
 		
-		for (Area2d lc : circle.getPointCircle(FacetGenerationContext.DEFAULT)) {
+		circle.getPointCircle(FacetGenerationContext.createDefault()).forEach(lc -> {
 			for (Coords2d c : lc) {
 				double dist = Math.sqrt((c.getX()-10)*(c.getX()-10)+(c.getY()-20)*(c.getY()-20));
 				AssertEx.assertDoubleEquals(10.5, dist);
 			}
-		}
+		});
 	}
 }

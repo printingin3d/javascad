@@ -1,8 +1,9 @@
 package eu.printingin3d.javascad.utils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Miscellaneous helper methods regarding lists.
@@ -24,12 +25,6 @@ public final class ListUtils {
 		if (values==null) {
 			return Collections.emptyList();
 		}
-		List<T> result = new ArrayList<>();
-		for (T value : values) {
-			if (value!=null) {
-				result.add(value);
-			}
-		}
-		return result;
+		return values.stream().filter(Objects::nonNull).collect(Collectors.toList());
 	}
 }

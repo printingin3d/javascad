@@ -1,9 +1,8 @@
 package eu.printingin3d.javascad.models2d;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.coords.Boundary;
@@ -66,8 +65,8 @@ public class Polygon extends Abstract2dModel {
 	}
 
 	@Override
-	public Collection<Area2d> getInnerPointCircle(FacetGenerationContext context) {
-		return Collections.singleton(new Area2d(coords));
+	public Stream<Area2d> getInnerPointCircle(FacetGenerationContext context) {
+		return Stream.of(new Area2d(coords));
 	}
 
 }
