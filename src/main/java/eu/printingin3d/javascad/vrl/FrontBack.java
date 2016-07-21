@@ -44,8 +44,8 @@ public class FrontBack<T> {
 	 * @param <U> just a test
 	 */
 	public <U> void addTo(Function<List<T>, U> func, FrontBack<U> fb) {
-		fb.addToBack(func.apply(front));
-		fb.addToFront(func.apply(back));
+		fb.addToFront(func.apply(front));
+		fb.addToBack(func.apply(back));
 	}
 
 	/**

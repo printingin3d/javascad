@@ -266,22 +266,4 @@ public final class Polygon {
 		    fb.addToBoth(ls.getStart().lerp(ls.getEnd(), t));
 		}
 	}
-    
- /*   private void addVertexToList(List<Coords3d> list, Coords3d newVertex) {
-    	if (!list.isEmpty()) {
-    		Coords3d lastVertex = list.get(list.size()-1);
-    		
-    		Coords3d prev = vertices.get(vertices.size()-1);
-    		for (Coords3d c : vertices) {
-    			Coords3d cross = EdgeCrossSolver.findIntersection(prev, c, lastVertex, newVertex);
-    			if (cross!=null && !cross.equals(newVertex) && !cross.equals(lastVertex)) {
-    				System.out.println(
-    				"Added new vertex: "+cross+" between "+lastVertex+" and "+newVertex+" ("+prev+", "+c+")");
-    				list.add(cross);
-    				break;
-    			}
-    		}
-    	}
-    	list.add(newVertex);
-    }*/
 }
