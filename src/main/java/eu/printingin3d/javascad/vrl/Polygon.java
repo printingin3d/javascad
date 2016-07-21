@@ -206,7 +206,6 @@ public final class Polygon {
      * @param fb front and back polygons
      */
     public void splitPolygon(Polygon polygon, FrontBack<Polygon> fb) {
-    	
     	// Classify each point as well as the entire polygon into one of the four possible classes.
     	VertexPosition polygonType = calculatePolygonPosition(polygon);
     	
@@ -235,9 +234,13 @@ public final class Polygon {
     
     // Classify the entire polygon into one of the four possible classes.
     private VertexPosition calculatePolygonPosition(Polygon polygon) {
-    	return polygon.vertices.stream().
-    			map(v -> calculateVertexPosition(v)).
-    			reduce(VertexPosition.COPLANAR, VertexPosition::add);
+    	// this way it is much faster than any Java8 solution, 
+    	// because the polygon rarely contains too many elements
+		VertexPosition polygonType = VertexPosition.COPLANAR;
+        for (Coords3d v : polygon.vertices) {
+            polygonType = polygonType.add(calculateVertexPosition(v));
+        }
+        return polygonType;
     }
 
 	private void splitPolygonLowLevel(Polygon polygon, FrontBack<Polygon> polyFb) {
