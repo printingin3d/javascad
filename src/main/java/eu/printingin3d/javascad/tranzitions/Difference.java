@@ -3,6 +3,8 @@ package eu.printingin3d.javascad.tranzitions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
@@ -132,15 +134,14 @@ public class Difference extends Complex3dModel {
 	}
 
 	@Override
-	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
-		Abstract3dModel subModel = model1.subModel(context);
-		if (subModel==null) {
-			return null;
-		}
-		List<Abstract3dModel> subModels = new ArrayList<>();
-		for (Abstract3dModel model : model2) {
-			subModels.add(model.subModel(context));
-		}
-		return new Difference(subModel, subModels);
+	protected Optional<Abstract3dModel> innerSubModel(IScadGenerationContext context) {
+		return model1.subModel(context).map(sm-> {
+			List<Abstract3dModel> subModels = model2.stream().
+				map(m -> m.subModel(context)).
+				filter(Optional::isPresent).
+				map(Optional::get).
+				collect(Collectors.toList());
+			return new Difference(sm, subModels);
+		});
 	}
 }

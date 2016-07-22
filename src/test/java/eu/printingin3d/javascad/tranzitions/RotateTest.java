@@ -75,7 +75,7 @@ public class RotateTest {
 				Angles3d.ROTATE_MINUS_X
 				).withTag(12);
 		
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).isPresent());
 	}
 	
 	@Test
@@ -85,6 +85,6 @@ public class RotateTest {
 				Angles3d.ROTATE_MINUS_X
 				).withTag(12);
 		
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()).isPresent());
 	}
 }

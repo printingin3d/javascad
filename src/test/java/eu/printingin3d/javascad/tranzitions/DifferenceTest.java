@@ -138,8 +138,7 @@ public class DifferenceTest {
 		Abstract3dModel base = new Cube(new Dims3d(6.0, 30.0, 6.0));
 		Abstract3dModel result = new Difference(base,
 						new Cube(100.0)
-							.align(new Side(AlignType.MAX, AlignType.CENTER, AlignType.NONE), base, true)
-							.align(Side.TOP, base, false));
+							.align(new Side(AlignType.MAX_OUT, AlignType.CENTER, AlignType.MAX_IN), base));
 		result.getBoundaries();
 	}
 	
@@ -182,7 +181,7 @@ public class DifferenceTest {
 				new Test3dModel("(model12)").withTag(12)
 				);
 		
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().include(12).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).isPresent());
 	}
 	
 	@Test
@@ -203,7 +202,7 @@ public class DifferenceTest {
 				new Test3dModel("(model12)").withTag(12)
 				);
 		
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).isPresent());
 	}
 	
 	@Test

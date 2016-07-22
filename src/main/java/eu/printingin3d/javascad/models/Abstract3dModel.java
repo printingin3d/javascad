@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
@@ -397,7 +398,7 @@ public abstract class Abstract3dModel implements IModel {
 		return new Difference(this, model);
 	}
 
-	protected abstract Abstract3dModel innerSubModel(IScadGenerationContext context);
+	protected abstract Optional<Abstract3dModel> innerSubModel(IScadGenerationContext context);
 
 	/**
 	 * <p>Copies parts of the model to a new model based on the given context. It is very useful if we want
@@ -409,20 +410,20 @@ public abstract class Abstract3dModel implements IModel {
 	 * @param context the context to be used as a filter during the copy process.
 	 * @return a copy of the selected parts of this model
 	 */
-	public Abstract3dModel subModel(IScadGenerationContext context) {
+	public Optional<Abstract3dModel> subModel(IScadGenerationContext context) {
 		IScadGenerationContext currentContext = context.applyTag(tag);
 
-		Abstract3dModel model = innerSubModel(currentContext);
-		if (model!=null) {
-			model.tag = tag;
-			model.debug = debug;
-			model.background = background;
+		Optional<Abstract3dModel> model = innerSubModel(currentContext);
+		model.ifPresent(m -> {
+			m.tag = tag;
+			m.debug = debug;
+			m.background = background;
 			
-			model.move = move;
-			model.rotate = rotate;
+			m.move = move;
+			m.rotate = rotate;
 			
-			model.roundingPlane.putAll(roundingPlane);
-		}
+			m.roundingPlane.putAll(roundingPlane);
+		});
 		
 		return model;
 	}

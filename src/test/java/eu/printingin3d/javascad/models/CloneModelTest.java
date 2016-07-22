@@ -107,7 +107,7 @@ public class CloneModelTest {
 	@Test
 	public void subModelWithDefaultContextShouldClone() {
 		assertEquals(original.toScad(ColorHandlingContext.DEFAULT), 
-				original.subModel(ScadGenerationContextFactory.DEFAULT).toScad(ColorHandlingContext.DEFAULT));
+				original.subModel(ScadGenerationContextFactory.DEFAULT).get().toScad(ColorHandlingContext.DEFAULT));
 	}
 	
 	@Test
@@ -137,11 +137,11 @@ public class CloneModelTest {
 	@Test
 	public void subModelShouldCopyFields() {
 		assertEquals(111, Abstract3dModelReader.getTag(original.cloneModel()
-				.withTag(111).subModel(ScadGenerationContextFactory.DEFAULT)));
+				.withTag(111).subModel(ScadGenerationContextFactory.DEFAULT).get()));
 		assertTrue(Abstract3dModelReader.isDebug(original.cloneModel()
-				.debug().subModel(ScadGenerationContextFactory.DEFAULT)));
+				.debug().subModel(ScadGenerationContextFactory.DEFAULT).get()));
 		assertTrue(Abstract3dModelReader.isBackground(original.cloneModel()
-					.background().subModel(ScadGenerationContextFactory.DEFAULT)));
+					.background().subModel(ScadGenerationContextFactory.DEFAULT).get()));
 	}
 	
 	@Test

@@ -111,7 +111,7 @@ public class TranslateTest {
 				new Coords3d(10, 20, 30)
 				).withTag(12);
 		
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).isPresent());
 	}
 	
 	@Test
@@ -121,6 +121,6 @@ public class TranslateTest {
 				new Coords3d(10, 20, 30)
 				).withTag(12);
 		
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()).isPresent());
 	}
 }

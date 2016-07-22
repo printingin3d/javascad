@@ -88,7 +88,8 @@ public class Abstract3dModelTagTest {
 	public void subModuleShouldReturnWithTheSameObjectIfTheItemIsIncluded() {
 		Abstract3dModel testSubject2 = new Test3dModel("(model)").withTag(11);
 		Abstract3dModel subModel = testSubject2
-				.subModel(new ScadGenerationContextFactory().include(11).create());
+				.subModel(new ScadGenerationContextFactory().include(11).create())
+				.get();
 		Assert.assertSame(testSubject2, subModel);
 	}
 }

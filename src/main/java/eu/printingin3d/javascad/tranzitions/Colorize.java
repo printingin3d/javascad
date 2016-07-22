@@ -1,6 +1,7 @@
 package eu.printingin3d.javascad.tranzitions;
 
 import java.awt.Color;
+import java.util.Optional;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
@@ -79,8 +80,7 @@ public class Colorize extends Complex3dModel {
 	}
 
 	@Override
-	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
-		Abstract3dModel subModel = baseModel.subModel(context);
-		return subModel==null ? null : new Colorize(color, subModel);
+	protected Optional<Abstract3dModel> innerSubModel(IScadGenerationContext context) {
+		return baseModel.subModel(context).map(sm -> new Colorize(color, sm));
 	}
 }

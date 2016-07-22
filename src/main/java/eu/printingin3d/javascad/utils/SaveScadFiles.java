@@ -148,7 +148,7 @@ public class SaveScadFiles {
 	@Deprecated
 	public SaveScadFiles addModel(String fileName, Abstract3dModel model, 
 			IScadGenerationContext scadContext) {
-		return addModel(fileName, model.subModel(scadContext));
+		return addModel(fileName, model.subModel(scadContext).get());
 	}
 	
 	/**

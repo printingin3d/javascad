@@ -3,7 +3,7 @@ package eu.printingin3d.javascad.tranzitions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
@@ -84,9 +84,13 @@ public class Intersection extends Complex3dModel {
 	}
 
 	@Override
-	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
-		return new Intersection(
-				models.stream().map(m -> m.subModel(context)).filter(Objects::nonNull).collect(Collectors.toList())
-			);
+	protected Optional<Abstract3dModel> innerSubModel(IScadGenerationContext context) {
+		return Optional.of(new Intersection(
+				models.stream().
+						map(m -> m.subModel(context)).
+						filter(Optional::isPresent).
+						map(Optional::get).
+						collect(Collectors.toList())
+			));
 	}
 }

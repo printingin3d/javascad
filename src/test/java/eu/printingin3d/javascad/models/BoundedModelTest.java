@@ -56,7 +56,7 @@ public class BoundedModelTest {
 				).withTag(12);
 		
 		assertEqualsWithoutWhiteSpaces("(model11)",  
-				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()));
+				testSubject.subModel(new ScadGenerationContextFactory().include(12).create()).get());
 	}
 	
 	@Test
@@ -67,7 +67,7 @@ public class BoundedModelTest {
 				).withTag(12);
 		
 		assertEqualsWithoutWhiteSpaces("(model11)",  
-				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()));
+				testSubject.subModel(new ScadGenerationContextFactory().include(11).create()).get());
 	}
 	
 	@Test
@@ -77,7 +77,7 @@ public class BoundedModelTest {
 				RandomUtils.getRandomBoundaries()
 				).withTag(12);
 		
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).isPresent());
 	}
 	
 	@Test
@@ -87,6 +87,6 @@ public class BoundedModelTest {
 				RandomUtils.getRandomBoundaries()
 				).withTag(12);
 		
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()).isPresent());
 	}
 }

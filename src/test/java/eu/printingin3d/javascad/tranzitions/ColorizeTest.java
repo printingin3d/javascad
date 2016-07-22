@@ -67,7 +67,7 @@ public class ColorizeTest {
 				new Test3dModel("(model12)").withTag(12)
 				).withTag(11);
 		
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).isPresent());
 	}
 	
 	@Test
@@ -77,7 +77,7 @@ public class ColorizeTest {
 				new Test3dModel("(model12)").withTag(12)
 				).withTag(11);
 		
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()).isPresent());
 	}
 
 }

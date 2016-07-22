@@ -62,7 +62,7 @@ public class Extendable3dModelTest {
 	
 	@Test(expected=IllegalValueException.class)
 	public void subModelShouldThrowExceptonIfThereIsNoDefaultConstructor() {
-		Abstract3dModel ts = new Extendable3dModel() {
+		Abstract3dModel ts = new TestSubModel() {
 		};
 		
 		ts.subModel(ScadGenerationContextFactory.DEFAULT);
@@ -70,7 +70,7 @@ public class Extendable3dModelTest {
 	
 	@Test(expected=IllegalValueException.class)
 	public void cloneModelShouldThrowExceptonIfThereIsNoDefaultConstructor() {
-		Abstract3dModel ts = new Extendable3dModel() {
+		Abstract3dModel ts = new TestSubModel() {
 		};
 		
 		ts.cloneModel();
@@ -79,7 +79,7 @@ public class Extendable3dModelTest {
 	@Test
 	public void subModelShouldWorkIfThereIsDefaultConstructor() {
 		Abstract3dModel test = new TestSubModel();
-		Abstract3dModel subModel = test.subModel(ScadGenerationContextFactory.DEFAULT);
+		Abstract3dModel subModel = test.subModel(ScadGenerationContextFactory.DEFAULT).get();
 		
 		Assert.assertEquals(test.toScad(ColorHandlingContext.DEFAULT), subModel.toScad(ColorHandlingContext.DEFAULT));
 		Assert.assertNotSame(test, subModel);
@@ -88,7 +88,7 @@ public class Extendable3dModelTest {
 	@Test
 	public void subModelShouldCopyMoves() {
 		Abstract3dModel test = new TestSubModel().move(new Coords3d(10, 20, 30));
-		Abstract3dModel subModel = test.subModel(ScadGenerationContextFactory.DEFAULT);
+		Abstract3dModel subModel = test.subModel(ScadGenerationContextFactory.DEFAULT).get();
 		
 		Assert.assertEquals(test.toScad(ColorHandlingContext.DEFAULT), subModel.toScad(ColorHandlingContext.DEFAULT));
 		Assert.assertNotSame(test, subModel);

@@ -4,7 +4,7 @@ package eu.printingin3d.javascad.tranzitions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
@@ -23,9 +23,7 @@ import eu.printingin3d.javascad.vrl.FacetGenerationContext;
  * <p>You don't have to worry about the optimization either, because the generated OpenSCAD code will be 
  * the optimal one in every case. The parameters could even contain null elements, those will
  * be ignored during the model generation.</p>
- * <p>The object doesn't have any list modification method and although it could work if the passed list
- * is modified after the construction, the advised solution is to create the final list before creating
- * this object.</p>  
+ * <p>You can add new models to the list by the {@link #addModel(Abstract3dModel)} method.</p>  
  */
 public class Union extends Complex3dModel {
 	protected final List<Abstract3dModel> models;
@@ -99,11 +97,12 @@ public class Union extends Complex3dModel {
 	}
 
 	@Override
-	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
-		return new Union(models.stream()
+	protected Optional<Abstract3dModel> innerSubModel(IScadGenerationContext context) {
+		return Optional.of(new Union(models.stream()
 				.map(m -> m.subModel(context))
-				.filter(Objects::nonNull)
-				.collect(Collectors.toList()));
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.collect(Collectors.toList())));
 	}
 	
 }

@@ -1,5 +1,7 @@
 package eu.printingin3d.javascad.models;
 
+import java.util.Optional;
+
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 
 /**
@@ -14,10 +16,10 @@ public abstract class Atomic3dModel extends Abstract3dModel {
 	}
 	
 	@Override
-	protected final Abstract3dModel innerSubModel(IScadGenerationContext context) {
+	protected final Optional<Abstract3dModel> innerSubModel(IScadGenerationContext context) {
 		if (context.isTagIncluded()) {
-			return this;
+			return Optional.of(this);
 		}
-		return null;
+		return Optional.empty();
 	}
 }

@@ -1,6 +1,7 @@
 package eu.printingin3d.javascad.models;
 
 import java.lang.reflect.Constructor;
+import java.util.Optional;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
@@ -24,7 +25,7 @@ public abstract class Extendable3dModel extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return innerSubModel(ScadGenerationContextFactory.DEFAULT);
+		return innerSubModel(ScadGenerationContextFactory.DEFAULT).get();
 	}
 
 	@Override
@@ -44,19 +45,21 @@ public abstract class Extendable3dModel extends Complex3dModel {
 	}
 	
 	@Override
-	protected Abstract3dModel innerSubModel(IScadGenerationContext context) {
-		Extendable3dModel newInstance;
-		try {
-			Constructor<? extends Extendable3dModel> constructor = getClass().getDeclaredConstructor();
-			constructor.setAccessible(true);
-			newInstance = constructor.newInstance();
-		} catch (ReflectiveOperationException | IllegalArgumentException | SecurityException e) {
-			throw new IllegalValueException("Creating the new instance of this "
-					+ "class ("+getClass()+") has failed! "+
-					"Possibly there is no default constructor for this class.", e);
-		}
-		newInstance.baseModel = baseModel.subModel(context);
-		return newInstance;
+	protected Optional<Abstract3dModel> innerSubModel(IScadGenerationContext context) {
+		return baseModel.subModel(context).map(sm -> {
+			Extendable3dModel newInstance;
+			try {
+				Constructor<? extends Extendable3dModel> constructor = getClass().getDeclaredConstructor();
+				constructor.setAccessible(true);
+				newInstance = constructor.newInstance();
+			} catch (ReflectiveOperationException | IllegalArgumentException | SecurityException e) {
+				throw new IllegalValueException("Creating the new instance of this "
+						+ "class ("+getClass()+") has failed! "+
+						"Possibly there is no default constructor for this class.", e);
+			}
+			newInstance.baseModel = sm;
+			return newInstance;
+		});
 	}
 
 }

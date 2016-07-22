@@ -262,13 +262,13 @@ public class SlicerTest {
 	public void subModelExcludeTest() {
 		Abstract3dModel testSubject = new Slicer(TEST_MODEL, Direction.X, 3, 0)
 			.withTag(12);
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(11).create()).isPresent());
 	}
 	
 	@Test
 	public void subModelExcludeTest2() {
 		Abstract3dModel testSubject = new Slicer(TEST_MODEL, Direction.X, 3, 0)
 		.withTag(12);
-		Assert.assertNull(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()));
+		Assert.assertFalse(testSubject.subModel(new ScadGenerationContextFactory().exclude(12).create()).isPresent());
 	}
 }

@@ -3,6 +3,7 @@ package eu.printingin3d.javascad.testutils;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,10 @@ public class AssertEx {
 				return item.replaceAll("\\s", "").equals(expected.replaceAll("\\s", ""));
 			}
 		});
+	}
+	
+	public static void assertEqualsWithoutWhiteSpaces(final String expected, Optional<Abstract3dModel> model) {
+		assertEqualsWithoutWhiteSpaces(expected, model.get());
 	}
 	
 	public static void assertEqualsWithoutWhiteSpaces(final String expected, Abstract3dModel model) {
