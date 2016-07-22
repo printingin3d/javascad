@@ -127,13 +127,10 @@ public class Support extends Atomic3dModel {
 
 	@Override
 	protected Boundaries3d getModelBoundaries() {
-		double x = dims.getX()/2.0;
-		double y = dims.getY()/2.0;
-		double z = dims.getZ()/2.0;
 		return new Boundaries3d(
-				new Boundary(-x, x),
-				new Boundary(-y, y),
-				new Boundary(-z, z));
+				Boundary.createSymmetricBoundary(dims.getX()*0.5),
+				Boundary.createSymmetricBoundary(dims.getY()*0.5),
+				Boundary.createSymmetricBoundary(dims.getZ()*0.5));
 	}
 
 	@Override

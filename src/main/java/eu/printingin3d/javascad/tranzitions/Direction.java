@@ -50,14 +50,18 @@ public enum Direction {
 	 * @return a new object representing <code>model</code>, but aligned to <code>alignTo</code>
 	 */
 	public Abstract3dModel moveTo(Abstract3dModel model, Abstract3dModel alignTo, AlignType side) {
-		return model.align(getSide(side), alignTo, true);
+		return model.align(getSide(side), alignTo);
 	}
 	
 	private Side getSide(AlignType alignType) {
 		return new Side(
-				coords.isXZero() ? AlignType.NONE : alignType, 
-				coords.isYZero() ? AlignType.NONE : alignType,
-				coords.isZZero() ? AlignType.NONE : alignType
+				convertIf(coords.isXZero(), alignType), 
+				convertIf(coords.isYZero(), alignType), 
+				convertIf(coords.isZZero(), alignType) 
 				);
+	}
+	
+	private static AlignType convertIf(boolean crit, AlignType align) {
+		return crit ? AlignType.NONE : align;
 	}
 }

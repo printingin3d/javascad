@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.basic.Angle;
 import eu.printingin3d.javascad.basic.Radius;
@@ -133,7 +134,7 @@ public class Cylinder extends Atomic3dModel {
         double step = 1.0 / numSlices;
         List<Polygon> polygons = DoubleStream.iterate(0, d -> d+step).limit(numSlices).boxed().flatMap(t0 -> {
             double t1 = t0 + step;
-            return Arrays.asList(
+            return Stream.of(
             		Arrays.asList(
 	                    startV,
 	                    cylPoint(+z, topRadius, t1),
@@ -149,8 +150,7 @@ public class Cylinder extends Atomic3dModel {
                             endV,
                             cylPoint(-z, bottomRadius, t0),
                             cylPoint(-z, bottomRadius, t1)
-            		))
-            		.stream();
+            		));
         })
         .map(l -> Polygon.fromPolygons(l, color))
         .collect(Collectors.toList());

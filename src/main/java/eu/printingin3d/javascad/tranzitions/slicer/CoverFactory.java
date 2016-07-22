@@ -38,11 +38,11 @@ public final class CoverFactory {
 				b3d.getZ().getMiddle()));
 		if (lower) {
 			return direction
-					.moveTo(result, model, AlignType.MIN)
+					.moveTo(result, model, AlignType.MIN_IN)
 					.move(direction.getCoords().inverse());
 		} else {
 			return direction
-					.moveTo(result, model, AlignType.MAX)
+					.moveTo(result, model, AlignType.MAX_IN)
 					.move(direction.getCoords());
 		}
 	}

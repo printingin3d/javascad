@@ -144,6 +144,16 @@ public class Angles3d extends Basic3dFunc<Angles3d> {
 		CONFIGS = Collections.unmodifiableList(results);
 	}
 	
+	private boolean sameRotate(Coords3d start, Angles3d delta, Angles3d result) {
+		return Abstract3d.closeEquals(start.rotate(this).rotate(delta), start.rotate(result));
+	}
+	
+	private boolean sameRotate(Angles3d delta, Angles3d result) {
+		return sameRotate(Coords3d.X, delta, result) &&
+				sameRotate(Coords3d.Y, delta, result) &&
+				sameRotate(Coords3d.Z, delta, result);
+	}
+	
 	/**
 	 * Rotates the current value by the given value - this object won't change, but
 	 * a new object will be created.
@@ -161,14 +171,14 @@ public class Angles3d extends Basic3dFunc<Angles3d> {
 			temp = conf.coord3.rotate(this).rotate(delta).rotate(zOnly(-gamma)).rotate(yOnly(-beta));
 			double alpha = simplicity(temp, conf.norm3, conf.norm1);
 			
-			if (Coords3d.xOnly(1.0).rotate(this).rotate(delta)
+			if (Coords3d.X.rotate(this).rotate(delta)
 					.rotate(zOnly(-gamma)).rotate(yOnly(-beta)).rotate(xOnly(-alpha))
 					.equals(Coords3d.xOnly(-1.0))) {
 				alpha = -(180.0+alpha);
 				beta = -beta;
 				gamma = 180.0+gamma;
 			}
-			if (Coords3d.yOnly(1.0).rotate(this).rotate(delta)
+			if (Coords3d.Y.rotate(this).rotate(delta)
 					.rotate(zOnly(-gamma)).rotate(yOnly(-beta)).rotate(xOnly(-alpha))
 					.equals(Coords3d.yOnly(-1.0))) {
 				alpha = -(180.0+alpha);
@@ -176,9 +186,7 @@ public class Angles3d extends Basic3dFunc<Angles3d> {
 			
 			Angles3d result = new Angles3d(alpha, beta, gamma);
 			
-			if (Abstract3d.closeEquals(Coords3d.X.rotate(this).rotate(delta), Coords3d.X.rotate(result)) &&
-				Abstract3d.closeEquals(Coords3d.Y.rotate(this).rotate(delta), Coords3d.Y.rotate(result)) &&
-				Abstract3d.closeEquals(Coords3d.Z.rotate(this).rotate(delta), Coords3d.Z.rotate(result))) {
+			if (sameRotate(delta, result)) {
 				return result;
 			}
 		}

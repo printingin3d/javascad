@@ -22,7 +22,7 @@ public class LineSegment<T> {
 	public static <T> LineSegment<T> startLineSegmentSeries(T p) {
 		return new LineSegment<>(null, p);
 	}
-
+	
 	/**
 	 * Returns with the list of line segments which is denoted by this series of points.
 	 * @param coords the list of points
@@ -31,7 +31,7 @@ public class LineSegment<T> {
 	 */
 	public static <T> List<LineSegment<T>> lineSegmentSeries(List<T> coords) {
 		List<LineSegment<T>> result = new ArrayList<>();
-		LineSegment<T> current = new LineSegment<T>(null, coords.get(coords.size()-1));
+		LineSegment<T> current = startLineSegmentSeries(coords.get(coords.size()-1));
 		for (T c : coords) {
 			current = current.next(c);
 			result.add(current);

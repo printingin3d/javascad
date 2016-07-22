@@ -4,8 +4,10 @@ import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -18,7 +20,6 @@ import eu.printingin3d.javascad.coords2d.LineSegment2d;
 import eu.printingin3d.javascad.enums.PointRelation;
 import eu.printingin3d.javascad.exceptions.IllegalValueException;
 import eu.printingin3d.javascad.utils.AssertValue;
-import eu.printingin3d.javascad.utils.DoubleUtils;
 import eu.printingin3d.javascad.utils.Pair;
 
 /**
@@ -143,9 +144,9 @@ public class Area2d extends AbstractCollection<Coords2d> {
 			if (current.hasCommon(segment)) {
 				closest.add(new Pair<Coords2d, Area2dIterator>(current.getEnd(), new Area2dIterator(i, coords)));
 			} else {
-				Coords2d cross = EdgeCrossSolver.findCross(segment, current);
-				if (cross!=null) {
-					closest.add(new Pair<Coords2d, Area2dIterator>(cross, new Area2dIterator(i, coords)));
+				Optional<Coords2d> cross = EdgeCrossSolver.findCross(segment, current);
+				if (cross.isPresent()) {
+					closest.add(new Pair<Coords2d, Area2dIterator>(cross.get(), new Area2dIterator(i, coords)));
 				}
 			}
 			i++;
@@ -269,7 +270,7 @@ public class Area2d extends AbstractCollection<Coords2d> {
 	 */
 	public List<Coords2d> findCrossing(LineSegment2d segment, boolean includeEndPoints) {
 		List<Coords2d> result = new ArrayList<>();
-		for (LineSegment2d current : LineSegment2d.lineSegmentSeries2d(coords)) {
+		LineSegment2d.lineSegmentSeries2d(coords).forEach(current -> {
 			if (current.hasCommon(segment)) {
 				if (includeEndPoints) {
 					result.add(current.getEnd());
@@ -280,13 +281,14 @@ public class Area2d extends AbstractCollection<Coords2d> {
 					result.add(common.getStart());
 					result.add(common.getEnd());
 				} else {
-					Coords2d cross = EdgeCrossSolver.findCross(segment, current);
-					if (cross!=null && (includeEndPoints || !segment.contains(cross))) {
-						result.add(cross);
-					}
+					EdgeCrossSolver.findCross(segment, current).ifPresent(cross -> {
+						if (includeEndPoints || !segment.contains(cross)) {
+							result.add(cross);
+						}
+					});
 				}
 			}
-		}
+		});
 		return result;
 	}
 
@@ -319,12 +321,7 @@ public class Area2d extends AbstractCollection<Coords2d> {
 				);
 		
 		LineSegment2d current = new LineSegment2d(null, coords.get(coords.size()-1));
-		Set<Coords2d> crosses = new TreeSet<>(new Comparator<Coords2d>() {
-			@Override
-			public int compare(Coords2d o1, Coords2d o2) {
-				return DoubleUtils.compareEps(o1.getX(), o2.getX());
-			}
-		});
+		Set<Coords2d> crosses = new HashSet<>();
 		int i = 0;
 		for (Coords2d c : coords) {
 			current = current.next(c);
@@ -338,35 +335,29 @@ public class Area2d extends AbstractCollection<Coords2d> {
 				crosses.add(common.getStart());
 				crosses.add(common.getEnd());
 			} else {
-				Coords2d cross = EdgeCrossSolver.findCross(horizontal, current);
-				if (cross!=null) {
+				Optional<Coords2d> cross = EdgeCrossSolver.findCross(horizontal, current);
+				if (cross.isPresent()) {
 					if (cross.equals(current.getStart())) {
 						Coords2d prevv = coords.get(Math.floorMod(i-2, coords.size()));
-						if (EdgeCrossSolver.findCross(horizontal, new LineSegment2d(c, prevv))!=null) {
-							crosses.add(cross);
-						}
-						
+						EdgeCrossSolver.findCross(horizontal, new LineSegment2d(c, prevv)).
+								ifPresent(x -> crosses.add(cross.get()));
 					} else if (cross.equals(c)) {
 						Coords2d next = coords.get(Math.floorMod(i+1, coords.size()));
-						if (EdgeCrossSolver.findCross(horizontal, new LineSegment2d(next, current.getStart()))!=null) {
-							crosses.add(cross);
-						}
+						EdgeCrossSolver.findCross(horizontal, new LineSegment2d(next, current.getStart())).
+								ifPresent(x -> crosses.add(cross.get()));
 					} else {
-						crosses.add(cross);
+						crosses.add(cross.get());
 					}
 				}
 			}
 			i++;
 		}
 		
-		boolean inside = false;
-		for (Coords2d c : crosses) {
-			if (c.getX()>p.getX()) {
-				return inside ? PointRelation.INSIDE : PointRelation.OUTSIDE;
-			}
-			inside = !inside;
-		}
-		return PointRelation.OUTSIDE;
+		long leftCount = crosses.stream().
+			filter(c -> c.getX()<=p.getX()).
+			count();
+		return (crosses.size()==leftCount) || (leftCount & 1)==0 ? 
+				PointRelation.OUTSIDE : PointRelation.INSIDE;
 	}
 	
 	/**

@@ -28,6 +28,7 @@ import eu.printingin3d.javascad.models.Support;
 import eu.printingin3d.javascad.models2d.Circle;
 import eu.printingin3d.javascad.models2d.Square;
 import eu.printingin3d.javascad.tranzitions.Intersection;
+import eu.printingin3d.javascad.tranzitions.Mirror;
 import eu.printingin3d.javascad.tranzitions2d.Union;
 import eu.printingin3d.javascad.vrl.Facet;
 import eu.printingin3d.javascad.vrl.VertexPosition;
@@ -66,10 +67,11 @@ public class CsgGenerationWithinBoundariesTest {
 		triangles.add(new Triangle3d(c1,c3,c0));
 		triangles.add(new Triangle3d(c2,c3,c1));
 		
-		List<Abstract3dModel> result = new ArrayList<>(Arrays.<Abstract3dModel>asList(
+		return Arrays.<Abstract3dModel>asList(
 					new Cube(new Dims3d(10, 20, Math.PI)),
 					new Cylinder(12, Radius.fromRadius(54)),
 					new Cylinder(3, Radius.fromRadius(500)).move(new Coords3d(10, 20, 50)),
+					Mirror.mirrorX(new Cube(new Dims3d(10, 20, 30))),
 					new Sphere(Radius.fromRadius(12)),
 					new Cylinder(10, Radius.fromRadius(12), Radius.fromRadius(20))
 							.addModelTo(Side.TOP_OUT, new Cylinder(10, Radius.fromRadius(20), Radius.fromRadius(12))),
@@ -83,8 +85,7 @@ public class CsgGenerationWithinBoundariesTest {
 					new LinearExtrude(new Circle(Radius.fromRadius(5)), 5, Angle.ZERO),
 					new LinearExtrude(new Union(Arrays.asList(
 							new Circle(Radius.fromRadius(3)), new Square(new Dims2d(3, 5)))), 10, Angle.ZERO)
-				));
-		return result;
+				);
 	}
 	
 	@Test
@@ -108,9 +109,7 @@ public class CsgGenerationWithinBoundariesTest {
 				Coords3d a = f.getTriangle().getPoints().get(0);
 				Coords3d n = f.getNormal();
 
-				double dist = n.dot(a);
-
-				double t = n.dot(mid) - dist;
+				double t = n.dot(mid) - n.dot(a);
 				VertexPosition vp = VertexPosition.fromSquareDistance(t);
 
 				Assert.assertEquals(VertexPosition.BACK, vp);

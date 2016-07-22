@@ -1,5 +1,7 @@
 package eu.printingin3d.javascad.coords;
 
+import java.util.Optional;
+
 import eu.printingin3d.javascad.coords2d.Coords2d;
 import eu.printingin3d.javascad.coords2d.LineSegment2d;
 import eu.printingin3d.javascad.utils.DoubleUtils;
@@ -112,11 +114,11 @@ public final class EdgeCrossSolver {
 	 * @param segment2 the second line segment
 	 * @return the cross point or null if the two line segment is not crossing
 	 */
-	public static Coords2d findCross(LineSegment2d segment1, LineSegment2d segment2) {
+	public static Optional<Coords2d> findCross(LineSegment2d segment1, LineSegment2d segment2) {
 		IntersectionResult result = findIntersection(
 				segment1.getStart(), segment1.getEnd(), 
 				segment2.getStart(), segment2.getEnd());
-		return result==null ? null : new Coords2d(result.x, result.y);
+		return result==null ? Optional.empty() : Optional.of(new Coords2d(result.x, result.y));
 	}
 
 }

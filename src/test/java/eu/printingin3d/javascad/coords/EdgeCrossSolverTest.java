@@ -1,5 +1,7 @@
 package eu.printingin3d.javascad.coords;
 
+import java.util.Optional;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -86,7 +88,7 @@ public class EdgeCrossSolverTest {
 		Coords2d result = EdgeCrossSolver.findCross(
 				new LineSegment2d(new Coords2d(-5, 0), new Coords2d(5, 0)), 
 				new LineSegment2d(new Coords2d(0, -5), new Coords2d(0, 5))
-			);
+			).get();
 		
 		Assert.assertEquals(Coords2d.ZERO, result);
 	}
@@ -102,18 +104,18 @@ public class EdgeCrossSolverTest {
 		Coords2d result = EdgeCrossSolver.findCross(
 				new LineSegment2d(c1, c2), 
 				new LineSegment2d(d1, d2)
-			);
+			).get();
 		
 		Assert.assertEquals(new Coords2d(1.87, 10), result);
 	}
 	
 	@Test
 	public void testParallelCross() {
-		Coords2d result = EdgeCrossSolver.findCross(
+		Optional<Coords2d> result = EdgeCrossSolver.findCross(
 				new LineSegment2d(new Coords2d(-5, 0), new Coords2d(5, 0)), 
 				new LineSegment2d(new Coords2d(-5, 5), new Coords2d(5, 5))
 			);
 		
-		Assert.assertNull(result);
+		Assert.assertFalse(result.isPresent());
 	}
 }
