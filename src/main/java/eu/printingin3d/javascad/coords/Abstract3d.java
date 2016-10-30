@@ -1,7 +1,6 @@
 package eu.printingin3d.javascad.coords;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 import eu.printingin3d.javascad.enums.OutputFormat;
 import eu.printingin3d.javascad.utils.DoubleUtils;
@@ -85,16 +84,13 @@ public abstract class Abstract3d {
     
 	/**
 	 * Returns the byte array representation of this object used by the binary STL export function.
-	 * @return a byte array containing the three coordinates.
+	 * There will be 3x4 bytes to be written to the output buffer.
+	 * @param byteBuffer the byte buffer where the coordinates will be written.
 	 */
-    public byte[] toByteArray() {
-		ByteBuffer byteBuffer = ByteBuffer.allocate(12).order(ByteOrder.LITTLE_ENDIAN);
-
+    public void toByteArray(ByteBuffer byteBuffer) {
 		byteBuffer.putFloat((float)x);
 		byteBuffer.putFloat((float)y);
 		byteBuffer.putFloat((float)z);
-    	
-    	return byteBuffer.array();
     }
 
 	@Override

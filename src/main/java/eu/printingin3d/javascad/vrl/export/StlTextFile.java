@@ -1,9 +1,8 @@
 package eu.printingin3d.javascad.vrl.export;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.List;
 
 import eu.printingin3d.javascad.enums.OutputFormat;
@@ -16,29 +15,24 @@ import eu.printingin3d.javascad.vrl.Vertex;
  * @author ivivan <ivivan@printingin3d.eu>
  */
 public class StlTextFile implements IFileExporter {
-	private final File file;
+	private final OutputStream stream;
 	
 	/**
-	 * Constructs the object with the given file.
-	 * @param file the file to write to
+	 * Constructs the object with the given stream.
+	 * @param stream the stream to write to
 	 */
-	public StlTextFile(File file) {
-		this.file = file;
+	public StlTextFile(OutputStream stream) {
+		this.stream = stream;
 	}
 
 	@Override
 	public void writeToFile(List<Facet> facets) throws IOException {
-		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-		
-		try { 
-	        bw.write("solid v3d.csg\n");
+		try (PrintStream ps = new PrintStream(stream)) { 
+	        ps.println("solid v3d.csg");
 	        for (Facet facet : facets) {
-	        	bw.write(facetToStlString(facet));
+	        	ps.println(facetToStlString(facet));
 	        }
-	        bw.write("endsolid v3d.csg\n");
-		}
-		finally {
-			bw.close();
+	        ps.println("endsolid v3d.csg");
 		}
 	}
 	
@@ -51,7 +45,12 @@ public class StlTextFile implements IFileExporter {
 	        sb.append("    vertex ").append(v.format(OutputFormat.STL)).append('\n');
 		}
 		
-		return sb.append("    endloop\n").append("  endfacet\n").toString();
+		return sb.append("    endloop\n").append("  endfacet").toString();
+	}
+
+	@Override
+	public void close() throws IOException {
+		stream.close();
 	}
 	
 }

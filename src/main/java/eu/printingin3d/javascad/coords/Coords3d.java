@@ -1,5 +1,7 @@
 package eu.printingin3d.javascad.coords;
 
+import java.nio.ByteBuffer;
+
 import eu.printingin3d.javascad.basic.Angle;
 
 /**
@@ -62,6 +64,16 @@ public class Coords3d extends Basic3dFunc<Coords3d> {
 	 */
 	public static Coords3d zOnly(double z) {
 		return new Coords3d(0.0, 0.0, z);
+	}
+	
+	/**
+	 * Creates a coordinate based on the given byte array. This is the inverse operation of
+	 * the {@link Abstract3d#toByteArray()} method.
+	 * @param bb the byte buffer to be read
+	 * @return the new coordinate
+	 */
+	public static Coords3d fromByteBuffer(ByteBuffer bb) {
+		return new Coords3d(bb.getFloat(), bb.getFloat(), bb.getFloat());
 	}
 	
 	/**

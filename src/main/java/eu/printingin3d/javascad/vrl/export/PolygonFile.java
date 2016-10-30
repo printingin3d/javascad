@@ -1,7 +1,7 @@
 package eu.printingin3d.javascad.vrl.export;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +17,18 @@ import eu.printingin3d.javascad.vrl.VertexMap;
  * @author ivivan <ivivan@printingin3d.eu>
  */
 public class PolygonFile implements IFileExporter {
-	private final File file;
+	private final OutputStream stream;
 	
 	/**
 	 * Constructs the object with the given file.
-	 * @param file the file to write to
+	 * @param stream the file to write to
 	 */
-	public PolygonFile(File file) {
-		this.file = file;
+	public PolygonFile(OutputStream stream) {
+		this.stream = stream;
 	}
 
 	@Override
-	public void writeToFile(List<Facet> facets) throws IOException {
+	public void writeToFile(List<Facet> facets) {
 		List<Vertex> vertexes = new ArrayList<>();
 		for (Facet f : facets) {
 			vertexes.addAll(f.getVertexes());
@@ -38,9 +38,7 @@ public class PolygonFile implements IFileExporter {
 		
 		List<Vertex> sortedList = map.getVertexList();
 		
-		PrintStream ps = new PrintStream(file);
-		
-		try {
+		try (PrintStream ps = new PrintStream(stream)) {
 			// fix header
 			ps.println("ply");
 			ps.println("format ascii 1.0");
@@ -74,8 +72,10 @@ public class PolygonFile implements IFileExporter {
 				ps.println(sb.toString());
 			}
 		}
-		finally {
-			ps.close();
-		}
+	}
+
+	@Override
+	public void close() throws IOException {
+		stream.close();
 	}
 }

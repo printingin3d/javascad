@@ -25,8 +25,7 @@ import eu.printingin3d.javascad.vrl.Polygon;
  * @author Rob van der Veer
  */
 public class Polyhedron extends Atomic3dModel {
-
-	private final List<Triangle3d> triangles;
+	protected final List<Triangle3d> triangles;
 
 	/**
 	 * Constructs the object with the given triangles.
@@ -40,17 +39,17 @@ public class Polyhedron extends Atomic3dModel {
 		AssertValue.isNotEmpty(triangles,
 				"The triangle list should not be empty!");
 
-		this.triangles = triangles;
+		this.triangles = new ArrayList<>(triangles);
 	}
 
 	@Override
 	protected Boundaries3d getModelBoundaries() {
-		double minX = Double.MAX_VALUE;
-		double minY = Double.MAX_VALUE;
-		double minZ = Double.MAX_VALUE;
-		double maxX = Double.MIN_VALUE;
-		double maxY = Double.MIN_VALUE;
-		double maxZ = Double.MIN_VALUE;
+		double minX = +Double.MAX_VALUE;
+		double minY = +Double.MAX_VALUE;
+		double minZ = +Double.MAX_VALUE;
+		double maxX = -Double.MAX_VALUE;
+		double maxY = -Double.MAX_VALUE;
+		double maxZ = -Double.MAX_VALUE;
 
 		for (final Coords3d p : getPoints()) {
 			minX = Math.min(p.getX(), minX);
@@ -75,7 +74,7 @@ public class Polyhedron extends Atomic3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return new Polyhedron(new ArrayList<>(triangles));
+		return new Polyhedron(triangles);
 	}
 
 	@Override

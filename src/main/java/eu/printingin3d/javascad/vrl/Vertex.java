@@ -1,6 +1,7 @@
 package eu.printingin3d.javascad.vrl;
 
 import java.awt.Color;
+import java.nio.ByteBuffer;
 
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.enums.OutputFormat;
@@ -29,11 +30,11 @@ public class Vertex {
 	}
 
 	/**
-	 * Returns with a byte array representation of this vertex.
-	 * @return a byte array representation of this vertex
+	 * Writes the byte array representation of this vertex to the given buffer.
+	 * @param bb byte buffer the representation of this vertex will be written to
 	 */
-	public byte[] toByteArray() {
-		return coords.toByteArray();
+	public void toByteArray(ByteBuffer bb) {
+		coords.toByteArray(bb);
 	}
 
 	/**

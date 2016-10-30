@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.vrl.export;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import eu.printingin3d.javascad.vrl.Facet;
  * @author Ivan
  *
  */
-public interface IFileExporter {
+public interface IFileExporter extends Closeable {
 	
 	/**
 	 * Do the actual export to file. 

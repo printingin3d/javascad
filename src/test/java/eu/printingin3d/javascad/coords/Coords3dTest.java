@@ -7,6 +7,7 @@ import static eu.printingin3d.javascad.testutils.RandomUtils.getRandomDouble;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -157,5 +158,19 @@ public class Coords3dTest {
 						new Coords3d(-1,-1,+1), new Coords3d(-1,-1,-1)
 					)), 
 				variances);
+	}
+	
+	@Test
+	public void byteArray() {
+		ByteBuffer bb = ByteBuffer.allocate(12);
+		Coords3d.ZERO.toByteArray(bb);
+		
+		bb.clear();
+		assertEquals(Coords3d.ZERO, Coords3d.fromByteBuffer(bb));
+		
+		bb.clear();
+		new Coords3d(1, 2, 3).toByteArray(bb);
+		bb.clear();
+		assertEquals(new Coords3d(1, 2, 3), Coords3d.fromByteBuffer(bb));
 	}
 }

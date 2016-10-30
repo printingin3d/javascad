@@ -1,5 +1,6 @@
 package eu.printingin3d.javascad.coords;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +19,16 @@ public class Triangle3d {
 	private final Coords3d point2;
 	private final Coords3d point3;
 
+	/**
+	 * Reads the given byte buffer and creates a triangle based on its content. It is the inverse 
+	 * operation of {@link Triangle3d#toByteArray(ByteBuffer)}.
+	 * @param bb the byte buffer the content will be read from
+	 * @return a triangle created based on the content of the buffer
+	 */
+	public static Triangle3d fromByteArray(ByteBuffer bb) {
+		return new Triangle3d(Coords3d.fromByteBuffer(bb), Coords3d.fromByteBuffer(bb), Coords3d.fromByteBuffer(bb));
+	}
+	
 	/**
 	 * Creates a list of triangles which covers the polygon defined by the given list of coordinates.
 	 * The given list should contain at least three coordinates.
@@ -100,4 +111,16 @@ public class Triangle3d {
 		
 		return "[" + p1 + ',' + p2 + ',' + p3 + ']';
 	}
+
+	/**
+	 * Writes the byte array representation of this triangle to the given buffer.
+	 * @param byteBuffer the byte buffer the representation of this vertex will be written to
+	 */
+	public void toByteArray(ByteBuffer byteBuffer) {
+		point1.toByteArray(byteBuffer);
+		point2.toByteArray(byteBuffer);
+		point3.toByteArray(byteBuffer);
+
+	}
+
 }
