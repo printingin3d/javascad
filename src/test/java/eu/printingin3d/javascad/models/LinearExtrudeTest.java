@@ -1,9 +1,6 @@
 package eu.printingin3d.javascad.models;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -13,18 +10,8 @@ import eu.printingin3d.javascad.coords.Boundaries3dTest;
 import eu.printingin3d.javascad.coords.Boundary;
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords2d.Boundaries2d;
-import eu.printingin3d.javascad.coords2d.Coords2d;
-import eu.printingin3d.javascad.coords2d.Dims2d;
-import eu.printingin3d.javascad.enums.Side;
-import eu.printingin3d.javascad.models2d.Abstract2dModel;
-import eu.printingin3d.javascad.models2d.Square;
 import eu.printingin3d.javascad.testutils.AssertEx;
 import eu.printingin3d.javascad.testutils.Test2dModel;
-import eu.printingin3d.javascad.tranzitions2d.Union;
-import eu.printingin3d.javascad.utils.SaveScadFiles;
-import eu.printingin3d.javascad.vrl.Facet;
-import eu.printingin3d.javascad.vrl.FacetGenerationContext;
-import eu.printingin3d.javascad.vrl.export.FileExporterFactory;
 
 public class LinearExtrudeTest {
     public static final File mavenTargetPath = new File(System.getProperty("basedir"), "target");
@@ -53,33 +40,33 @@ public class LinearExtrudeTest {
 				new Boundaries3d(new Coords3d(-10, -10, -15), new Coords3d(10, 10, 15)), testSubject.getBoundaries());
 	}
 	
-	@Test
-	public void test() throws IOException {
-		Abstract2dModel union = new Union(Arrays.<Abstract2dModel>asList(
-				new Square(new Dims2d(10, 3)),
-				new Square(new Dims2d(3, 10)).move(Coords2d.yOnly(3.5)))
-			);
-/*		Abstract2dModel union = new Union(Arrays.asList(
-				new Circle(5).move(Coords2d.xOnly(-5)),
-				new Circle(5), 
-				new Circle(5).move(Coords2d.xOnly(5))));*/
-		Abstract3dModel test = new LinearExtrude(union, 10, Angle.A45)
-				.addModelTo(Side.TOP_OUT, new Cube(10))
-				.addModelTo(Side.LEFT_OUT, new Cube(10))
-				;
-		
-		new SaveScadFiles(mavenTargetPath)
-			.addModel("test.scad", test)
-			.saveScadFiles();
-		
-		FacetGenerationContext context = new FacetGenerationContext(null, null, 0);
-		context.setFsAndFa(1, 12);
-		
-		long start = System.currentTimeMillis();
-		List<Facet> facets = test.toCSG(context).toFacets();
-		FileExporterFactory.createExporter(new File(mavenTargetPath, "test.stl"))
-			.writeToFile(facets);
-		
-		System.out.println(facets.size()+" in "+(System.currentTimeMillis()-start));
-	}
+//	@Test
+//	public void test() throws IOException {
+//		Abstract2dModel union = new Union(Arrays.<Abstract2dModel>asList(
+//				new Square(new Dims2d(10, 3)),
+//				new Square(new Dims2d(3, 10)).move(Coords2d.yOnly(3.5)))
+//			);
+///*		Abstract2dModel union = new Union(Arrays.asList(
+//				new Circle(5).move(Coords2d.xOnly(-5)),
+//				new Circle(5), 
+//				new Circle(5).move(Coords2d.xOnly(5))));*/
+//		Abstract3dModel test = new LinearExtrude(union, 10, Angle.A45)
+//				.addModelTo(Side.TOP_OUT, new Cube(10))
+//				.addModelTo(Side.LEFT_OUT, new Cube(10))
+//				;
+//		
+//		new SaveScadFiles(mavenTargetPath)
+//			.addModel("test.scad", test)
+//			.saveScadFiles();
+//		
+//		FacetGenerationContext context = new FacetGenerationContext(null, null, 0);
+//		context.setFsAndFa(1, 12);
+//		
+//		long start = System.currentTimeMillis();
+//		List<Facet> facets = test.toCSG(context).toFacets();
+//		FileExporterFactory.createExporter(new File(mavenTargetPath, "test.stl"))
+//			.writeToFile(facets);
+//		
+//		System.out.println(facets.size()+" in "+(System.currentTimeMillis()-start));
+//	}
 }
