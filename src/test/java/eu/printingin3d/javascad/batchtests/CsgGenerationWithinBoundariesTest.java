@@ -27,17 +27,20 @@ import eu.printingin3d.javascad.models.Support;
 import eu.printingin3d.javascad.models2d.Circle;
 import eu.printingin3d.javascad.models2d.Square;
 import eu.printingin3d.javascad.tranzitions2d.Union;
+import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.Facet;
 import eu.printingin3d.javascad.vrl.VertexPosition;
 
 @RunWith(Parameterized.class)
 public class CsgGenerationWithinBoundariesTest {
-	private final Abstract3dModel testSubject;
+	private final Boundaries3d testSubjectBoundaries3d;
 	private final boolean checkFacets;
+	private final CSG testSubjectCSG;
 	
 	public CsgGenerationWithinBoundariesTest(Abstract3dModel testSubject, boolean checkFacets) {
-		this.testSubject = testSubject;
+		this.testSubjectBoundaries3d = testSubject.getBoundaries();
 		this.checkFacets = checkFacets;
+		this.testSubjectCSG = testSubject.toCSG();
 	}
 
 	@Parameterized.Parameters(name="{0}")
@@ -81,22 +84,22 @@ public class CsgGenerationWithinBoundariesTest {
 	
 	@Test
 	public void allPointsShouldBeWithinBoundaries() {
-		Boundaries3d boundaries = testSubject.getBoundaries();
-		for (Coords3d c : testSubject.toCSG().getPoints()) {
-			Assert.assertTrue(boundaries.getX().isInside(c.getX()));
-			Assert.assertTrue(boundaries.getY().isInside(c.getY()));
-			Assert.assertTrue(boundaries.getZ().isInside(c.getZ()));
+		for (Coords3d c : testSubjectCSG.getPoints()) {
+			Assert.assertTrue(testSubjectBoundaries3d.getX().isInside(c.getX()));
+			Assert.assertTrue(testSubjectBoundaries3d.getY().isInside(c.getY()));
+			Assert.assertTrue(testSubjectBoundaries3d.getZ().isInside(c.getZ()));
 		}
 	}
 	
 	@Test
 	public void allPolygonShouldFaceFromOrigin() {
 		if (checkFacets) {
-			Boundaries3d boundaries = testSubject.getBoundaries();
+			Coords3d mid = new Coords3d(
+					testSubjectBoundaries3d.getX().getMiddle(), 
+					testSubjectBoundaries3d.getY().getMiddle(), 
+					testSubjectBoundaries3d.getZ().getMiddle());
 
-			Coords3d mid = new Coords3d(boundaries.getX().getMiddle(), boundaries.getY().getMiddle(), boundaries.getZ().getMiddle());
-
-			for (Facet f : testSubject.toCSG().toFacets()) {
+			for (Facet f : testSubjectCSG.toFacets()) {
 				Coords3d a = f.getTriangle().getPoints().get(0);
 				Coords3d n = f.getNormal();
 
