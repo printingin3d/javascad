@@ -30,6 +30,7 @@ import eu.printingin3d.javascad.testutils.RandomUtils;
 import eu.printingin3d.javascad.tranzitions.Colorize;
 import eu.printingin3d.javascad.tranzitions.Difference;
 import eu.printingin3d.javascad.tranzitions.Direction;
+import eu.printingin3d.javascad.tranzitions.Hull;
 import eu.printingin3d.javascad.tranzitions.Intersection;
 import eu.printingin3d.javascad.tranzitions.Mirror;
 import eu.printingin3d.javascad.tranzitions.Rotate;
@@ -80,9 +81,11 @@ public class CloneModelTest {
 				new TestCase(new Translate(cube, new Coords3d(-23, 33.2, 7.3))),
 				new TestCase(new BoundedModel(cube, RandomUtils.getRandomBoundaries())),
 				new TestCase(new Union()),
+				new TestCase(new Hull()),
 				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, Angle.ofDegree(55))),
 				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, Angle.ofDegree(55), 2.5)),
 				new TestCase(new Union(cube, cylinder).rotate(new Angles3d(40, 42, -55))),
+				new TestCase(new Hull(cube, cylinder).rotate(new Angles3d(40, 42, -55))),
 				new TestCase(cube.cloneModel().background()),
 				new TestCase(cube.cloneModel().debug()),
 				new TestCase(new Polyhedron(Arrays.asList(RandomUtils.getRandomTriangle(), RandomUtils.getRandomTriangle()))),

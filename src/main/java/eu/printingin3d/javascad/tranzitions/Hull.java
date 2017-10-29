@@ -9,6 +9,7 @@ import java.util.List;
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
+import eu.printingin3d.javascad.exceptions.NotImplementedException;
 import eu.printingin3d.javascad.models.Abstract3dModel;
 import eu.printingin3d.javascad.models.Complex3dModel;
 import eu.printingin3d.javascad.models.SCAD;
@@ -17,21 +18,20 @@ import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
- * <p>Represents an union of models. It is a descendant of {@link Abstract3dModel}, which means you
+ * <p>Represents a hull of models. It is a descendant of {@link Abstract3dModel}, which means you
  * can use the convenient methods on unions too.</p>
  * <p>You don't have to worry about the optimization either, because the generated OpenSCAD code will be 
  * the optimal one in every case. The parameters could even contain null elements, those will
  * be ignored during the model generation.</p>
- * <p>You can use the {@link #addModel} method to add more models to the union.</p>  
  */
-public class Union extends Complex3dModel {
+public class Hull extends Complex3dModel {
 	protected final List<Abstract3dModel> models;
 
 	/**
 	 * Construct the object.
 	 * @param models list of models
 	 */
-	public Union(List<Abstract3dModel> models) {
+	public Hull(List<Abstract3dModel> models) {
 		this.models = models==null ? Collections.<Abstract3dModel>emptyList() : ListUtils.removeNulls(models);
 	}
 
@@ -39,7 +39,7 @@ public class Union extends Complex3dModel {
 	 * Construct the object.
 	 * @param models array of models
 	 */
-	public Union(Abstract3dModel... models) {
+	public Hull(Abstract3dModel... models) {
 		this(Arrays.asList(models));
 	}
 
@@ -59,7 +59,7 @@ public class Union extends Complex3dModel {
 		case 1:
 			return scads.get(0);
 		default:
-			SCAD result = new SCAD("union() {\n");
+			SCAD result = new SCAD("hull() {\n");
 			for (SCAD scad : scads) {
 				result = result.append(scad);
 			}
@@ -78,32 +78,13 @@ public class Union extends Complex3dModel {
 
 	@Override
 	protected Abstract3dModel innerCloneModel() {
-		return new Union(new ArrayList<Abstract3dModel>(models));
+		return new Hull(new ArrayList<Abstract3dModel>(models));
 	}
 
 	@Override
 	protected CSG toInnerCSG(FacetGenerationContext context) {
-		CSG csg = null;
-		for (Abstract3dModel model : models) {
-			if (csg==null) {
-				csg = model.toCSG(context);
-			}
-			else {
-				csg = csg.union(model.toCSG(context));
-			}
-		}
-		return csg;
-	}
-	
-	@Override
-	public Abstract3dModel addModel(Abstract3dModel model) {
-		if (isMoved() || isRotated()) {
-			return super.addModel(model);
-		}
-		
-		List<Abstract3dModel> newModels = new ArrayList<>(models);
-		newModels.add(model);
-		return new Union(newModels);
+		// It is very hard to implement hull with CSG
+		throw new NotImplementedException();
 	}
 
 	@Override
@@ -113,7 +94,7 @@ public class Union extends Complex3dModel {
 			subModels.add(m.subModel(context));
 		}
 		
-		return new Union(subModels);
+		return new Hull(subModels);
 	}
 	
 }

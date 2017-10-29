@@ -4,7 +4,7 @@
 
 	<groupId>eu.printingin3d.javascad</groupId>
 	<artifactId>javascad</artifactId>
-	<version>0.9.0.14</version>
+	<version>0.9.1.0</version>
 	<packaging>jar</packaging>
 	<name>JavaSCAD</name>
 	<description>Our little model generator framework.</description>

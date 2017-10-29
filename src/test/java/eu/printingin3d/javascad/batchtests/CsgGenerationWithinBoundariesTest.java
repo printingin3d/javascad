@@ -75,6 +75,7 @@ public class CsgGenerationWithinBoundariesTest {
 					new Support(new Dims3d(50, 23, 3), 0.1),
 					new Support(new Dims3d(12, 33, 3), 0.1).move(new Coords3d(34, 3, 10)),
 					new Polyhedron(triangles),
+					new Cube(10).addModel(new Cube(15)),
 					new LinearExtrude(new Circle(Radius.fromRadius(5)), 5, Angle.ZERO),
 					new LinearExtrude(new Union(Arrays.asList(
 							new Circle(Radius.fromRadius(3)), new Square(new Dims2d(3, 5)))), 10, Angle.ZERO)
