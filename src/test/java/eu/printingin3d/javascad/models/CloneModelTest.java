@@ -2,6 +2,7 @@ package eu.printingin3d.javascad.models;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
@@ -44,18 +45,27 @@ public class CloneModelTest {
 	
 	public static class TestCase {
 		private final Abstract3dModel model;
-		private TestCase(Abstract3dModel model) {
+		private final String name;
+		private TestCase(Abstract3dModel model, String name) {
 			this.model = model;
+			this.name = name;
+		}
+		private TestCase(Abstract3dModel model) {
+			this(model, model.getClass().getSimpleName());
 		}
 		public Abstract3dModel getModel() {
 			return model;
+		}
+		@Override
+		public String toString() {
+			return name;
 		}
 	}
 	
 	private final Abstract3dModel original;
 	
-	public CloneModelTest(Abstract3dModel original) {
-		this.original = original;
+	public CloneModelTest(TestCase original) {
+		this.original = original.getModel();
 	}
 
 	public static Collection<TestCase> createTestSubjects() {
@@ -64,32 +74,33 @@ public class CloneModelTest {
 		return Arrays.<TestCase>asList(
 				new TestCase(cube.cloneModel()),
 				new TestCase(cylinder.cloneModel()),
-				new TestCase(new Prism(78.2, Radius.fromRadius(10.1), Radius.fromRadius(32.2), 5)),
-				new TestCase(new Prism(78.2, Radius.fromRadius(10.1), 5)),
-				new TestCase(new Intersection()),
-				new TestCase(new Intersection(cube.cloneModel())),
-				new TestCase(new Intersection(cube.cloneModel(), cylinder.cloneModel())),
-				new TestCase(new Difference(cube.cloneModel(), cylinder.cloneModel())),
-				new TestCase(new Difference(cube.cloneModel())),
-				new TestCase(new Difference(cube.cloneModel()).move(new Coords3d(10, 20, 30))),
+				new TestCase(new Prism(78.2, Radius.fromRadius(10.1), Radius.fromRadius(32.2), 5), "PrismTwoRadiuses"),
+				new TestCase(new Prism(78.2, Radius.fromRadius(10.1), 5), "PrismOneRadius"),
+				new TestCase(new Intersection(), "IntersectionEmpty"),
+				new TestCase(new Intersection(cube.cloneModel()), "IntersectionOneModel"),
+				new TestCase(new Intersection(cube.cloneModel(), cylinder.cloneModel()), "IntersectionTwoModels"),
+				new TestCase(new Difference(cube.cloneModel(), cylinder.cloneModel()), "DifferenceTwoModels"),
+				new TestCase(new Difference(cube.cloneModel()), "DifferenceOneModel"),
+				new TestCase(new Difference(cube.cloneModel()).move(new Coords3d(10, 20, 30)), "DifferenceMoved"),
 				new TestCase(Mirror.mirrorX(cube.cloneModel())),
 				new TestCase(new Rotate(cylinder, new Angles3d(-21, 32.1, 331.4))),
 				new TestCase(new Scale(cylinder, new Coords3d(4.10, 1.0, 3.21))),
 				new TestCase(new Slicer(cube, Direction.X, 3, 0)),
 				new TestCase(new Colorize(Color.BLACK, cube)),
-				new TestCase(new Sphere(3.1)),
+				new TestCase(new Sphere(Radius.fromRadius(3.1))),
 				new TestCase(new Translate(cube, new Coords3d(-23, 33.2, 7.3))),
 				new TestCase(new BoundedModel(cube, RandomUtils.getRandomBoundaries())),
 				new TestCase(new Union()),
 				new TestCase(new Hull()),
 				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, Angle.ofDegree(55))),
-				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, Angle.ofDegree(55), 2.5)),
+				new TestCase(new LinearExtrude(new Circle(Radius.fromRadius(10)), 30, Angle.ofDegree(55), 2.5), "LinearExtrudeScaled"),
 				new TestCase(new Union(cube, cylinder).rotate(new Angles3d(40, 42, -55))),
 				new TestCase(new Hull(cube, cylinder).rotate(new Angles3d(40, 42, -55))),
-				new TestCase(cube.cloneModel().background()),
-				new TestCase(cube.cloneModel().debug()),
+				new TestCase(cube.cloneModel().background(), "Background"),
+				new TestCase(cube.cloneModel().debug(), "Debug"),
 				new TestCase(new Polyhedron(Arrays.asList(RandomUtils.getRandomTriangle(), RandomUtils.getRandomTriangle()))),
-				new TestCase(new Ring(12.2, new Square(new Dims2d(15.0, 12.2))))
+				new TestCase(new Ring(Radius.fromRadius(12.2), new Square(new Dims2d(15.0, 12.2)))),
+				new TestCase(new Empty3dModel())
 			);
 	}
 	
@@ -97,7 +108,7 @@ public class CloneModelTest {
 	public static Collection<Object[]> testCases() {
 		List<Object[]> result = new ArrayList<Object[]>();
 		for (TestCase testCase : createTestSubjects()) {
-			result.add(new Object[] {testCase.getModel()});
+			result.add(new Object[] {testCase});
 		}
 		return result;
 	}
@@ -124,6 +135,22 @@ public class CloneModelTest {
 		SCAD scad = clone.toScad(ColorHandlingContext.DEFAULT);
 		if (!scad.isEmpty()) {
 			assertFalse(scad.equals(original.move(RandomUtils.getRandomCoords()).toScad(ColorHandlingContext.DEFAULT)));
+		}
+	}
+	
+	@Test
+	public void shouldBeIndependent2() {
+		if (!original.isBackground()) {
+			Abstract3dModel newOne = original.background();
+			assertNotSame(original, newOne);
+			assertTrue(newOne.isBackground());
+			assertFalse(original.isBackground());
+		} 
+		else if (!original.isDebug()) {
+			Abstract3dModel newOne = original.debug();
+			assertNotSame(original, newOne);
+			assertTrue(newOne.isDebug());
+			assertFalse(original.isDebug());
 		}
 	}
 	
