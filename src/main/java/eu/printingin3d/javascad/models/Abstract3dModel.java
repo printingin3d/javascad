@@ -32,8 +32,10 @@ import eu.printingin3d.javascad.vrl.CSG;
 import eu.printingin3d.javascad.vrl.FacetGenerationContext;
 
 /**
- * <p>Implements IModel interface and adds convenient methods to make it easier to move or rotate
+ * <p>Immutable implementation of IModel interface and adds convenient methods to make it easier to move or rotate
  * the 3D models. Every primitive 3D object and 3D transition extend this class.</p>
+ * <p>None of the methods changing this object rather creates a new object with the changes and gives that 
+ * changed object back. This make cloning and other similar techniques unnecessary.</p>
  *
  * @author ivivan <ivivan@printingin3d.eu>
  */
@@ -58,8 +60,7 @@ public abstract class Abstract3dModel implements IModel {
 	}
 
 	/**
-	 * Add moves to this model, which converts this to an {@link Union}, representing more than one model.
-	 * This object won't be changed.  
+	 * <p>Add moves to this model, which converts this to an {@link Union}, representing more than one model.</p>
 	 * @param delta the collection of coordinates used by the move operation
 	 * @return a new object which holds the moved objects
 	 */
@@ -78,8 +79,39 @@ public abstract class Abstract3dModel implements IModel {
 	}
 	
 	/**
+	 * <p>Add moves to this model, which converts this to an {@link Union}, representing more than one model.</p>
+	 * <p>The moved objects is annotated with the given list of annotations respectively. There 
+	 * has to be an equal number of moves and annotations given, otherwise an exception is thrown.</p>
+	 * <p>It is very convenient with the use of Coords3d.createVariances. For example:</p>
+	 * <code><pre>
+	 * object.moves(new Coords3d(1,1,0).createVariances(), "
+	 * </pre></code>
+	 * @param delta the collection of coordinates used by the move operation
+	 * @param annotations the list of annotations to be used
+	 * @return a new object which holds the moved objects
+	 * @throws IllegalValueException in case the number of moves and annotations are not equal
+	 */
+	public Abstract3dModel moves(List<Coords3d> delta, String... annotations) {
+	    AssertValue.isTrue(delta.size()==annotations.length, 
+	            "There should be the same number of moves and annotations given, "
+	            + "but "+delta.size()+" moves and "+annotations.length+" annotations have been given.");
+	    
+	    if (!delta.isEmpty()) {
+	        if (delta.size()==1) {
+	            return move(delta.iterator().next()).annotate(annotations[0]);
+	        }
+	        int i = 0;
+	        List<Abstract3dModel> newModels = new ArrayList<>();
+	        for (Coords3d c : delta) {
+	            newModels.add(this.move(c).annotate(annotations[i++]));
+	        }
+	        return new Union(newModels);
+	    }
+	    return this;
+	}
+	
+	/**
 	 * Add moves to this model, which converts this to an {@link Union}, representing more than one model.
-	 * This object won't be changed.  
 	 * @param delta the collection of coordinates used by the move operation
 	 * @return a new object which holds the moved objects
 	 */
@@ -153,6 +185,10 @@ public abstract class Abstract3dModel implements IModel {
 	protected abstract List<Abstract3dModel> getChildrenModels();
 	
 	protected final List<Abstract3dModel> findAnnotatedModel(String annotation) {
+	    if (annotation==null) {
+            return Collections.singletonList(this);
+        }
+	    
         List<Abstract3dModel> result = annotations.contains(annotation) ? 
                         Collections.singletonList(this) : 
                         Collections.emptyList();
@@ -347,7 +383,9 @@ public abstract class Abstract3dModel implements IModel {
     /**
      * <p>Moves this model to the position relative to the annotated part of the given model. 
      * The position is controlled by the place - see {@link Side} - parameter.</p>
-     * @param innerAnnotation the annotated part of this object which will be used for the positioning
+     * @param innerAnnotation the annotated part of this object which will be used for the positioning.
+     *          Can be null which case it does filter anything and the call is equivalent to 
+     *          <code>align(place, model)</code>
      * @param place where to move this model
      * @param model the model used as a reference point
      * @return the new object created
@@ -367,10 +405,12 @@ public abstract class Abstract3dModel implements IModel {
 	 * The position is controlled by the place - see {@link Side} - parameter.</p>
 	 * <p>In case more than one pieces of the target object is annotated with externalAnnotation this model
 	 * will be aligned to all of them and the returned object will be the union of those new objects.</p>
-     * @param innerAnnotation the annotated part of this object which will be used for the positioning
+     * @param innerAnnotation the annotated part of this object which will be used for the positioning.
+     *     Can be null which case it does not filter on the source side.
 	 * @param place where to move this model
 	 * @param model the model used as a reference point
-	 * @param externalAnnotation the annotation used to filter the target object
+	 * @param externalAnnotation the annotation used to filter the target object.
+	 *     Can be null which case it does not filter on the target side.
 	 * @return the new object created
 	 * @throws IllegalValueException if there are more than one pieces of this model is annotated with innerAnnotation 
 	 *         or if there are no pieces of the target model is annotated with externalAnnotation

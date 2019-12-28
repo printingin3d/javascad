@@ -11,7 +11,6 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 
 import org.junit.Test;
 
@@ -132,31 +131,30 @@ public class Coords3dTest {
 	
 	@Test
 	public void variancesShouldBeSingleElementForZero() {
-		assertEquals(Collections.singleton(Coords3d.ZERO), Coords3d.ZERO.createVariances());
+		assertEquals(Collections.singletonList(Coords3d.ZERO), Coords3d.ZERO.createVariances());
 	}
 	
 	@Test
 	public void variancesShouldBeTwoElementsForEveryCoordinateWhichHasOnlyOneNonZeroElement() {
 		Collection<Coords3d> variances = Coords3d.X.createVariances();
-		assertEquals(new HashSet<>(Arrays.asList(Coords3d.X, Coords3d.X.inverse())), variances);
+		assertEquals(Arrays.asList(Coords3d.X, Coords3d.X.inverse()), variances);
 		
 		variances = Coords3d.Y.createVariances();
-		assertEquals(new HashSet<>(Arrays.asList(Coords3d.Y, Coords3d.Y.inverse())), variances);
+		assertEquals(Arrays.asList(Coords3d.Y, Coords3d.Y.inverse()), variances);
 		
 		variances = Coords3d.Z.createVariances();
-		assertEquals(new HashSet<>(Arrays.asList(Coords3d.Z, Coords3d.Z.inverse())), variances);
+		assertEquals(Arrays.asList(Coords3d.Z, Coords3d.Z.inverse()), variances);
 	}
 	
 	@Test
 	public void variancesShouldBeEightElementsForThreeElementsCoordinates() {
 		Collection<Coords3d> variances = new Coords3d(1,1,1).createVariances();
-		assertEquals(
-				new HashSet<>(Arrays.asList(
-						new Coords3d(+1,+1,+1), new Coords3d(+1,+1,-1),
-						new Coords3d(+1,-1,+1), new Coords3d(+1,-1,-1),
-						new Coords3d(-1,+1,+1), new Coords3d(-1,+1,-1),
-						new Coords3d(-1,-1,+1), new Coords3d(-1,-1,-1)
-					)), 
+		assertEquals(Arrays.asList(
+						new Coords3d(+1,+1,+1), new Coords3d(-1,+1,+1),
+						new Coords3d(+1,-1,+1), new Coords3d(-1,-1,+1),
+						new Coords3d(+1,+1,-1), new Coords3d(-1,+1,-1),
+						new Coords3d(+1,-1,-1), new Coords3d(-1,-1,-1)
+					), 
 				variances);
 	}
 	

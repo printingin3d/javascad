@@ -1,8 +1,9 @@
 package eu.printingin3d.javascad.coords;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.printingin3d.javascad.utils.DoubleUtils;
 
 /**
  * Basic 3D functions.
@@ -97,16 +98,40 @@ public abstract class Basic3dFunc <T extends Basic3dFunc<T>> extends Abstract3d 
     }
     
     /**
-     * Creates a collection of values which contains all variances of this coordinates and 
-     * their negated pair. The result contains at least one element (for ZERO) and up to eight elements.
+     * <p>Creates a collection of values which contains all variances of this coordinates and 
+     * their negated pair. The result contains at least one element (for ZERO) and up to eight elements.</p>
+     * <p>The result contains the values in plus-minus order. First the X, then the Y and last the Z coordinates
+     * change if that coordinate is nonzero.</p>
      * @return a collection of coordinates which contains all variances
      */
-    public Collection<T> createVariances() {
-    	return new HashSet<T>(Arrays.asList(
-    			create(+x, +y, +z), create(-x, +y, +z),
-    			create(+x, -y, +z), create(-x, -y, +z),
-    			create(+x, +y, -z), create(-x, +y, -z),
-    			create(+x, -y, -z), create(-x, -y, -z)
-    		));
+    public List<T> createVariances() {
+        List<T> result = new ArrayList<>();
+        boolean hasX = !DoubleUtils.equalsEps(x, -x);
+        boolean hasY = !DoubleUtils.equalsEps(y, -y);
+        boolean hasZ = !DoubleUtils.equalsEps(z, -z);
+        
+        result.add(create(+x, +y, +z));
+        if (hasX) {
+            result.add(create(-x, +y, +z));
+        }
+        if (hasY) {
+            result.add(create(+x, -y, +z));
+            if (hasX) {
+                result.add(create(-x, -y, +z));
+            }
+        }
+        if (hasZ) {
+            result.add(create(+x, +y, -z));
+            if (hasX) {
+                result.add(create(-x, +y, -z));
+            }
+            if (hasY) {
+                result.add(create(+x, -y, -z));
+                if (hasX) {
+                    result.add(create(-x, -y, -z));
+                }
+            }
+        }
+        return result;
     }
 }

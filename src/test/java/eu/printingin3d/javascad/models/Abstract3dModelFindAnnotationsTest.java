@@ -27,6 +27,12 @@ public class Abstract3dModelFindAnnotationsTest {
     }
     
     @Test
+    public void shouldFindItselfForNull() {
+        Abstract3dModel testSubject = new Test3dModel("asd", ONE);
+        assertResult(testSubject.findAnnotatedModel(null), ONE, "asd");
+    }
+    
+    @Test
     public void shouldFindItself() {
         Abstract3dModel testSubject = new Test3dModel("asd", ONE).annotate("one");
         assertResult(testSubject.findAnnotatedModel("one"), ONE, "asd");
