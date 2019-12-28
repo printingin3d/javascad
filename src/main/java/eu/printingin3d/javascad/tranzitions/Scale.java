@@ -1,5 +1,8 @@
 package eu.printingin3d.javascad.tranzitions;
 
+import java.util.Collections;
+import java.util.List;
+
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
@@ -71,4 +74,8 @@ public class Scale extends Complex3dModel {
 		return subModel==null ? null : new Scale(subModel, scale);
 	}
 
+    @Override
+    protected List<Abstract3dModel> getChildrenModels() {
+        return Collections.singletonList(model);
+    }
 }

@@ -1,6 +1,8 @@
 package eu.printingin3d.javascad.tranzitions;
 
 import java.awt.Color;
+import java.util.Collections;
+import java.util.List;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
@@ -83,4 +85,9 @@ public class Colorize extends Complex3dModel {
 		Abstract3dModel subModel = baseModel.subModel(context);
 		return subModel==null ? null : new Colorize(color, subModel);
 	}
+
+    @Override
+    protected List<Abstract3dModel> getChildrenModels() {
+        return Collections.singletonList(baseModel);
+    }
 }

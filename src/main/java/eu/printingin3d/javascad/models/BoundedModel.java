@@ -1,5 +1,8 @@
 package eu.printingin3d.javascad.models;
 
+import java.util.Collections;
+import java.util.List;
+
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
@@ -59,4 +62,8 @@ public class BoundedModel extends Complex3dModel {
 		return subModel==null ? null : new BoundedModel(subModel, boundaries3d);
 	}
 
+    @Override
+    protected List<Abstract3dModel> getChildrenModels() {
+        return Collections.singletonList(baseModel);
+    }
 }

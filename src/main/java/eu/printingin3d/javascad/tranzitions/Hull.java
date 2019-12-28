@@ -96,5 +96,9 @@ public class Hull extends Complex3dModel {
 		
 		return new Hull(subModels);
 	}
-	
+
+    @Override
+    protected List<Abstract3dModel> getChildrenModels() {
+        return models;
+    }
 }

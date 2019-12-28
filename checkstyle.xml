@@ -47,6 +47,8 @@
     <!-- </module> -->
 
     <module name="TreeWalker">
+        <module name="SuppressionCommentFilter"/>
+        
         <property name="tabWidth" value="4"/>
 
         <!-- Checks for Javadoc comments.                     -->

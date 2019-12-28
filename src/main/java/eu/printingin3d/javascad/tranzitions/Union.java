@@ -115,5 +115,9 @@ public class Union extends Complex3dModel {
 		
 		return new Union(subModels);
 	}
-	
+
+    @Override
+    protected List<Abstract3dModel> getChildrenModels() {
+        return models;
+    }
 }

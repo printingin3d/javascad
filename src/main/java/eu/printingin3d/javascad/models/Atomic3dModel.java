@@ -1,5 +1,8 @@
 package eu.printingin3d.javascad.models;
 
+import java.util.Collections;
+import java.util.List;
+
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 
 /**
@@ -19,5 +22,10 @@ public abstract class Atomic3dModel extends Abstract3dModel {
 			return this;
 		}
 		return null;
+	}
+	
+	@Override
+    protected final List<Abstract3dModel> getChildrenModels() {
+	    return Collections.emptyList();
 	}
 }

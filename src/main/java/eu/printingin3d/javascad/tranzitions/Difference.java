@@ -144,4 +144,11 @@ public class Difference extends Complex3dModel {
 		}
 		return new Difference(subModel, subModels);
 	}
+
+    @Override
+    protected List<Abstract3dModel> getChildrenModels() {
+        List<Abstract3dModel> result = new ArrayList<>(model2);
+        result.add(model1);
+        return result;
+    }
 }

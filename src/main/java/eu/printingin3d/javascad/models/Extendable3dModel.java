@@ -1,6 +1,8 @@
 package eu.printingin3d.javascad.models;
 
 import java.lang.reflect.Constructor;
+import java.util.Collections;
+import java.util.List;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
@@ -59,4 +61,8 @@ public abstract class Extendable3dModel extends Complex3dModel {
 		return newInstance;
 	}
 
+    @Override
+    protected List<Abstract3dModel> getChildrenModels() {
+        return Collections.singletonList(baseModel);
+    }
 }

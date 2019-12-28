@@ -1,5 +1,8 @@
 package eu.printingin3d.javascad.tranzitions;
 
+import java.util.Collections;
+import java.util.List;
+
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
 import eu.printingin3d.javascad.coords.Boundaries3d;
@@ -132,4 +135,9 @@ public class Slicer extends Complex3dModel {
 		Abstract3dModel subModel = model.subModel(context);
 		return subModel==null ? null : new Slicer(subModel, direction, lowRate, highRate);
 	}
+
+    @Override
+    protected List<Abstract3dModel> getChildrenModels() {
+        return Collections.singletonList(model);
+    }
 }

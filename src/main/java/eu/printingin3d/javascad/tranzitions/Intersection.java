@@ -94,4 +94,9 @@ public class Intersection extends Complex3dModel {
 		}
 		return new Intersection(ListUtils.removeNulls(subModels));
 	}
+
+    @Override
+    protected List<Abstract3dModel> getChildrenModels() {
+        return models;
+    }
 }

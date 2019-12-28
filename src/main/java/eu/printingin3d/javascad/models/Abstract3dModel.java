@@ -4,9 +4,13 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import eu.printingin3d.javascad.context.IColorGenerationContext;
 import eu.printingin3d.javascad.context.IScadGenerationContext;
@@ -40,6 +44,7 @@ public abstract class Abstract3dModel implements IModel {
 	private boolean debug = false;
 	private boolean background = false;
 	private final Map<Plane, RoundProperties> roundingPlane = new HashMap<>();
+	private final Set<String> annotations = new HashSet<>();
 	
 	/**
 	 * Moves this object by the given coordinates. This object won't be changed, but a new object will be created.
@@ -145,6 +150,37 @@ public abstract class Abstract3dModel implements IModel {
 		return result;
 	}
 	
+	protected abstract List<Abstract3dModel> getChildrenModels();
+	
+	protected final List<Abstract3dModel> findAnnotatedModel(String annotation) {
+        List<Abstract3dModel> result = annotations.contains(annotation) ? 
+                        Collections.singletonList(this) : 
+                        Collections.emptyList();
+        List<Abstract3dModel> children = getChildrenModels();
+        if (!children.isEmpty()) {
+            result = new ArrayList<>(result);
+            result.addAll(children.stream()
+                    .flatMap(m -> m.findAnnotatedModel(annotation).stream())
+                    .map(a -> a.move(move))
+                    .map(a -> a.rotate(rotate))
+                    .collect(Collectors.toList()));
+        }
+        return result;
+	}
+
+	/**
+	 * <p>Annotate this object with the given annotation.</p>
+	 * <p>An object can be annotated by several annotation at the same time.
+	 * A new annotation never overrides an old one.</p>
+	 * @param annotation the annotation will be used
+	 * @return the new object created
+	 */
+	public Abstract3dModel annotate(String annotation) {
+	    Abstract3dModel result = cloneModel();
+	    result.annotations.add(annotation);
+	    return result;
+	}
+	
 	/**
 	 * Creates a clone of this model, so after the cloning any change on it won't affect.
 	 * this model
@@ -159,6 +195,7 @@ public abstract class Abstract3dModel implements IModel {
 		model.debug = debug;
 		model.background = background;
 		model.roundingPlane.putAll(roundingPlane);
+		model.annotations.addAll(annotations);
 		
 		return model;
 	}
@@ -298,13 +335,56 @@ public abstract class Abstract3dModel implements IModel {
 	
 	/**
 	 * <p>Moves this model to the position relative to the given model. The position is controlled by
-	 * the place - see {@link Side} - and inside parameters.</p>
+	 * the place - see {@link Side} - parameter.</p>
 	 * @param place where to move this model
 	 * @param model the model used as a reference point
 	 * @return the new object created
 	 */
 	public Abstract3dModel align(Side place, Abstract3dModel model) {
 		return move(place.calculateCoords(getBoundaries(), model.getBoundaries()));
+	}
+	
+    /**
+     * <p>Moves this model to the position relative to the annotated part of the given model. 
+     * The position is controlled by the place - see {@link Side} - parameter.</p>
+     * @param innerAnnotation the annotated part of this object which will be used for the positioning
+     * @param place where to move this model
+     * @param model the model used as a reference point
+     * @return the new object created
+     * @throws IllegalValueException if there are more than one pieces of this model is annotated with innerAnnotation
+     */
+	public Abstract3dModel align(String innerAnnotation, Side place, Abstract3dModel model) {
+	    Abstract3dModel annotatedModel = findAnnotatedModel(innerAnnotation).stream()
+	            .reduce((a, b) -> {
+	                throw new IllegalValueException("Multiple elements has been annotated with " + innerAnnotation);
+	            })
+	            .get();
+	    return move(place.calculateCoords(annotatedModel.getBoundaries(), model.getBoundaries()));
+	}
+	
+	/**
+	 * <p>Moves this model to the position relative to the annotated part of the given model. 
+	 * The position is controlled by the place - see {@link Side} - parameter.</p>
+	 * <p>In case more than one pieces of the target object is annotated with externalAnnotation this model
+	 * will be aligned to all of them and the returned object will be the union of those new objects.</p>
+     * @param innerAnnotation the annotated part of this object which will be used for the positioning
+	 * @param place where to move this model
+	 * @param model the model used as a reference point
+	 * @param externalAnnotation the annotation used to filter the target object
+	 * @return the new object created
+	 * @throws IllegalValueException if there are more than one pieces of this model is annotated with innerAnnotation 
+	 *         or if there are no pieces of the target model is annotated with externalAnnotation
+	 */
+	public Abstract3dModel align(String innerAnnotation, Side place, Abstract3dModel model, String externalAnnotation) {
+	    List<Abstract3dModel> externalAnnotatedModels = model.findAnnotatedModel(externalAnnotation);
+	    AssertValue.isNotEmpty(externalAnnotatedModels,
+	            "No part of the model has been annotated with "+externalAnnotation);
+	    Abstract3dModel result = null;
+	    for (Abstract3dModel m : externalAnnotatedModels) {
+	        Abstract3dModel tmp = align(innerAnnotation, place, m);
+	        result = result==null ? tmp : result.addModel(tmp);
+	    }
+	    return result;
 	}
 	
 	/**
