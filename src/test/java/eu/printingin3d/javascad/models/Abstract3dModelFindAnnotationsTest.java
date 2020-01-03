@@ -1,6 +1,7 @@
 package eu.printingin3d.javascad.models;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -24,6 +25,12 @@ public class Abstract3dModelFindAnnotationsTest {
         String scad = annotatedModels.iterator().next().toScad(ColorHandlingContext.DEFAULT).getScad();
         assertTrue("The generated SCAD should contain "+expectedScad+", but was "+scad, scad.contains(expectedScad));
         Boundaries3dTest.assertBoundariesEquals(expectedBoundaries, annotatedModels.iterator().next().getBoundaries());
+    }
+    
+    @Test
+    public void shouldNotAnnotateWithNull() {
+        Abstract3dModel testSubject = new Test3dModel("asd", ONE);
+        assertSame(testSubject, testSubject.annotate(null));
     }
     
     @Test

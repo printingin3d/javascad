@@ -66,14 +66,11 @@ public abstract class Abstract3dModel implements IModel {
 	 */
 	public Abstract3dModel moves(Collection<Coords3d> delta) {
 		if (!delta.isEmpty()) {
-			if (delta.size()==1) {
-				return move(delta.iterator().next());
-			}
-			List<Abstract3dModel> newModels = new ArrayList<>();
+            Abstract3dModel result = new Empty3dModel();
 			for (Coords3d c : delta) {
-				newModels.add(this.move(c));
+                result = result.addModel(this.move(c));
 			}
-			return new Union(newModels);
+			return result;
 		}
 		return this;
 	}
@@ -82,9 +79,10 @@ public abstract class Abstract3dModel implements IModel {
 	 * <p>Add moves to this model, which converts this to an {@link Union}, representing more than one model.</p>
 	 * <p>The moved objects is annotated with the given list of annotations respectively. There 
 	 * has to be an equal number of moves and annotations given, otherwise an exception is thrown.</p>
+     * <p>If any item in the annotations list is null that copy of the object won't be annotated.</p>
 	 * <p>It is very convenient with the use of Coords3d.createVariances. For example:</p>
 	 * <code><pre>
-	 * object.moves(new Coords3d(1,1,0).createVariances(), "
+	 * object.moves(new Coords3d(1,1,0).createVariances(), "+1+1", "+1-1", "-1+1", "-1-1")
 	 * </pre></code>
 	 * @param delta the collection of coordinates used by the move operation
 	 * @param annotations the list of annotations to be used
@@ -92,20 +90,31 @@ public abstract class Abstract3dModel implements IModel {
 	 * @throws IllegalValueException in case the number of moves and annotations are not equal
 	 */
 	public Abstract3dModel moves(List<Coords3d> delta, String... annotations) {
-	    AssertValue.isTrue(delta.size()==annotations.length, 
+	    return moves(delta, Arrays.asList(annotations));
+	}
+	
+	/**
+	 * <p>Add moves to this model, which converts this to an {@link Union}, representing more than one model.</p>
+	 * <p>The moved objects is annotated with the given list of annotations respectively. There 
+	 * has to be an equal number of moves and annotations given, otherwise an exception is thrown.</p>
+	 * <p>If any item in the annotations list is null that copy of the object won't be annotated.</p>
+	 * @param delta the collection of coordinates used by the move operation
+	 * @param annotations the list of annotations to be used
+	 * @return a new object which holds the moved objects
+	 * @throws IllegalValueException in case the number of moves and annotations are not equal
+	 */
+	public Abstract3dModel moves(List<Coords3d> delta, List<String> annotations) {
+	    AssertValue.isTrue(delta.size()==annotations.size(), 
 	            "There should be the same number of moves and annotations given, "
-	            + "but "+delta.size()+" moves and "+annotations.length+" annotations have been given.");
+	                    + "but "+delta.size()+" moves and "+annotations.size()+" annotations have been given.");
 	    
 	    if (!delta.isEmpty()) {
-	        if (delta.size()==1) {
-	            return move(delta.iterator().next()).annotate(annotations[0]);
-	        }
+	        Abstract3dModel result = new Empty3dModel();
 	        int i = 0;
-	        List<Abstract3dModel> newModels = new ArrayList<>();
 	        for (Coords3d c : delta) {
-	            newModels.add(this.move(c).annotate(annotations[i++]));
+	            result = result.addModel(this.move(c).annotate(annotations.get(i++)));
 	        }
-	        return new Union(newModels);
+	        return result;
 	    }
 	    return this;
 	}
@@ -208,10 +217,14 @@ public abstract class Abstract3dModel implements IModel {
 	 * <p>Annotate this object with the given annotation.</p>
 	 * <p>An object can be annotated by several annotation at the same time.
 	 * A new annotation never overrides an old one.</p>
-	 * @param annotation the annotation will be used
+	 * <p>If the given parameter is null this method does nothing.</p>
+	 * @param annotation the annotation will be used - can be null
 	 * @return the new object created
 	 */
 	public Abstract3dModel annotate(String annotation) {
+	    if (annotation==null) {
+            return this;
+        }
 	    Abstract3dModel result = cloneModel();
 	    result.annotations.add(annotation);
 	    return result;
