@@ -37,6 +37,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import eu.printingin3d.javascad.coords.Coords3d;
 import eu.printingin3d.javascad.coords.Triangle3d;
@@ -271,4 +272,9 @@ public final class Polygon {
     	}*/
     	list.add(newVertex);
     }
+
+	/** Stream vertices for simple processing. */
+	public Stream<Coords3d> stream() {
+		return vertices.stream();
+	}
 }

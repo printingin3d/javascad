@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -208,5 +209,20 @@ public class PolygonTest {
 		
 		assertFalse(front.isEmpty());
 		assertFalse(back.isEmpty());
+	}
+
+	@Test
+	public void testStream() {
+		Coords3d c0 = new Coords3d(1, 2, 3);
+		Coords3d c1 = new Coords3d(4, 5, 6);
+		Coords3d c2 = new Coords3d(7, 8, 9);
+
+		Polygon p = Polygon.fromPolygons(Arrays.asList(c0, c1, c2), Color.BLACK);
+
+		List<Coords3d> l = p.stream().collect(Collectors.toList());
+
+		assertEquals("c0", c0, l.get(0));
+		assertEquals("c1", c1, l.get(1));
+		assertEquals("c2", c2, l.get(2));
 	}
 }
