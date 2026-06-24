@@ -273,7 +273,10 @@ public final class Polygon {
     	list.add(newVertex);
     }
 
-	/** Stream vertices for simple processing. */
+	/** 
+     * Stream vertices for simple processing.
+     *
+     * @return a stream vertices for simple processing.
 	public Stream<Coords3d> stream() {
 		return vertices.stream();
 	}
