@@ -277,6 +277,7 @@ public final class Polygon {
      * Stream vertices for simple processing.
      *
      * @return a stream vertices for simple processing.
+     */
 	public Stream<Coords3d> stream() {
 		return vertices.stream();
 	}
